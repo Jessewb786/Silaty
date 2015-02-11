@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=Silaty
+Comment=A neat prayer reminder application
+Exec=silaty-indicator
+Icon=silaty
+Terminal=false
+StartupNotify=true
+Type=Application
+Categories=GNOME;GTK;Utility;
+Name[en_US]=Silaty

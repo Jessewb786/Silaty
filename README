@@ -1,0 +1,3 @@
+To install this Application Run:
+
+sudo python setup.py install
