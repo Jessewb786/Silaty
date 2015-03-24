@@ -14,6 +14,15 @@ cp -R audio /usr/share/silaty/
 cp /usr/share/silaty/icons/hicolor/128x128/apps/silaty.svg /usr/share/icons/hicolor/scalable/apps/
 chmod 644  /usr/share/icons/hicolor/scalable/apps/silaty.svg
 
+cp /usr/share/silaty/icons/hicolor/128x128/apps/silaty.svg /usr/share/icons/hicolor/128x128/apps/
+chmod 644  /usr/share/icons/hicolor/128x128/apps/silaty.svg
+
+cp /usr/share/silaty/icons/hicolor/48x48/apps/silaty.svg /usr/share/icons/hicolor/48x48/apps/
+chmod 644  /usr/share/icons/hicolor/48x48/apps/silaty.svg
+
+cp /usr/share/silaty/icons/hicolor/24x24/apps/silaty.svg /usr/share/icons/hicolor/24x24/apps/
+chmod 644  /usr/share/icons/hicolor/24x24/apps/silaty.svg
+
 cp  *.py /usr/share/silaty/
 pycompile silaty-indicator
 mv /usr/share/silaty/silaty-indicator.py /usr/share/silaty/silaty-indicator
