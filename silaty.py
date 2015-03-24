@@ -279,23 +279,23 @@ class Silaty(Gtk.Window):
 
     def set_sidebar_buttons(self):
         #Set up the home icon
-        act_icon   = os.getcwd() + "/icons/sidebar/homeA.svg"
-        inact_icon = os.getcwd() + "/icons/sidebar/homeN.svg"
+        act_icon   =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/homeA.svg"
+        inact_icon =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/homeN.svg"
         self.sidebar.new_button(inact_icon, act_icon)
 
         #Set up the qibla icon
-        act_icon   = os.getcwd() + "/icons/sidebar/qiblaA.svg"
-        inact_icon = os.getcwd() + "/icons/sidebar/qiblaN.svg"
+        act_icon   =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/qiblaA.svg"
+        inact_icon =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/qiblaN.svg"
         self.sidebar.new_button(inact_icon, act_icon)
 
         #Set up the calendar icon
-        act_icon   = os.getcwd() + "/icons/sidebar/calendarA.svg"
-        inact_icon = os.getcwd() + "/icons/sidebar/calendarN.svg"
+        act_icon   =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/calendarA.svg"
+        inact_icon =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/calendarN.svg"
         self.sidebar.new_button(inact_icon, act_icon)
 
         #Set up the settings icon
-        act_icon   = os.getcwd() + "/icons/sidebar/settingsA.svg"
-        inact_icon = os.getcwd() + "/icons/sidebar/settingsN.svg"
+        act_icon   =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/settingsA.svg"
+        inact_icon =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/settingsN.svg"
         self.sidebar.new_button(inact_icon, act_icon)
 
         #Set up the about icon
@@ -312,7 +312,7 @@ class Silaty(Gtk.Window):
 
     def on_fajr_play_pressed(self,widget,event):
         if self.fajrplaying == False:
-            uri =  "file://"+os.getcwd()+"/audio/Fajr/"+self.fajradhan.get_active_text()+".ogg"
+            uri =  "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Fajr/"+self.fajradhan.get_active_text()+".ogg"
             self.fajrplayer = Gst.ElementFactory.make("playbin", "player")
             fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
             bus = self.fajrplayer.get_bus()
@@ -334,7 +334,7 @@ class Silaty(Gtk.Window):
 
     def on_normal_play_pressed(self,widget,event):
         if self.normalplaying == False:         
-            uri =  "file://"+os.getcwd()+"/audio/Normal/"+self.normaladhan.get_active_text()+".ogg"
+            uri =  "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Normal/"+self.normaladhan.get_active_text()+".ogg"
             self.normalplayer = Gst.ElementFactory.make("playbin", "player")
             fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
             bus = self.normalplayer.get_bus()

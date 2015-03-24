@@ -130,13 +130,13 @@ class Cal(Gtk.Box):
 		self.combinedstack.add_named(self.gmonthstack, "Gregorian")
 		self.combinedstack.add_named(self.hmonthstack, "Hijri")
 
-		lefticon = os.getcwd() + "/icons/arrows/arrow-left.svg"
+		lefticon = os.path.dirname(os.path.realpath(__file__)) + "/icons/arrows/arrow-left.svg"
 		leftarrow = self.set_image_from_file(lefticon)
 		leftbox = Gtk.EventBox()
 		leftbox.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
 		leftbox.add(leftarrow)
 		
-		righticon = os.getcwd() + "/icons/arrows/arrow-right.svg"
+		righticon = os.path.dirname(os.path.realpath(__file__)) + "/icons/arrows/arrow-right.svg"
 		rightarrow = self.set_image_from_file(righticon)
 		rightbox = Gtk.EventBox()
 		rightbox.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)

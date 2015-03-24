@@ -290,14 +290,14 @@ class Prayertime(object):
                 
                 if self.options.audio_notifications == True:
                     if CurrentPrayer == 'Fajr':
-                        uri =  "file://"+os.getcwd()+"/audio/Fajr/"+self.options.fajr_adhan+".ogg"
+                        uri =  "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Fajr/"+self.options.fajr_adhan+".ogg"
                         self.fajrplayer = Gst.ElementFactory.make("playbin", "player")
                         fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
                         self.fajrplayer.set_property('uri', uri)
                         self.fajrplayer.set_property("video-sink", fakesink)
                         self.fajrplayer.set_state(Gst.State.PLAYING)
                     else:
-                        uri =  "file://"+os.getcwd()+"/audio/Normal/"+self.options.normal_adhan+".ogg"
+                        uri =  "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Normal/"+self.options.normal_adhan+".ogg"
                         self.normalplayer = Gst.ElementFactory.make("playbin", "player")
                         fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
                         self.normalplayer.set_property('uri', uri)

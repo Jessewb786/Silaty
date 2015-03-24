@@ -84,13 +84,13 @@ class Options:
 		return ['12h', '24h']
 
 	def get_fajr_adhans(self):
-		dirfiles = os.listdir(os.getcwd()+"/audio/Fajr/")
+		dirfiles = os.listdir( os.path.dirname(os.path.realpath(__file__))+"/audio/Fajr/")
 		wavfiles = filter(lambda song: song.endswith(".ogg"), dirfiles)
 		adhans = list(map(lambda x: os.path.splitext(x)[0], wavfiles))
 		return adhans
 
 	def get_normal_adhans(self):
-		dirfiles = os.listdir(os.getcwd()+"/audio/Normal/")
+		dirfiles = os.listdir( os.path.dirname(os.path.realpath(__file__))+"/audio/Normal/")
 		wavfiles = filter(lambda song: song.endswith(".ogg"), dirfiles)
 		adhans = list(map(lambda x: os.path.splitext(x)[0], wavfiles))
 		return adhans

@@ -150,7 +150,7 @@ class SilatyIndicator():
 
 	def icon(self):# Get Icon
 		print ("DEBUG: getting Icons @", (str(datetime.datetime.now())))
-		PathDir = os.getcwd() + "/icons/hicolor/scalable/silaty-indicator.svg"
+		PathDir = os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/scalable/silaty-indicator.svg"
 		print (PathDir)		
 
 		if os.path.exists(PathDir):
