@@ -35,7 +35,7 @@ class Silaty(Gtk.Window):
         self.set_modal(True)
         self.set_resizable(False)
         self.connect('delete-event', self.hide_window)
-        #self.set_default_size(540, 440)
+        #self.set_default_size(429, 440)
         self.headerbar = Gtk.HeaderBar()
 
         # Set up mainbox
@@ -87,7 +87,7 @@ class Silaty(Gtk.Window):
         self.set_sidebar_buttons()
 
         # Add the stack and menu to the list
-        self.mainbox.set_size_request(540, 200)
+        self.mainbox.set_size_request(429, 200)
         self.mainbox.pack_start(self.sidebar, False, True, 0)
         self.mainbox.pack_start(self.sidebar.stack, True, True, 0)
 
