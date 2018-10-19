@@ -275,7 +275,12 @@ class Silaty(Gtk.Window):
         self.longentry = Gtk.SpinButton(adjustment=lngadj, digits=3, halign=Gtk.Align.FILL)
         self.longentry.set_value(float(defaultlong))
         self.longentry.connect("value-changed",self.on_entered_longitude)
-        settings.add_setting(self.longentry, longlabel) 
+        settings.add_setting(self.longentry, longlabel)
+
+        # Link to get location
+        infolabel = Gtk.Label("You can get your location on ", halign=Gtk.Align.START)
+        linklabel = Gtk.Label('<a href="https://www.islamicfinder.org/">www.islamicfinder.org</a>', use_markup=True, halign=Gtk.Align.FILL)
+        settings.add_setting(linklabel, infolabel)
 
         # Add settings to the Stack
         scrolledwindow = Gtk.ScrolledWindow()
@@ -422,15 +427,20 @@ class Silaty(Gtk.Window):
     def on_entered_city(self, widget):
         entry = self.cityentry.get_text()
         data = self.fetch(entry)
+        success = False
         if data != None:
             if data["status"] == "ZERO_RESULTS":
                 self.cityentry.set_text("Invalid City")
+            elif data["status"] == "OVER_QUERY_LIMIT" or not data["results"]:
+                self.cityentry.set_text("Error")
+                print ("Debug: %s" % data["error_message"])
             else:
                 self.cityentry.set_text('%s' % data["results"][0]["address_components"][1]["long_name"])
                 self.latentry.set_value(float(data["results"][0]['geometry']['location']['lat']))
                 self.longentry.set_value(float(data["results"][0]['geometry']['location']['lng']))
+                success = True
 
-        if self.cityentry.get_text() != "Invalid City":
+        if success:
 
             for addcom in data["results"][0]["address_components"]:
                 for item in addcom["types"]:
