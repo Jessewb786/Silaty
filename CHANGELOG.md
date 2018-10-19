@@ -14,6 +14,8 @@ Silaty
 * fixed a crash when closing the main window.
 * load notification icon from its path instead of using an icon name.
 * use default layout size, instead of using a fixed window size.
+* updates prayer times when changing clock format from settings.
+* useless debug messages commented (especially those used in main loop).
 
 ### v1.0
 

@@ -506,20 +506,20 @@ class Silaty(Gtk.Window):
 
     def get_times(self, prayer):# If User Sets Clock Format 12hr or 24hr Return It As He Likes!
         if self.prayertimes.options.clock_format == '12h':
-            print ("DEBUG: using 12h format @", (str(datetime.datetime.now())))
+            #print ("DEBUG: using 12h format @", (str(datetime.datetime.now())))
             return self.timeto12(prayer)
         if self.prayertimes.options.clock_format == '24h':
-            print ("DEBUG: using 24h format @", (str(datetime.datetime.now())))
+            #print ("DEBUG: using 24h format @", (str(datetime.datetime.now())))
             return self.timeto24(prayer)
 
     def timeto24(self, timeto24):# Transform 12hr clock into 24hr Clock
-        print ("DEBUG: transforming 24h to 12h @", (str(datetime.datetime.now())))
+        #print ("DEBUG: transforming 24h to 12h @", (str(datetime.datetime.now())))
         tts = datetime.datetime.strptime(timeto24, "%I:%M:%S %p")
         tfs = datetime.datetime.strftime(tts,"%H:%M")
         return str(tfs)
 
     def timeto12(self, timeto12):# Transform 12hr clock into 12hr Clock Without second and Remove The Zero before hour
-        print ("DEBUG: analysing times @", (str(datetime.datetime.now())))
+        #print ("DEBUG: analysing times @", (str(datetime.datetime.now())))
         tts = datetime.datetime.strptime(timeto12, "%I:%M:%S %p")
         tfs = datetime.datetime.strftime(tts,"%l:%M %p")
         return str(tfs)

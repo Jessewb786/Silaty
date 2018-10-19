@@ -110,7 +110,7 @@ class Options:
 
 	@property
 	def audio_notifications(self):
-		print ("DEBUG: getting icon label settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting icon label settings @", (str(datetime.datetime.now())))
 		if self.audio_notifications_num == '1':
 			return True
 		else:
@@ -118,7 +118,7 @@ class Options:
 
 	@audio_notifications.setter
 	def audio_notifications(self, data):
-		print ("DEBUG: setting icon label settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting icon label settings @", (str(datetime.datetime.now())))
 		if data == True:
 			self.audio_notifications_num = '1'
 		else:
@@ -142,21 +142,21 @@ class Options:
 
 	@property
 	def city(self):
-		print ("DEBUG: getting city settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting city settings @", (str(datetime.datetime.now())))
 		return self._city
 
 	@city.setter
 	def city(self, data):
-		print ("DEBUG: setting city settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting city settings @", (str(datetime.datetime.now())))
 		self._city = data
 
 	@property
 	def country(self):
-		print ("DEBUG: getting country settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting country settings @", (str(datetime.datetime.now())))
 		return self._country
 	@country.setter
 	def country(self, value):
-		print ("DEBUG: setting country settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting country settings @", (str(datetime.datetime.now())))
 		self._country = value
 
 	@property
@@ -169,7 +169,7 @@ class Options:
 
 	@property
 	def calculation_method(self):
-		print ("DEBUG: getting calculation method settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting calculation method settings @", (str(datetime.datetime.now())))
 		if self.calculation_method_name == 'Makkah':
 			return Calendar.UmmAlQuraUniv
 		elif self.calculation_method_name == 'Egypt':
@@ -183,7 +183,7 @@ class Options:
 
 	@calculation_method.setter
 	def calculation_method(self, data):
-		print ("DEBUG: setting calculation method settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting calculation method settings @", (str(datetime.datetime.now())))
 		self.calculation_method_name = data
 
 	@property
@@ -196,7 +196,7 @@ class Options:
 
 	@property
 	def madhab(self):
-		print ("DEBUG: getting madhab settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting madhab settings @", (str(datetime.datetime.now())))
 		if self.madhab_name == 'Default':
 			return Madhab.Default
 		if self.madhab_name == 'Hanafi':
@@ -204,47 +204,47 @@ class Options:
 
 	@madhab.setter
 	def madhab(self, data):
-		print ("DEBUG: setting madhab settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting madhab settings @", (str(datetime.datetime.now())))
 		self._madhab = data
 
 	@property
 	def latitude(self):
-		print ("DEBUG: getting latitude settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting latitude settings @", (str(datetime.datetime.now())))
 		return float(self._latitude)
 
 	@latitude.setter
 	def latitude(self, data):
-		print ("DEBUG: setting latitude settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting latitude settings @", (str(datetime.datetime.now())))
 		self._latitude = str(data)
 
 	@property
 	def longitude(self):
-		print ("DEBUG: getting longitude settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting longitude settings @", (str(datetime.datetime.now())))
 		return float(self._longitude)
 
 	@longitude.setter
 	def longitude(self, data):
-		print ("DEBUG: setting longitude settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting longitude settings @", (str(datetime.datetime.now())))
 		self._longitude = str(data)
 
 	@property
 	def timezone(self):
-		print ("DEBUG: getting timezone settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting timezone settings @", (str(datetime.datetime.now())))
 		return float(self._timezone)
 
 	@timezone.setter
 	def timezone(self, data):
-		print ("DEBUG: setting timezone settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting timezone settings @", (str(datetime.datetime.now())))
 		self._timezone = str(data)
 
 	@property
 	def notification_time(self):
-		print ("DEBUG: getting notification time settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting notification time settings @", (str(datetime.datetime.now())))
 		return float(self._notif)
 
 	@notification_time.setter
 	def notification_time(self, data):
-		print ("DEBUG: setting notification time settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting notification time settings @", (str(datetime.datetime.now())))
 		self._notif = str(data)
 
 	@property
@@ -257,7 +257,7 @@ class Options:
 
 	@property
 	def iconlabel(self):
-		print ("DEBUG: getting icon label settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting icon label settings @", (str(datetime.datetime.now())))
 		if self.iconlabel_num == '1':
 			return True
 		else:
@@ -265,7 +265,7 @@ class Options:
 
 	@iconlabel.setter
 	def iconlabel(self, data):
-		print ("DEBUG: setting icon label settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting icon label settings @", (str(datetime.datetime.now())))
 		if data == True:
 			self.iconlabel_num = '1'
 		else:
@@ -281,7 +281,7 @@ class Options:
 
 	@property
 	def start_minimized(self):
-		print ("DEBUG: getting icon label settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting icon label settings @", (str(datetime.datetime.now())))
 		if self.start_minimized_num == '1':
 			return True
 		else:
@@ -289,7 +289,7 @@ class Options:
 
 	@start_minimized.setter
 	def start_minimized(self, data):
-		print ("DEBUG: setting icon label settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting icon label settings @", (str(datetime.datetime.now())))
 		if data == True:
 			self.start_minimized_num = '1'
 		else:
@@ -297,12 +297,12 @@ class Options:
 
 	@property
 	def clock_format(self):
-		print ("DEBUG: getting clock format settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting clock format settings @", (str(datetime.datetime.now())))
 		return self._clockformat
 
 	@clock_format.setter
 	def clock_format(self, data):
-		print ("DEBUG: setting clock format settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting clock format settings @", (str(datetime.datetime.now())))
 		self._clockformat = data
 
 	## Function to save the options
