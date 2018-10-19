@@ -12,7 +12,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
-from gi.repository import Gtk, GObject, Gio, GLib
+from gi.repository import Gtk, GObject, Gio, GLib, Gdk, GdkPixbuf
 from gi.repository import AppIndicator3 as AI
 from datetime import date
 from hijrical import *
@@ -29,10 +29,10 @@ class SilatyIndicator():
 			AI.IndicatorCategory.APPLICATION_STATUS)
 		self.Indicator.set_status(AI.IndicatorStatus.ACTIVE)
 		self.Indicator.set_icon(self.icon())
-		
+
 		# Activate the Silaty Window
-		self.silaty = Silaty()
-		
+		self.silaty = Silaty(self)
+
 		self.silaty.prayertimes.calculate()
 		print ("DEBUG: Silaty started! @", (str(datetime.datetime.now())))
 		print ("DEBUG: started prayer times report: @", (str(datetime.datetime.now())))
@@ -102,7 +102,7 @@ class SilatyIndicator():
 		self.loop()# Run Application's loop
 		self.Menu.show_all()# Show All Items
 		self.Indicator.set_menu(self.Menu)# Assign Menu To Indicator
-		self.Gobjectloop = GLib.timeout_add_seconds(1,self.loop)# Run loop
+		self.Gobjectloop = GLib.timeout_add_seconds(1, self.loop)# Run loop
 
 	def loop(self):
 		global NextPrayerDT
@@ -120,10 +120,10 @@ class SilatyIndicator():
 		# Update Prayer Times items
 		self.FajrItem.set_label("Fajr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.fajr_time()))
 		#self.ShurukItem.set_label("Shuruk\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.shrouk_time()))
-		self.DhuhrItem.set_label("Dhuhr\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.zuhr_time()))
+		self.DhuhrItem.set_label("Dhuhr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.zuhr_time()))
 		self.AsrItem.set_label("Asr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.asr_time()))
 		self.MaghribItem.set_label("Maghrib\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.maghrib_time()))
-		self.IshaItem.set_label("Isha\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.isha_time()))
+		self.IshaItem.set_label("Isha\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.isha_time()))
 
 		nextprayer = self.silaty.prayertimes.next_prayer()
 		tonextprayer = self.silaty.prayertimes.time_to_next_prayer()
@@ -168,12 +168,12 @@ class SilatyIndicator():
 			return PathDir
 
 		else:
-			print("ERROR: Cannot find icon : silaty-indicator.svg @ %s" % (str(datetime.datetime.now())), file=sys.stderr)
+			print ("ERROR: Cannot find icon : silaty-indicator.svg @ %s" % (str(datetime.datetime.now())), file=sys.stderr)
 			print ("DEBUG: silaty-indicator QUITING @", (str(datetime.datetime.now())))
 			sys.exit(1)
 
 	def get_hijri_date(self):
-		wd=datetime.datetime.now().strftime("%A")
+		wd = datetime.datetime.now().strftime("%A")
 		calc = HijriCal()
 		h_months = ['Muharram ', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab', "Sha'ban", 'Ramadan', 'Shawwal', "Dhu al Qa'da", 'Dhu al Hijja']
 		h_year,  h_month,  h_day,  h_week_day = calc.today
@@ -181,30 +181,33 @@ class SilatyIndicator():
 		return (str(wd)+", "+str(h_date))
 
 	def show_home(self, widget):
-		if (not self.silaty.is_visible()):
-			self.silaty.show_all()
-			self.silaty.set_layout()
-		self.silaty.sidebar.stack.set_visible_child_name("home")
-		self.silaty.sidebar.emit("window-shown")
+		self.show_tab("home")
 
 	def show_qibla(self, widget):
-		if (not self.silaty.is_visible()):
-			self.silaty.show_all()
-			self.silaty.set_layout()
-		self.silaty.sidebar.stack.set_visible_child_name("qibla")
-		self.silaty.sidebar.emit("window-shown")
+		self.show_tab("qibla")
 
 	def show_settings(self, widget, data):
+		self.show_tab("options")
+
+	def show_tab(self, tab_name):
+		# Show main window
 		if (not self.silaty.is_visible()):
 			self.silaty.show_all()
-			self.silaty.set_layout()
-		self.silaty.sidebar.stack.set_visible_child_name('options')
+		# Get current tab
+		current_tab = self.silaty.sidebar.stack.get_visible_child_name()
+		if (current_tab != tab_name):
+			# If another tab was activated before, set its state to OFF
+			index = self.silaty.sidebar.stackchildnames.index(current_tab)
+			self.silaty.sidebar.get_child(index).state = State.OFF
+		# Activate/show new tab
+		self.silaty.sidebar.stack.set_visible_child_name(tab_name)
 		self.silaty.sidebar.emit("window-shown")
 
-	def about_dialog(self,widget,data=None):# The About Dialog
+	def about_dialog(self, widget, data=None):# The About Dialog
 		print ("DEBUG: opening about dialog @", (str(datetime.datetime.now())))
 		about_dialog = Gtk.AboutDialog()
-		about_dialog.set_logo_icon_name('silaty')
+		logo = GdkPixbuf.Pixbuf.new_from_file(os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/48x48/apps/silaty.svg")
+		about_dialog.set_logo(logo)
 		about_dialog.set_program_name("Silaty")
 		about_dialog.set_website("https://github.com/AXeL-dev/Silaty")
 		about_dialog.set_website_label("GitHub Project Page")
@@ -227,13 +230,13 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.''')
-		about_dialog.set_version("1.0")
+		about_dialog.set_version("1.1-beta")
 		about_dialog.set_comments("A neat Prayer Time Reminder App.\n Simple and complete so no prayer is missed")
 		about_dialog.set_copyright("Copyright © 2018 Silaty Team")
 		about_dialog.run()
 		about_dialog.destroy()
 
-	def quit(self,widget):
+	def quit(self, widget):
 		self.silaty.prayertimes.options.save_options()
 		Gtk.main_quit()
 

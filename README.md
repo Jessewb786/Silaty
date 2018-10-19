@@ -3,7 +3,9 @@ Silaty
 
 A neat prayer reminder app in GTK
 
-![screenshot](Silaty.png)
+![screenshot](screenshots/Silaty.png)
+![screenshot](screenshots/Silaty_qibla.png)
+![screenshot](screenshots/Silaty_calendar.png)
 
 ## Installation
 
@@ -24,4 +26,4 @@ sudo ./uninstall.sh
 
 ## License
 
-Silaty is licensed under the [MIT license](LICENSE).
+Silaty is licensed under the [GPL license](LICENSE).

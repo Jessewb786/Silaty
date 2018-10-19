@@ -276,23 +276,27 @@ class Prayertime(object):
         for time in PrayerTimes:
             if time == NotifTime:
                 Notify.init("Silaty")
-                notif = Notify.Notification().new('Get Ready','%s minutes left until the %s prayer.' % (str(int(self.options.notification_time)),NextPrayer), 'silaty')
+                notif = Notify.Notification.new('Get Ready', '%s minutes left until the %s prayer.' % (str(int(self.options.notification_time)), NextPrayer))
+                icon = GdkPixbuf.Pixbuf.new_from_file(os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/128x128/apps/silaty.svg")
+                notif.set_icon_from_pixbuf(icon)
                 notif.set_app_name('Silaty')
                 notif.show()
-            if time == Time:
+            elif time == Time:
                 Notify.init("Silaty")
-                notif=Notify.Notification.new('Prayer time for %s' % CurrentPrayer,"It's time for the %s prayer." %(CurrentPrayer), 'silaty')
+                notif = Notify.Notification.new('Prayer time for %s' % CurrentPrayer,"It's time for the %s prayer." %(CurrentPrayer))
+                icon = GdkPixbuf.Pixbuf.new_from_file(os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/128x128/apps/silaty.svg")
+                notif.set_icon_from_pixbuf(icon)
 
                 if self.options.audio_notifications == True:
                     if CurrentPrayer == 'Fajr':
-                        uri =  "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Fajr/"+self.options.fajr_adhan+".ogg"
+                        uri = "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Fajr/"+self.options.fajr_adhan+".ogg"
                         self.fajrplayer = Gst.ElementFactory.make("playbin", "player")
                         fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
                         self.fajrplayer.set_property('uri', uri)
                         self.fajrplayer.set_property("video-sink", fakesink)
                         self.fajrplayer.set_state(Gst.State.PLAYING)
                     else:
-                        uri =  "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Normal/"+self.options.normal_adhan+".ogg"
+                        uri = "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Normal/"+self.options.normal_adhan+".ogg"
                         self.normalplayer = Gst.ElementFactory.make("playbin", "player")
                         fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
                         self.normalplayer.set_property('uri', uri)
@@ -361,10 +365,10 @@ def fill_zeros(time):
 def to_hrtime(var):
     """var: double -> human readable string of format "%I:%M:%S %p" """
     time = ''
-    hours = int(var) #cast var (initially a double) as an int
+    hours = int(var) # cast var (initially a double) as an int
 
-    # If Division by 12 = 0, it's morning, else afternoon
-    if hours // 12 == 0:
+    # If Division by 24 = 0, it's morning, else afternoon
+    if hours // 24 == 0:
         zone = "AM"
     else:
         zone = "PM"

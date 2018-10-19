@@ -21,17 +21,21 @@ import os
 
 class Silaty(Gtk.Window):
 
-    def __init__(self):
+    def __init__(self, parent):
         Gtk.Window.__init__(self)
         GLib.threads_init()
         Gst.init()
 
+        # Set parent widget
+        self.parent = parent
+
+        # Tweak window
         self.set_decorated(True)
         self.set_icon_name('silaty')
         self.set_modal(True)
         self.set_resizable(False)
         self.connect('delete-event', self.hide_window)
-        self.set_default_size(429, 440)
+        #self.set_default_size(540, 440)
         self.headerbar = Gtk.HeaderBar()
 
         # Set up mainbox
@@ -41,8 +45,10 @@ class Silaty(Gtk.Window):
         self.prayertimes = Prayertime()
         self.prayertimes.calculate()
 
+        # Set layout
+        self.set_layout()
+
         if self.prayertimes.options.start_minimized == False:
-            self.set_layout()
             self.show_all()
             self.sidebar.emit("window-shown")
 
@@ -81,12 +87,11 @@ class Silaty(Gtk.Window):
         self.set_sidebar_buttons()
 
         # Add the stack and menu to the list
-        self.mainbox.set_size_request(429,200)
+        self.mainbox.set_size_request(540, 200)
         self.mainbox.pack_start(self.sidebar, False, True, 0)
         self.mainbox.pack_start(self.sidebar.stack, True, True, 0)
 
         self.add(self.mainbox)
-        self.show_all()
 
     def set_home(self):
         ## Home - Prayers
@@ -302,9 +307,9 @@ class Silaty(Gtk.Window):
         self.sidebar.new_button(inact_icon, act_icon)
 
         # Set up the about icon
-        #act_icon   = os.getcwd() + "/icons/sidebar/aboutA.svg"
-        #inact_icon = os.getcwd() + "/icons/sidebar/aboutN.svg"
-        #self.sidebar.new_button(inact_icon, act_icon)
+        act_icon   = os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/aboutA.svg"
+        inact_icon = os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/aboutN.svg"
+        self.sidebar.new_button(inact_icon, act_icon, self.parent.about_dialog)
 
     def on_entered_audio_notifications(self, widget, event):
         self.prayertimes.options.audio_notifications = (not widget.get_active())
@@ -312,7 +317,7 @@ class Silaty(Gtk.Window):
     def on_entered_fajr_adhan(self, widget):
         self.prayertimes.options.fajr_adhan = widget.get_active_text()
 
-    def on_fajr_play_pressed(self,widget,event):
+    def on_fajr_play_pressed(self, widget, event):
         if self.fajrplaying == False:
             uri =  "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Fajr/"+self.fajradhan.get_active_text()+".ogg"
             self.fajrplayer = Gst.ElementFactory.make("playbin", "player")
@@ -334,8 +339,8 @@ class Silaty(Gtk.Window):
     def on_entered_normal_adhan(self, widget):
         self.prayertimes.options.normal_adhan = widget.get_active_text()
 
-    def on_normal_play_pressed(self,widget,event):
-        if self.normalplaying == False:         
+    def on_normal_play_pressed(self, widget, event):
+        if self.normalplaying == False:
             uri =  "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Normal/"+self.normaladhan.get_active_text()+".ogg"
             self.normalplayer = Gst.ElementFactory.make("playbin", "player")
             fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
@@ -475,6 +480,7 @@ class Silaty(Gtk.Window):
     def hide_window(self, widget, data):
         self.prayertimes.options.save_options()
         self.hide_on_delete()
+        return True # we must return true, to confirm that we have handled the event
 
     def get_times(self, prayer):# If User Sets Clock Format 12hr or 24hr Return It As He Likes!
         if self.prayertimes.options.clock_format == '12h':
