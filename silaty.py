@@ -314,7 +314,8 @@ class Silaty(Gtk.Window):
         # Set up the about icon
         act_icon   = os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/aboutA.svg"
         inact_icon = os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/aboutN.svg"
-        self.sidebar.new_button(inact_icon, act_icon, self.parent.about_dialog)
+        sidebaricon = self.sidebar.new_button(inact_icon, act_icon, False)
+        sidebaricon.connect("button-press-event", self.parent.about_dialog, self)
 
     def on_entered_audio_notifications(self, widget, event):
         self.prayertimes.options.audio_notifications = (not widget.get_active())

@@ -203,9 +203,9 @@ class SilatyIndicator():
 		self.silaty.sidebar.stack.set_visible_child_name(tab_name)
 		self.silaty.sidebar.emit("window-shown")
 
-	def about_dialog(self, widget, data=None):# The About Dialog
+	def about_dialog(self, widget, data=None, parent=None):# The About Dialog
 		print ("DEBUG: opening about dialog @", (str(datetime.datetime.now())))
-		about_dialog = Gtk.AboutDialog()
+		about_dialog = Gtk.AboutDialog(transient_for=parent)
 		logo = GdkPixbuf.Pixbuf.new_from_file(os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/48x48/apps/silaty.svg")
 		about_dialog.set_logo(logo)
 		about_dialog.set_program_name("Silaty")

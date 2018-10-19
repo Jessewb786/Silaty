@@ -25,15 +25,18 @@ class SideBar(Gtk.Grid):
 	def childlength(self, value):
 		self._childlength = value
 
-	def new_button(self, inact_icon, act_icon, on_press_callback = None):
-		sidebaricon = SideBarButton(inact_icon, act_icon, on_press_callback)
+	def new_button(self, inact_icon, act_icon, set_press_event = True):
+		sidebaricon = SideBarButton(inact_icon, act_icon, set_press_event)
 		self.attach(sidebaricon, 0, self.childlength, 1, 1)
 
 		sidebaricon.position = self.childlength
-		if (on_press_callback is None):
+
+		if set_press_event:
 			sidebaricon.connect("sidebar-button-pressed", self.change_visible_stack, sidebaricon.position)
 
 		self.childlength += 1
+
+		return sidebaricon
 
 	def add_to_stack(self, widget, name):
 		self.stack.add_named(widget, name)
@@ -52,14 +55,12 @@ class SideBar(Gtk.Grid):
 		return self.get_child_at(0, index)
 
 class SideBarButton(Gtk.EventBox):	
-	def __init__(self, inactive_icon, active_icon, on_press_callback = None):
+	def __init__(self, inactive_icon, active_icon, set_press_event = True):
 
 		Gtk.EventBox.__init__(self)
 		self.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
-		if (on_press_callback is None):
+		if set_press_event:
 			self.connect("button-press-event", self.on_icon_pressed)
-		else:
-			self.connect("button-press-event", on_press_callback)
 
 		self.inactive_icon = inactive_icon
 		self.active_icon = active_icon
