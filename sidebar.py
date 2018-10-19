@@ -30,10 +30,8 @@ class SideBar(Gtk.Grid):
 		self.attach(sidebaricon, 0, self.childlength, 1, 1)
 
 		sidebaricon.position = self.childlength
-
 		if set_press_event:
 			sidebaricon.connect("sidebar-button-pressed", self.change_visible_stack, sidebaricon.position)
-
 		self.childlength += 1
 
 		return sidebaricon

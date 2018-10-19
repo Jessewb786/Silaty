@@ -49,6 +49,14 @@ class Home(Gtk.Box):
 		prayercontainer.pack_start(prayerbox, True, False, 0)
 		self.pack_start(prayercontainer, False, True, 0)
 
+	def update_prayers_time(self, widget, prayertimes, nextprayer):
+		for prayer in self.prayers:
+			if prayer.name in prayertimes:
+				if prayer.name == nextprayer:
+					prayer.timelabel.set_markup("<span color=\"#55c1ec\">"+prayertimes[prayer.name]+"</span>")
+				else:
+					prayer.timelabel.set_markup(prayertimes[prayer.name])
+
 	def update_prayers_highlight(self, widget, prayername):
 		print ("received signal")
 		for prayer in self.prayers:

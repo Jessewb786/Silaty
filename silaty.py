@@ -391,25 +391,36 @@ class Silaty(Gtk.Window):
     def on_entered_start_minimized(self, widget, event):
         self.prayertimes.options.start_minimized = (not widget.get_active())
 
-    def on_entered_latitude(self,widget):
+    def on_entered_latitude(self, widget):
         self.prayertimes.options.latitude = widget.get_value()
 
-    def on_entered_longitude(self,widget):
+    def on_entered_longitude(self, widget):
         self.prayertimes.options.longitude = widget.get_value()
 
-    def on_entered_timezone(self,widget):
+    def on_entered_timezone(self, widget):
         self.prayertimes.options.timezone = widget.get_value()
 
-    def on_entered_notification_time(self,widget):
+    def on_entered_notification_time(self, widget):
         self.prayertimes.options.notification_time = widget.get_value()
 
-    def on_entered_clock_format(self,widget):
+    def on_entered_clock_format(self, widget):
         self.prayertimes.options.clock_format = widget.get_active_text()
+        # update prayer times
+        prayertimes = {
+            'Fajr': self.get_times(self.prayertimes.fajr_time()),
+            'Shuruk': self.get_times(self.prayertimes.shrouk_time()),
+            'Dhuhr': self.get_times(self.prayertimes.zuhr_time()),
+            'Asr': self.get_times(self.prayertimes.asr_time()),
+            'Maghrib': self.get_times(self.prayertimes.maghrib_time()),
+            'Isha': self.get_times(self.prayertimes.isha_time()),
+        }
+        nextprayer = self.prayertimes.next_prayer()
+        self.homebox.update_prayers_time(self, prayertimes, nextprayer)
 
-    def on_entered_calculation_method_name(self,widget):
+    def on_entered_calculation_method_name(self, widget):
         self.prayertimes.options.calculation_method_name = widget.get_active_text()
 
-    def on_entered_madhab_name(self,widget):
+    def on_entered_madhab_name(self, widget):
         self.prayertimes.options.madhab_name = widget.get_active_text()
 
     def fetch(self, city):
