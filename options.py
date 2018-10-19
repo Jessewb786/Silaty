@@ -1,3 +1,7 @@
+# Silaty
+# Copyright (c) 2018 - 2019 AXeL
+# Copyright (c) 2014 - 2015 Jessewb786
+
 import configparser
 import os
 import datetime
@@ -15,10 +19,10 @@ class Madhab(object):
 class Options:
 	def __init__(self):
 		print ("DEBUG: Initializing the Options module @", (str(datetime.datetime.now())))
-		
+
 		cparse = configparser.ConfigParser()
 		cparse.read([os.path.expanduser('~/.silaty')])
-				
+
 		try:
 			self._city               = cparse.get('DEFAULT', 'city')
 			self._country            = cparse.get('DEFAULT', 'country')
@@ -31,8 +35,8 @@ class Options:
 			self._notif              = cparse.get('DEFAULT', 'notif')
 			self._iconlabel          = cparse.get('DEFAULT', 'iconlabel')
 			self._startminimized     = cparse.get('DEFAULT', 'minimized')
-			self._fajradhan 	     = cparse.get('DEFAULT', 'fajr-adhan')
-			self._normaladhan 	     = cparse.get('DEFAULT', 'normal-adhan')
+			self._fajradhan          = cparse.get('DEFAULT', 'fajr-adhan')
+			self._normaladhan        = cparse.get('DEFAULT', 'normal-adhan')
 			self._audionotifications = cparse.get('DEFAULT', 'audio-notifications')
  
 		
@@ -50,7 +54,7 @@ class Options:
 			self._iconlabel          = '1'
 			self._startminimized     = '1'
 			self._fajradhan          = (self.get_fajr_adhans())[0]
-			self._normaladhan 	     = (self.get_normal_adhans())[0]
+			self._normaladhan        = (self.get_normal_adhans())[0]
 			self._audionotifications = '1'
 			self.save_options()
 
@@ -69,17 +73,17 @@ class Options:
 			self._iconlabel          = '1'
 			self._startminimized     = '1'
 			self._fajradhan          = (self.get_fajr_adhans())[0]
-			self._normaladhan 	     = (self.get_normal_adhans())[0]
+			self._normaladhan        = (self.get_normal_adhans())[0]
 			self._audionotifications = '1'
 			self.save_options()
 
-	##Functions with lists for the Buttons
+	## Functions with lists for the Buttons
 	def get_cal_methods(self):
 		return ['Makkah', 'Egypt', 'Karachi', 'ISNA', 'MWL']
-		
+
 	def get_madhahed(self):
 		return ['Hanafi','Default']
-		
+
 	def get_clock_formats(self):
 		return ['12h', '24h']
 
@@ -95,12 +99,11 @@ class Options:
 		adhans = list(map(lambda x: os.path.splitext(x)[0], wavfiles))
 		return adhans
 
-
-	##Functions to get and set settings
+	## Functions to get and set settings
 	@property
 	def audio_notifications_num(self):
 		return self._audionotifications
-	
+
 	@audio_notifications_num.setter
 	def audio_notifications_num(self, value):
 		self._audionotifications = value
@@ -121,22 +124,21 @@ class Options:
 		else:
 			self.audio_notifications_num = '0'
 
-
 	@property
 	def fajr_adhan(self):
 		return self._fajradhan
-	
+
 	@fajr_adhan.setter
 	def fajr_adhan(self, value):
 		self._fajradhan = value
-	
+
 	@property
 	def normal_adhan(self):
 		return self._normaladhan
-	
+
 	@normal_adhan.setter
 	def normal_adhan(self, value):
-		self._normaladhan = value	
+		self._normaladhan = value
 
 	@property
 	def city(self):
@@ -160,11 +162,11 @@ class Options:
 	@property
 	def calculation_method_name(self):
 		return self._calcmethodname
-	
+
 	@calculation_method_name.setter
 	def calculation_method_name(self, value):
 		self._calcmethodname = value
-	
+
 	@property
 	def calculation_method(self):
 		print ("DEBUG: getting calculation method settings @", (str(datetime.datetime.now())))
@@ -187,11 +189,11 @@ class Options:
 	@property
 	def madhab_name(self):
 		return self._madhab
-	
+
 	@madhab_name.setter
 	def madhab_name(self, value):
 		self._madhab = value
-		
+
 	@property
 	def madhab(self):
 		print ("DEBUG: getting madhab settings @", (str(datetime.datetime.now())))
@@ -215,7 +217,7 @@ class Options:
 		print ("DEBUG: setting latitude settings @", (str(datetime.datetime.now())))
 		self._latitude = str(data)
 
-	@property	
+	@property
 	def longitude(self):
 		print ("DEBUG: getting longitude settings @", (str(datetime.datetime.now())))
 		return float(self._longitude)
@@ -239,7 +241,7 @@ class Options:
 	def notification_time(self):
 		print ("DEBUG: getting notification time settings @", (str(datetime.datetime.now())))
 		return float(self._notif)
-	
+
 	@notification_time.setter
 	def notification_time(self, data):
 		print ("DEBUG: setting notification time settings @", (str(datetime.datetime.now())))
@@ -248,7 +250,7 @@ class Options:
 	@property
 	def iconlabel_num(self):
 		return self._iconlabel
-	
+
 	@iconlabel_num.setter
 	def iconlabel_num(self, value):
 		self._iconlabel = value
@@ -272,7 +274,7 @@ class Options:
 	@property
 	def start_minimized_num(self):
 		return self._startminimized
-	
+
 	@start_minimized_num.setter
 	def start_minimized_num(self, value):
 		self._startminimized = value
@@ -351,10 +353,9 @@ minimized = %s
 fajr-adhan = %s
 normal-adhan = %s
 
-''' %  (self.city, self.country, self.latitude, self.longitude, self.timezone,\
-        self.calculation_method_name, self.madhab_name, self.clock_format,    \
+''' %  (self.city, self.country, self.latitude, self.longitude, self.timezone, \
+        self.calculation_method_name, self.madhab_name, self.clock_format, \
         self.notification_time, self.iconlabel_num, self.audio_notifications_num,self.start_minimized_num, \
         self.fajr_adhan, self.normal_adhan)
 		config.write(Text)
 		config.close()
-

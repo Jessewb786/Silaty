@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+#
+# Silaty
+#
+# Copyright (c) 2018 - 2019 AXeL
+# Copyright (c) 2014 - 2015 Jessewb786
+#
 # TODO: Help document
 # TODO: Good Code Documentation
+
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('AppIndicator3', '0.1')
 from gi.repository import Gtk, GObject, Gio, GLib
 from gi.repository import AppIndicator3 as AI
 from datetime import date
@@ -33,26 +43,26 @@ class SilatyIndicator():
 		print ("DEBUG: initialize the menu @", (str(datetime.datetime.now())))
 		self.Menu = Gtk.Menu()
 
-		#Add Hijri date
+		# Add Hijri date
 		print ("DEBUG: Adding hijri date to menu @", (str(datetime.datetime.now())))
 		self.HijriDateItem = Gtk.MenuItem(self.get_hijri_date())
 		self.HijriDateItem.connect("activate", self.show_home)
 		self.Menu.append(self.HijriDateItem)
 		self.Menu.append(Gtk.SeparatorMenuItem())
 
-		#Add City
+		# Add City
 		print ("DEBUG: Adding city to menu @", (str(datetime.datetime.now())))
 		self.CityItem = Gtk.MenuItem("Location: %s" % self.silaty.prayertimes.options.city, sensitive=False)
 		self.Menu.append(self.CityItem)
 
-		#Add Qibla Direction
+		# Add Qibla Direction
 		print ("DEBUG: Adding qibla direction to menu @", (str(datetime.datetime.now())))
 		self.QiblaItem = Gtk.MenuItem("Qibla is %.2f° from True North" % self.silaty.prayertimes.get_qibla())
 		self.QiblaItem.connect("activate", self.show_qibla)
 		self.Menu.append(self.QiblaItem)
 		self.Menu.append(Gtk.SeparatorMenuItem())
 
-		#Add Prayer Times
+		# Add Prayer Times
 		print ("DEBUG: Adding the prayer times to menu @", (str(datetime.datetime.now())))
 		self.FajrItem     = Gtk.MenuItem("Fajr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.fajr_time()), sensitive=False)
 		#self.ShurukItem   = Gtk.MenuItem("Shuruk\t\t\t\t%s" % self.get_times(self.silaty.prayertimes.shrouk_time()), sensitive=False)
@@ -74,8 +84,8 @@ class SilatyIndicator():
 		self.Menu.append(Gtk.SeparatorMenuItem())
 
 		print ("DEBUG: Adding About, Settings and Quit to menu @", (str(datetime.datetime.now())))
-		#The Last 3 menu items never change and don't need to be updated
-		AboutItem = Gtk.MenuItem('About')     
+		# The Last 3 menu items never change and don't need to be updated
+		AboutItem = Gtk.MenuItem('About')
 		self.Menu.append(AboutItem)
 		AboutItem.connect('activate',self.about_dialog, None)
 
@@ -98,16 +108,16 @@ class SilatyIndicator():
 		global NextPrayerDT
 		self.silaty.prayertimes.calculate()# Calculate PrayerTimes
 
-		#Update City menu item
+		# Update City menu item
 		self.CityItem.set_label("Location: %s" % self.silaty.prayertimes.options.city)
 
-		#Update Hijri Date Menu item
+		# Update Hijri Date Menu item
 		self.HijriDateItem.set_label(self.get_hijri_date())
 
-		#Update Qibla Menu item
+		# Update Qibla Menu item
 		self.QiblaItem.set_label("Qibla is %.2f° from True North" % self.silaty.prayertimes.get_qibla())
 
-		#Update Prayer Times items
+		# Update Prayer Times items
 		self.FajrItem.set_label("Fajr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.fajr_time()))
 		#self.ShurukItem.set_label("Shuruk\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.shrouk_time()))
 		self.DhuhrItem.set_label("Dhuhr\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.zuhr_time()))
@@ -118,7 +128,7 @@ class SilatyIndicator():
 		nextprayer = self.silaty.prayertimes.next_prayer()
 		tonextprayer = self.silaty.prayertimes.time_to_next_prayer()
 
-		#Update displayed prayer
+		# Update displayed prayer
 		if (nextprayer != self.currentprayer) and self.silaty.is_visible():
 			self.silaty.homebox.emit("prayers-updated", nextprayer)
 			self.currentprayer = nextprayer
@@ -151,7 +161,7 @@ class SilatyIndicator():
 	def icon(self):# Get Icon
 		print ("DEBUG: getting Icons @", (str(datetime.datetime.now())))
 		PathDir = os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/scalable/silaty-indicator.svg"
-		print (PathDir)		
+		print (PathDir)
 
 		if os.path.exists(PathDir):
 			print ("DEBUG: icon found in the OS @", (str(datetime.datetime.now())))
@@ -196,14 +206,14 @@ class SilatyIndicator():
 		about_dialog = Gtk.AboutDialog()
 		about_dialog.set_logo_icon_name('silaty')
 		about_dialog.set_program_name("Silaty")
-		about_dialog.set_website("https://github.com/Jessewb786/Silaty")
+		about_dialog.set_website("https://github.com/AXeL-dev/Silaty")
 		about_dialog.set_website_label("GitHub Project Page")
-		about_dialog.set_authors(["Jesse Wayde Brandão <www.jwb@gmail.com> (Lead Developer)",\
+		about_dialog.set_authors(["AXeL-dev <anass_denna@hotmail.fr> (Maintainer)", "Jesse Wayde Brandão <www.jwb@gmail.com> (Lead Developer)",\
 		 "Mohamed Alaa <m.alaa8@gmail.com> (Developer)","Eslam Mostafa <CsEslam@gmail.com> (Developer)",\
 		 "Ahmed Youssef <xmonader(at)gmail.com> (Developer)"])
 		about_dialog.set_artists(["Mustapha Asbbar <abobakrsalafi@gmail.com> (Designer)"])
 		about_dialog.set_license('''Silaty, A Prayer Times Reminder Application.
-Copyright © 2014 Silaty Team
+Copyright © 2018 Silaty Team
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -219,7 +229,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.''')
 		about_dialog.set_version("1.0")
 		about_dialog.set_comments("A neat Prayer Time Reminder App.\n Simple and complete so no prayer is missed")
-		about_dialog.set_copyright("Copyright © 2014 Silaty Team")
+		about_dialog.set_copyright("Copyright © 2018 Silaty Team")
 		about_dialog.run()
 		about_dialog.destroy()
 

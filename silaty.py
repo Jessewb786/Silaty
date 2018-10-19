@@ -1,3 +1,10 @@
+# Silaty
+# Copyright (c) 2018 - 2019 AXeL
+# Copyright (c) 2014 - 2015 Jessewb786
+
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gst', '1.0')
 from gi.repository import Gtk, Gst, Gio, GLib, Gdk, GdkPixbuf
 from qiblacompass import *
 from settingspane import *
@@ -27,7 +34,7 @@ class Silaty(Gtk.Window):
         self.set_default_size(429, 440)
         self.headerbar = Gtk.HeaderBar()
 
-        #Set up mainbox
+        # Set up mainbox
         self.mainbox = Gtk.Box()
         self.mainbox.set_orientation(Gtk.Orientation.HORIZONTAL)
 
@@ -39,42 +46,41 @@ class Silaty(Gtk.Window):
             self.show_all()
             self.sidebar.emit("window-shown")
 
-
     def set_layout(self):
-        #Set up Titlebar
+        # Set up Titlebar
         self.headerbar.set_show_close_button(True)
         self.set_titlebar(self.headerbar)
 
-        #Set up the Stack
+        # Set up the Stack
         stack = Gtk.Stack()
         stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
         stack.set_transition_duration(300)
         stack.set_homogeneous(False)
 
-        #Set up sidebar and give it the stack to manage
+        # Set up sidebar and give it the stack to manage
         self.sidebar = SideBar(stack)
 
-        #Set up the home pane
+        # Set up the home pane
         self.set_home()
-        
-        #Set up the qibla pane
+
+        # Set up the qibla pane
         compdirection = self.prayertimes.get_qibla()
         country = self.prayertimes.options.country
         city = self.prayertimes.options.city
         self.qiblacompass = QiblaCompass(compdirection, country, city)
         self.sidebar.add_to_stack(self.qiblacompass, 'qibla')
-        
-        ##set up calendar panel
+
+        # Set up calendar panel
         cal = SilatyCal()
         self.sidebar.add_to_stack(cal, "calendar")
 
-        #set up the options pane
+        # Set up the options pane
         self.set_options()
 
-        #set up the sidebar buttons
+        # Set up the sidebar buttons
         self.set_sidebar_buttons()
 
-        #Add the stack and menu to the list
+        # Add the stack and menu to the list
         self.mainbox.set_size_request(429,200)
         self.mainbox.pack_start(self.sidebar, False, True, 0)
         self.mainbox.pack_start(self.sidebar.stack, True, True, 0)
@@ -82,9 +88,8 @@ class Silaty(Gtk.Window):
         self.add(self.mainbox)
         self.show_all()
 
-
     def set_home(self):
-        ##Home - Prayers
+        ## Home - Prayers
         self.homebox = Home()
         self.homebox.connect("prayers-updated", self.homebox.update_prayers_highlight)
 
@@ -115,16 +120,16 @@ class Silaty(Gtk.Window):
             self.homebox.add_prayer('Isha', self.get_times(self.prayertimes.isha_time()), True)
         else:
             self.homebox.add_prayer('Isha', self.get_times(self.prayertimes.isha_time()), False)
-        
+
         self.sidebar.add_to_stack(self.homebox, 'home')
 
     def set_options(self):
-        ##Options
+        ## Options
         settings = SettingsPane()
 
         settings.add_category("System")
 
-        #Start minimized
+        # Start minimized
         showstat     = self.prayertimes.options.start_minimized
         silabel      = Gtk.Label('Start Minimized:')
         self.sivalue = Gtk.Switch(halign=Gtk.Align.START)
@@ -133,7 +138,7 @@ class Silaty(Gtk.Window):
         self.sivalue.connect('button-press-event', self.on_entered_start_minimized)
         settings.add_setting(self.sivalue, silabel)
 
-        #Clock Format
+        # Clock Format
         defaultcf    = self.prayertimes.options.clock_format
         clockformats = self.prayertimes.options.get_clock_formats()
         cflabel      = Gtk.Label('Clock Format:')
@@ -146,7 +151,7 @@ class Silaty(Gtk.Window):
 
         settings.add_category("Notifications")
 
-        #Show Icon with label
+        # Show Icon with label
         showstat     = self.prayertimes.options.iconlabel
         silabel      = Gtk.Label('Show Time left with Icon:')
         self.sivalue = Gtk.Switch(halign=Gtk.Align.START)
@@ -155,7 +160,7 @@ class Silaty(Gtk.Window):
         self.sivalue.connect('button-press-event', self.on_entered_iconlabel)
         settings.add_setting(self.sivalue, silabel)
 
-        #Enable Audio
+        # Enable Audio
         showstat        = self.prayertimes.options.audio_notifications
         audiolabel      = Gtk.Label('Enable audio notifications:')
         self.audiovalue = Gtk.Switch(halign=Gtk.Align.START)
@@ -164,7 +169,7 @@ class Silaty(Gtk.Window):
         self.audiovalue.connect('button-press-event', self.on_entered_audio_notifications)
         settings.add_setting(self.audiovalue, audiolabel)
 
-        #Notification Time
+        # Notification Time
         defaultvalue = self.prayertimes.options.notification_time
         ntlabel      = Gtk.Label('Time before notification:', halign=Gtk.Align.START)
         notifadj     = Gtk.Adjustment(value=0, lower=5, upper=60, step_incr=1, page_incr=1, page_size=0)
@@ -173,8 +178,8 @@ class Silaty(Gtk.Window):
         self.ntvalue.connect("value-changed",self.on_entered_notification_time)
         settings.add_setting(self.ntvalue, ntlabel)
 
-        #Adhan choices
-        adhanbox      = Gtk.Box(halign=Gtk.Align.FILL, spacing=3)       
+        # Adhan choices
+        adhanbox      = Gtk.Box(halign=Gtk.Align.FILL, spacing=3)
         self.fajradhanplay = Gtk.Button.new_from_icon_name("media-playback-start", Gtk.IconSize.BUTTON)
         self.fajradhanplay.set_relief(Gtk.ReliefStyle.HALF)
         self.fajradhanplay.connect("button-press-event", self.on_fajr_play_pressed)
@@ -194,8 +199,7 @@ class Silaty(Gtk.Window):
 
         settings.add_setting(adhanbox, fajrlabel)
 
-
-        adhanbox        = Gtk.Box(halign=Gtk.Align.FILL, spacing=3)
+        adhanbox = Gtk.Box(halign=Gtk.Align.FILL, spacing=3)
         self.normaladhanplay = Gtk.Button.new_from_icon_name("media-playback-start",  Gtk.IconSize.BUTTON)
         self.normaladhanplay.set_relief(Gtk.ReliefStyle.HALF)
         self.normaladhanplay.connect("button-press-event", self.on_normal_play_pressed)
@@ -215,10 +219,9 @@ class Silaty(Gtk.Window):
 
         settings.add_setting(adhanbox, normallabel)
 
-
         settings.add_category("Jurisprudence")
 
-        #Cal Method
+        # Cal Method
         defaultmethod    = self.prayertimes.options.calculation_method_name
         methods          = self.prayertimes.options.get_cal_methods()
         calmethodlabel   = Gtk.Label('Calculation Method:', halign=Gtk.Align.START)
@@ -229,8 +232,8 @@ class Silaty(Gtk.Window):
         self.methodsmenu.set_active(active_text)
         self.methodsmenu.connect("changed", self.on_entered_calculation_method_name)
         settings.add_setting(self.methodsmenu, calmethodlabel)
-        
-        #Madhab
+
+        # Madhab
         defaultmadhab    = self.prayertimes.options.madhab_name
         madaheb          = self.prayertimes.options.get_madhahed()
         madhablabel      = Gtk.Label('Madhab:', halign=Gtk.Align.START)
@@ -243,7 +246,7 @@ class Silaty(Gtk.Window):
 
         settings.add_category("Location")
 
-        #City name
+        # City name
         defaultcity    = self.prayertimes.options.city
         citylabel      = Gtk.Label('City:', halign=Gtk.Align.START)
         self.cityentry = Gtk.Entry(halign=Gtk.Align.FILL)
@@ -251,7 +254,7 @@ class Silaty(Gtk.Window):
         self.cityentry.connect("activate",self.on_entered_city)
         settings.add_setting(self.cityentry, citylabel)
 
-        #Latitude
+        # Latitude
         defaultlatitude = self.prayertimes.options.latitude
         latlabel        = Gtk.Label('Latitude:', halign=Gtk.Align.START)
         latadj          = Gtk.Adjustment(value=0, lower=-90, upper=90, step_incr=0.01, page_incr=1, page_size=1)
@@ -260,7 +263,7 @@ class Silaty(Gtk.Window):
         self.latentry.connect("value-changed",self.on_entered_latitude)
         settings.add_setting(self.latentry, latlabel)
 
-        #Longitude
+        # Longitude
         defaultlong    = self.prayertimes.options.longitude
         longlabel      = Gtk.Label("Longitude:", halign=Gtk.Align.START)
         lngadj         = Gtk.Adjustment(value=0, lower=-180, upper=180, step_incr=0.01, page_incr=1, page_size=1)
@@ -269,7 +272,7 @@ class Silaty(Gtk.Window):
         self.longentry.connect("value-changed",self.on_entered_longitude)
         settings.add_setting(self.longentry, longlabel) 
 
-        #Add Cit to the Stack
+        # Add settings to the Stack
         scrolledwindow = Gtk.ScrolledWindow()
         scrolledwindow.set_min_content_height(420)
         scrolledwindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -278,34 +281,33 @@ class Silaty(Gtk.Window):
         self.sidebar.add_to_stack(scrolledwindow, 'options')
 
     def set_sidebar_buttons(self):
-        #Set up the home icon
+        # Set up the home icon
         act_icon   =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/homeA.svg"
         inact_icon =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/homeN.svg"
         self.sidebar.new_button(inact_icon, act_icon)
 
-        #Set up the qibla icon
+        # Set up the qibla icon
         act_icon   =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/qiblaA.svg"
         inact_icon =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/qiblaN.svg"
         self.sidebar.new_button(inact_icon, act_icon)
 
-        #Set up the calendar icon
+        # Set up the calendar icon
         act_icon   =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/calendarA.svg"
         inact_icon =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/calendarN.svg"
         self.sidebar.new_button(inact_icon, act_icon)
 
-        #Set up the settings icon
+        # Set up the settings icon
         act_icon   =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/settingsA.svg"
         inact_icon =  os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/settingsN.svg"
         self.sidebar.new_button(inact_icon, act_icon)
 
-        #Set up the about icon
+        # Set up the about icon
         #act_icon   = os.getcwd() + "/icons/sidebar/aboutA.svg"
         #inact_icon = os.getcwd() + "/icons/sidebar/aboutN.svg"
         #self.sidebar.new_button(inact_icon, act_icon)
 
-    
     def on_entered_audio_notifications(self, widget, event):
-                self.prayertimes.options.audio_notifications = (not widget.get_active())
+        self.prayertimes.options.audio_notifications = (not widget.get_active())
 
     def on_entered_fajr_adhan(self, widget):
         self.prayertimes.options.fajr_adhan = widget.get_active_text()
@@ -360,7 +362,6 @@ class Silaty(Gtk.Window):
             self.normalplayer.set_state(Gst.State.NULL)
             err, debug = message.parse_error()
             print ("Error: %s" % err, debug)
-        
 
     def on_fajr_adhan_termination(self, bus, message):
         t = message.type
@@ -401,31 +402,31 @@ class Silaty(Gtk.Window):
         self.prayertimes.options.madhab_name = widget.get_active_text()
 
     def fetch(self, city):
-        entry=self.cityentry.get_text()
+        entry = self.cityentry.get_text()
         print ("DEBUG: fetching city '%s' from internet @", (city, str(datetime.datetime.now())))
         try:
-            entry=self.cityentry.get_text()
-            url='http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false' % city
+            entry = self.cityentry.get_text()
+            url = 'http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false' % city
             data = json.loads(urllib.request.urlopen(url).read().decode())
             return data
         except IOError:
             print ("DEBUG: Error fetching city '%s' from internet IOError: timeout @", (city, str(datetime.datetime.now())))
-        
+
         return None
 
     def on_entered_city(self, widget):
-        entry=self.cityentry.get_text()
-        data=self.fetch(entry)
+        entry = self.cityentry.get_text()
+        data = self.fetch(entry)
         if data != None:
             if data["status"] == "ZERO_RESULTS":
                 self.cityentry.set_text("Invalid City")
-            else:               
+            else:
                 self.cityentry.set_text('%s' % data["results"][0]["address_components"][1]["long_name"])
                 self.latentry.set_value(float(data["results"][0]['geometry']['location']['lat']))
                 self.longentry.set_value(float(data["results"][0]['geometry']['location']['lng']))
-        
+
         if self.cityentry.get_text() != "Invalid City":
-            
+
             for addcom in data["results"][0]["address_components"]:
                 for item in addcom["types"]:
                     if item == "locality":
@@ -437,14 +438,14 @@ class Silaty(Gtk.Window):
             self.prayertimes.options.longitude = float(data["results"][0]['geometry']['location']['lng'])
             self.prayertimes.options.timezone = float(time.timezone / 60 / 60 * -1)
 
-            #Update the Compass direction
+            # Update the Compass direction
             self.prayertimes.calculate()
             new_qibla = self.prayertimes.get_qibla()
             new_country = self.prayertimes.options.country
             new_city = self.prayertimes.options.city
             self.qiblacompass.update_compass(new_qibla, new_country, new_city)
-            
-            #Update home prayers, I need to change this algorithm, it's inefficient
+
+            # Update home prayers, I need to change this algorithm, it's inefficient
             for prayer in self.homebox.prayers:
                 if prayer.name == "Fajr":
                     prayer.time = self.get_times(self.prayertimes.fajr_time())
@@ -471,7 +472,6 @@ class Silaty(Gtk.Window):
 
             self.homebox.emit("prayers-updated", self.prayertimes.next_prayer())
 
-
     def hide_window(self, widget, data):
         self.prayertimes.options.save_options()
         self.hide_on_delete()
@@ -483,15 +483,15 @@ class Silaty(Gtk.Window):
         if self.prayertimes.options.clock_format == '24h':
             print ("DEBUG: using 24h format @", (str(datetime.datetime.now())))
             return self.timeto24(prayer)
-    
+
     def timeto24(self, timeto24):# Transform 12hr clock into 24hr Clock
-            print ("DEBUG: transforming 24h to 12h @", (str(datetime.datetime.now())))
-            tts=datetime.datetime.strptime(timeto24, "%I:%M:%S %p")
-            tfs=datetime.datetime.strftime(tts,"%H:%M")
-            return str(tfs)
-    
+        print ("DEBUG: transforming 24h to 12h @", (str(datetime.datetime.now())))
+        tts = datetime.datetime.strptime(timeto24, "%I:%M:%S %p")
+        tfs = datetime.datetime.strftime(tts,"%H:%M")
+        return str(tfs)
+
     def timeto12(self, timeto12):# Transform 12hr clock into 12hr Clock Without second and Remove The Zero before hour
-            print ("DEBUG: analysing times @", (str(datetime.datetime.now())))
-            tts=datetime.datetime.strptime(timeto12, "%I:%M:%S %p")
-            tfs=datetime.datetime.strftime(tts,"%l:%M %p")
-            return str(tfs)
+        print ("DEBUG: analysing times @", (str(datetime.datetime.now())))
+        tts = datetime.datetime.strptime(timeto12, "%I:%M:%S %p")
+        tfs = datetime.datetime.strftime(tts,"%l:%M %p")
+        return str(tfs)

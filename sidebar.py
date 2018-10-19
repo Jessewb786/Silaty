@@ -1,3 +1,9 @@
+# Silaty
+# Copyright (c) 2018 - 2019 AXeL
+# Copyright (c) 2014 - 2015 Jessewb786
+
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib, GdkPixbuf, GObject
 
 class SideBar(Gtk.Grid):
@@ -13,11 +19,11 @@ class SideBar(Gtk.Grid):
 
 	@property
 	def childlength(self):
-	    return self._childlength
-	
+		return self._childlength
+
 	@childlength.setter
 	def childlength(self, value):
-	    self._childlength = value
+		self._childlength = value
 
 	def new_button(self, inact_icon, act_icon):
 		sidebaricon = SideBarButton(inact_icon, act_icon)
@@ -56,7 +62,6 @@ class SideBarButton(Gtk.EventBox):
 		self._position = 0
 		self._state = State.OFF
 
-
 		self.iconstack = Gtk.Stack(margin_left=12, margin_right=12, margin_top=6, margin_bottom=6)
 		self.iconstack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
 		self.iconstack.set_transition_duration(300)
@@ -71,16 +76,16 @@ class SideBarButton(Gtk.EventBox):
 
 	@property
 	def position(self):
-	    return self._position
-	
+		return self._position
+
 	@position.setter
 	def position(self, value):
-	    self._position = value
+		self._position = value
 
 	@property
 	def state(self):
-	    return self._state
-	    
+		return self._state
+
 	@state.setter
 	def state(self, value):
 		if value == State.ON:
@@ -89,7 +94,7 @@ class SideBarButton(Gtk.EventBox):
 			self.iconstack.set_visible_child_name('inactive')
 		self._state = value	
 
-	def on_icon_pressed(self, widget, data):	
+	def on_icon_pressed(self, widget, data):
 		parent = self.get_parent()
 		for i in range(0, parent.childlength):
 			if i == self.position:
