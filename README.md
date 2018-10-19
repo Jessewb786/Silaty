@@ -3,6 +3,25 @@ Silaty
 
 A neat prayer reminder app in GTK
 
-To install run: sudo sh install.sh
+![screenshot](Silaty.png)
 
-To uninstall run: sudo sh uninstall.sh
+## Installation
+
+To install open a terminal & run: 
+```bash
+cd /path/to/silaty
+sudo ./install.sh
+```
+
+To uninstall run:
+```bash
+sudo ./uninstall.sh
+```
+
+## Credits
+
+- [Jessewb786](https://github.com/Jessewb786)
+
+## License
+
+Silaty is licensed under the [MIT license](LICENSE).
