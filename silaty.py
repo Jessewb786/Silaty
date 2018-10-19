@@ -341,7 +341,7 @@ class Silaty(Gtk.Window):
 
     def on_normal_play_pressed(self, widget, event):
         if self.normalplaying == False:
-            uri =  "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Normal/"+self.normaladhan.get_active_text()+".ogg"
+            uri = "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Normal/"+self.normaladhan.get_active_text()+".ogg"
             self.normalplayer = Gst.ElementFactory.make("playbin", "player")
             fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
             bus = self.normalplayer.get_bus()
