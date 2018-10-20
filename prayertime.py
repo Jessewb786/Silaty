@@ -177,7 +177,7 @@ class Prayertime(object):
         asr = zuhr+self._equation(asr_alt)/15  # Asr Time.
 
         # Add one hour to all times if the season is Summmer.
-        if is_dst() :
+        if self.options.daylight_saving_time and is_dst() :
             fajr += 1
             shrouk += 1
             zuhr += 1

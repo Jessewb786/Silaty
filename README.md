@@ -42,12 +42,13 @@ sudo ./uninstall.sh
 * [Settings won't open #2](https://github.com/Jessewb786/Silaty/issues/2) fixed.
 * load notification icon from its path instead of using an icon name.
 * use default layout size, instead of using a fixed window size.
-* updates prayer times when changing clock format from settings.
+* refresh prayer times on home tab when changing settings.
 * useless debug messages commented (especially those used in main loop).
 * attempt to fix [installing error #4](https://github.com/Jessewb786/Silaty/issues/4) by ignoring pycompile cmd.
 * timezone added to location settings.
 * display country beside city in location settings.
 * get location using Google Maps API disabled (no longer works).
+* daylight saving time setting added.
 
 ### v1.0
 

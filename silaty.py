@@ -135,13 +135,20 @@ class Silaty(Gtk.Window):
         settings.add_category("System")
 
         # Start minimized
-        showstat     = self.prayertimes.options.start_minimized
-        silabel      = Gtk.Label('Start Minimized:')
-        self.sivalue = Gtk.Switch(halign=Gtk.Align.START)
-        self.m       = showstat
-        self.sivalue.set_active(self.m)
-        self.sivalue.connect('button-press-event', self.on_entered_start_minimized)
-        settings.add_setting(self.sivalue, silabel)
+        startmin     = self.prayertimes.options.start_minimized
+        smlabel      = Gtk.Label('Start Minimized:')
+        self.smvalue = Gtk.Switch(halign=Gtk.Align.START)
+        self.smvalue.set_active(startmin)
+        self.smvalue.connect('button-press-event', self.on_entered_start_minimized)
+        settings.add_setting(self.smvalue, smlabel)
+
+        # Daylight saving time
+        defaultdst    = self.prayertimes.options.daylight_saving_time
+        dstlabel      = Gtk.Label('Daylight Saving Time:')
+        self.dstvalue = Gtk.Switch(halign=Gtk.Align.START)
+        self.dstvalue.set_active(defaultdst)
+        self.dstvalue.connect('button-press-event', self.on_entered_daylight_saving_time)
+        settings.add_setting(self.dstvalue, dstlabel)
 
         # Clock Format
         defaultcf    = self.prayertimes.options.clock_format
@@ -160,17 +167,15 @@ class Silaty(Gtk.Window):
         showstat     = self.prayertimes.options.iconlabel
         silabel      = Gtk.Label('Show Time left with Icon:')
         self.sivalue = Gtk.Switch(halign=Gtk.Align.START)
-        self.m       = showstat
-        self.sivalue.set_active(self.m)
+        self.sivalue.set_active(showstat)
         self.sivalue.connect('button-press-event', self.on_entered_iconlabel)
         settings.add_setting(self.sivalue, silabel)
 
         # Enable Audio
-        showstat        = self.prayertimes.options.audio_notifications
+        enableaudio     = self.prayertimes.options.audio_notifications
         audiolabel      = Gtk.Label('Enable audio notifications:')
         self.audiovalue = Gtk.Switch(halign=Gtk.Align.START)
-        self.m          = showstat
-        self.audiovalue.set_active(self.m)
+        self.audiovalue.set_active(enableaudio)
         self.audiovalue.connect('button-press-event', self.on_entered_audio_notifications)
         settings.add_setting(self.audiovalue, audiolabel)
 
@@ -404,6 +409,10 @@ class Silaty(Gtk.Window):
 
     def on_entered_start_minimized(self, widget, event):
         self.prayertimes.options.start_minimized = (not widget.get_active())
+
+    def on_entered_daylight_saving_time(self, widget, event):
+        self.prayertimes.options.daylight_saving_time = (not widget.get_active())
+        self.refresh_prayers()
 
     def on_entered_latitude(self, widget):
         self.prayertimes.options.latitude = widget.get_value()

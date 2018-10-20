@@ -38,8 +38,8 @@ class Options:
 			self._fajradhan          = cparse.get('DEFAULT', 'fajr-adhan')
 			self._normaladhan        = cparse.get('DEFAULT', 'normal-adhan')
 			self._audionotifications = cparse.get('DEFAULT', 'audio-notifications')
- 
-		
+			self._daylightsavingtime = cparse.get('DEFAULT', 'daylight-saving-time')
+
 		except configparser.NoOptionError:
 			print ("DEBUG: No configration file using default settings")
 			self._city               = 'Makkah'
@@ -56,6 +56,7 @@ class Options:
 			self._fajradhan          = (self.get_fajr_adhans())[0]
 			self._normaladhan        = (self.get_normal_adhans())[0]
 			self._audionotifications = '1'
+			self._daylightsavingtime = '1'
 			self.save_options()
 
 		except ValueError:
@@ -75,6 +76,7 @@ class Options:
 			self._fajradhan          = (self.get_fajr_adhans())[0]
 			self._normaladhan        = (self.get_normal_adhans())[0]
 			self._audionotifications = '1'
+			self._daylightsavingtime = '1'
 			self.save_options()
 
 	## Functions with lists for the Buttons
@@ -281,7 +283,7 @@ class Options:
 
 	@property
 	def start_minimized(self):
-		#print ("DEBUG: getting icon label settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting start minimized settings @", (str(datetime.datetime.now())))
 		if self.start_minimized_num == '1':
 			return True
 		else:
@@ -289,11 +291,35 @@ class Options:
 
 	@start_minimized.setter
 	def start_minimized(self, data):
-		#print ("DEBUG: setting icon label settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting start minimized settings @", (str(datetime.datetime.now())))
 		if data == True:
 			self.start_minimized_num = '1'
 		else:
 			self.start_minimized_num = '0'
+
+	@property
+	def daylight_saving_time_num(self):
+		return self._daylightsavingtime
+
+	@daylight_saving_time_num.setter
+	def daylight_saving_time_num(self, value):
+		self._daylightsavingtime = value
+
+	@property
+	def daylight_saving_time(self):
+		#print ("DEBUG: getting daylight saving time settings @", (str(datetime.datetime.now())))
+		if self.daylight_saving_time_num == '1':
+			return True
+		else:
+			return False
+
+	@daylight_saving_time.setter
+	def daylight_saving_time(self, data):
+		#print ("DEBUG: setting daylight saving time settings @", (str(datetime.datetime.now())))
+		if data == True:
+			self.daylight_saving_time_num = '1'
+		else:
+			self.daylight_saving_time_num = '0'
 
 	@property
 	def clock_format(self):
@@ -346,8 +372,11 @@ iconlabel = %s
 # Should audio notifications be enabled
 audio-notifications = %s
 
-# Should the application state minimized
-minimized = %s 
+# Should the application start minimized
+minimized = %s
+
+# Should the application use daylight saving time
+daylight-saving-time = %s
 
 # Paths to the audio files
 fajr-adhan = %s
@@ -356,6 +385,6 @@ normal-adhan = %s
 ''' %  (self.city, self.country, self.latitude, self.longitude, self.timezone, \
         self.calculation_method_name, self.madhab_name, self.clock_format, \
         self.notification_time, self.iconlabel_num, self.audio_notifications_num, self.start_minimized_num, \
-        self.fajr_adhan, self.normal_adhan)
+        self.daylight_saving_time_num, self.fajr_adhan, self.normal_adhan)
 		config.write(Text)
 		config.close()
