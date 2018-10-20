@@ -112,7 +112,7 @@ class Options:
 
 	@property
 	def audio_notifications(self):
-		#print ("DEBUG: getting icon label settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: getting audio notifications settings @", (str(datetime.datetime.now())))
 		if self.audio_notifications_num == '1':
 			return True
 		else:
@@ -120,7 +120,7 @@ class Options:
 
 	@audio_notifications.setter
 	def audio_notifications(self, data):
-		#print ("DEBUG: setting icon label settings @", (str(datetime.datetime.now())))
+		#print ("DEBUG: setting audio notifications settings @", (str(datetime.datetime.now())))
 		if data == True:
 			self.audio_notifications_num = '1'
 		else:

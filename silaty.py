@@ -412,36 +412,36 @@ class Silaty(Gtk.Window):
 
     def on_entered_daylight_saving_time(self, widget, event):
         self.prayertimes.options.daylight_saving_time = (not widget.get_active())
-        self.refresh_prayers()
+        self.update_prayers()
 
     def on_entered_latitude(self, widget):
         self.prayertimes.options.latitude = widget.get_value()
-        self.refresh_prayers()
+        self.update_prayers()
         self.update_qibla()
 
     def on_entered_longitude(self, widget):
         self.prayertimes.options.longitude = widget.get_value()
-        self.refresh_prayers()
+        self.update_prayers()
         self.update_qibla()
 
     def on_entered_timezone(self, widget):
         self.prayertimes.options.timezone = widget.get_value()
-        self.refresh_prayers()
+        self.update_prayers()
 
     def on_entered_notification_time(self, widget):
         self.prayertimes.options.notification_time = widget.get_value()
 
     def on_entered_clock_format(self, widget):
         self.prayertimes.options.clock_format = widget.get_active_text()
-        self.refresh_prayers(False)
+        self.update_prayers(False)
 
     def on_entered_calculation_method_name(self, widget):
         self.prayertimes.options.calculation_method_name = widget.get_active_text()
-        self.refresh_prayers()
+        self.update_prayers()
 
     def on_entered_madhab_name(self, widget):
         self.prayertimes.options.madhab_name = widget.get_active_text()
-        self.refresh_prayers()
+        self.update_prayers()
 
     def fetch_location(self, city):
         entry = self.cityentry.get_text()
@@ -489,7 +489,7 @@ class Silaty(Gtk.Window):
             self.update_qibla()
 
             # Update home prayers
-            self.refresh_prayers()
+            self.update_prayers()
 
     def on_entered_city(self, widget):
         entry = self.cityentry.get_text()
@@ -512,8 +512,8 @@ class Silaty(Gtk.Window):
         new_city = self.prayertimes.options.city
         self.qiblacompass.update_compass(new_qibla, new_country, new_city)
 
-    def refresh_prayers(self, recalculate_prayer_times = True):
-        print ("DEBUG: refreshing prayer times @", (str(datetime.datetime.now())))
+    def update_prayers(self, recalculate_prayer_times = True):
+        print ("DEBUG: updating prayer times @", (str(datetime.datetime.now())))
         # Re-calculate prayer times first
         if recalculate_prayer_times:
             self.prayertimes.calculate(True)
