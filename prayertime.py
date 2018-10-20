@@ -45,9 +45,9 @@ class Prayertime(object):
 
         self.options = Options()
 
-        year=datetime.datetime.now().year
-        month=datetime.datetime.now().month
-        day=datetime.datetime.now().day
+        year  = datetime.datetime.now().year
+        month = datetime.datetime.now().month
+        day   = datetime.datetime.now().day
         self.date = date(year, month, day)
 
         self._shrouk = None
@@ -275,35 +275,34 @@ class Prayertime(object):
         # Notification
         for time in PrayerTimes:
             if time == NotifTime:
-                Notify.init("Silaty")
-                notif = Notify.Notification.new('Get Ready', '%s minutes left until the %s prayer.' % (str(int(self.options.notification_time)), NextPrayer))
-                icon = GdkPixbuf.Pixbuf.new_from_file(os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/128x128/apps/silaty.svg")
-                notif.set_icon_from_pixbuf(icon)
-                notif.set_app_name('Silaty')
-                notif.show()
+                self.notify('Get Ready', '%s minutes left until the %s prayer.' % (str(int(self.options.notification_time)), NextPrayer))
             elif time == Time:
-                Notify.init("Silaty")
-                notif = Notify.Notification.new('Prayer time for %s' % CurrentPrayer,"It's time for the %s prayer." %(CurrentPrayer))
-                icon = GdkPixbuf.Pixbuf.new_from_file(os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/128x128/apps/silaty.svg")
-                notif.set_icon_from_pixbuf(icon)
+                self.notify('Prayer time for %s' % CurrentPrayer, "It's time for the %s prayer." % CurrentPrayer, self.options.audio_notifications, CurrentPrayer)
 
-                if self.options.audio_notifications == True:
-                    if CurrentPrayer == 'Fajr':
-                        uri = "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Fajr/"+self.options.fajr_adhan+".ogg"
-                        self.fajrplayer = Gst.ElementFactory.make("playbin", "player")
-                        fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
-                        self.fajrplayer.set_property('uri', uri)
-                        self.fajrplayer.set_property("video-sink", fakesink)
-                        self.fajrplayer.set_state(Gst.State.PLAYING)
-                    else:
-                        uri = "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Normal/"+self.options.normal_adhan+".ogg"
-                        self.normalplayer = Gst.ElementFactory.make("playbin", "player")
-                        fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
-                        self.normalplayer.set_property('uri', uri)
-                        self.normalplayer.set_property("video-sink", fakesink)
-                        self.normalplayer.set_state(Gst.State.PLAYING)
-                notif.set_app_name('Silaty')
-                notif.show()
+    def notify(self, title, message, play_audio = False, current_prayer = ''):
+        Notify.init("Silaty")
+        notif = Notify.Notification.new(title, message)
+        icon = GdkPixbuf.Pixbuf.new_from_file(os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/128x128/apps/silaty.svg")
+        notif.set_icon_from_pixbuf(icon)
+
+        if play_audio:
+            if current_prayer == 'Fajr':
+                uri = "file://" + os.path.dirname(os.path.realpath(__file__)) + "/audio/Fajr/" + self.options.fajr_adhan + ".ogg"
+                self.fajrplayer = Gst.ElementFactory.make("playbin", "player")
+                fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
+                self.fajrplayer.set_property('uri', uri)
+                self.fajrplayer.set_property("video-sink", fakesink)
+                self.fajrplayer.set_state(Gst.State.PLAYING)
+            else:
+                uri = "file://" + os.path.dirname(os.path.realpath(__file__)) + "/audio/Normal/" + self.options.normal_adhan + ".ogg"
+                self.normalplayer = Gst.ElementFactory.make("playbin", "player")
+                fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
+                self.normalplayer.set_property('uri', uri)
+                self.normalplayer.set_property("video-sink", fakesink)
+                self.normalplayer.set_state(Gst.State.PLAYING)
+
+        notif.set_app_name('Silaty')
+        notif.show()
 
     def closest(self, target, collection) :# Returns the closest Adhan
         return min((abs(target - i), i) for i in collection)[1]

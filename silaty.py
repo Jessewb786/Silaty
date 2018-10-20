@@ -44,6 +44,7 @@ class Silaty(Gtk.Window):
 
         self.prayertimes = Prayertime()
         self.prayertimes.calculate()
+        #self.prayertimes.notify('Title', 'This is a test.')
 
         # Set layout
         self.set_layout()
@@ -405,7 +406,10 @@ class Silaty(Gtk.Window):
 
     def on_entered_clock_format(self, widget):
         self.prayertimes.options.clock_format = widget.get_active_text()
-        # update prayer times
+        self.refresh_prayer_times()
+
+    def refresh_prayer_times(self):
+        # Update prayer times
         prayertimes = {
             'Fajr': self.get_times(self.prayertimes.fajr_time()),
             'Shuruk': self.get_times(self.prayertimes.shrouk_time()),

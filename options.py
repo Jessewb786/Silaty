@@ -355,7 +355,7 @@ normal-adhan = %s
 
 ''' %  (self.city, self.country, self.latitude, self.longitude, self.timezone, \
         self.calculation_method_name, self.madhab_name, self.clock_format, \
-        self.notification_time, self.iconlabel_num, self.audio_notifications_num,self.start_minimized_num, \
+        self.notification_time, self.iconlabel_num, self.audio_notifications_num, self.start_minimized_num, \
         self.fajr_adhan, self.normal_adhan)
 		config.write(Text)
 		config.close()
