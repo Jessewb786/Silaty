@@ -5,14 +5,6 @@ A neat prayer reminder app in GTK
 
 ![screenshot](screenshots/Silaty.png)
 
-## Test
-
-Make sure that you have python3 installed using `python3 -V` cmd, then run: 
-```bash
-cd /path/to/silaty
-python3 silaty-indicator.py
-```
-
 ## Installation
 
 To install open a terminal & run: 
@@ -26,12 +18,30 @@ To uninstall run:
 sudo ./uninstall.sh
 ```
 
+## Test
+
+If you already installed Silaty, you can simply start it from your applications menu, you can also open a terminal & run:
+```bash
+silaty-indicator
+```
+
+If you didn't install Silaty & you want to test it, you can start by cloning this repository:
+```bash
+git clone https://github.com/AXeL-dev/Silaty.git
+```
+
+Then, make sure that you have python3 installed using `python3 -V` before run: 
+```bash
+cd /path/to/silaty
+python3 silaty-indicator.py
+```
+
 ## Changelog
 
-### v1.1-beta
+### v1.1
 
 * LICENSE added.
-* screenshots added @see [Add screenshots #3](https://github.com/Jessewb786/Silaty/issues/3).
+* [Add screenshots #3](https://github.com/Jessewb786/Silaty/issues/3).
 * README updated.
 * attempt to clean code.
 * GTK warnings fixed.
