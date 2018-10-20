@@ -14,8 +14,8 @@ class Home(Gtk.Box):
 		self.set_orientation(Gtk.Orientation.VERTICAL)
 		self.set_margin_bottom(6)
 		# Set the Date in the Title
-		now_wd=datetime.datetime.now().strftime("%H:%M - %A")
-		g_date=datetime.datetime.now().strftime("%d %B %Y")
+		now_wd = datetime.datetime.now().strftime("%H:%M - %A")
+		g_date = datetime.datetime.now().strftime("%d %B %Y")
 		calc = HijriCal()
 		h_months = ['Muharram', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab',  "Sha'ban",  'Ramadan',  'Shawwal',  "Dhu al Qa'da", 'Dhu al Hijja']
 		h_year,  h_month,  h_day,  h_week_day = calc.today
@@ -49,16 +49,8 @@ class Home(Gtk.Box):
 		prayercontainer.pack_start(prayerbox, True, False, 0)
 		self.pack_start(prayercontainer, False, True, 0)
 
-	def update_prayers_time(self, widget, prayertimes, nextprayer):
-		for prayer in self.prayers:
-			if prayer.name in prayertimes:
-				if prayer.name == nextprayer:
-					prayer.timelabel.set_markup("<span color=\"#55c1ec\">"+prayertimes[prayer.name]+"</span>")
-				else:
-					prayer.timelabel.set_markup(prayertimes[prayer.name])
-
 	def update_prayers_highlight(self, widget, prayername):
-		print ("received signal")
+		print ("DEBUG: received update prayers signal")
 		for prayer in self.prayers:
 			if prayer.name == prayername:
 				prayer.prayerlabel.set_markup("<span color=\"#55c1ec\">"+prayer.name+"</span>")

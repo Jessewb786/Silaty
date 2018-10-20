@@ -72,7 +72,6 @@ class QiblaCompass(Gtk.Box):
 		return svgwidget
 
 	def update_compass(self, qibladirection, country, city):
-
 		## The only way to update so far is to remove the whole thing and create it again
 		self.remove(self.mainbox)
 

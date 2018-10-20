@@ -109,7 +109,10 @@ class SilatyIndicator():
 		self.silaty.prayertimes.calculate()# Calculate PrayerTimes
 
 		# Update City menu item
-		self.CityItem.set_label("Location: %s" % self.silaty.prayertimes.options.city)
+		if not self.silaty.prayertimes.options.country or self.silaty.prayertimes.options.country == 'None':
+			self.CityItem.set_label("Location: %s" % self.silaty.prayertimes.options.city)
+		else:
+			self.CityItem.set_label("Location: %s, %s" % (self.silaty.prayertimes.options.city, self.silaty.prayertimes.options.country))
 
 		# Update Hijri Date Menu item
 		self.HijriDateItem.set_label(self.get_hijri_date())
@@ -203,8 +206,12 @@ class SilatyIndicator():
 		self.silaty.sidebar.stack.set_visible_child_name(tab_name)
 		self.silaty.sidebar.emit("window-shown")
 
-	def about_dialog(self, widget, data=None, parent=None):# The About Dialog
+	def about_dialog(self, widget, data=None):# The About Dialog
 		print ("DEBUG: opening about dialog @", (str(datetime.datetime.now())))
+		if self.silaty.is_visible():
+			parent = self.silaty
+		else:
+			parent = None
 		about_dialog = Gtk.AboutDialog(transient_for=parent)
 		logo = GdkPixbuf.Pixbuf.new_from_file(os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/48x48/apps/silaty.svg")
 		about_dialog.set_logo(logo)

@@ -97,7 +97,6 @@ class Silaty(Gtk.Window):
     def set_home(self):
         ## Home - Prayers
         self.homebox = Home()
-        self.homebox.connect("prayers-updated", self.homebox.update_prayers_highlight)
 
         nextprayer = self.prayertimes.next_prayer()
         if nextprayer == 'Fajr':
@@ -254,10 +253,16 @@ class Silaty(Gtk.Window):
 
         # City name
         defaultcity    = self.prayertimes.options.city
+        defaultcountry = self.prayertimes.options.country
         citylabel      = Gtk.Label('City:', halign=Gtk.Align.START)
         self.cityentry = Gtk.Entry(halign=Gtk.Align.FILL)
-        self.cityentry.set_text('%s' % defaultcity)
-        self.cityentry.connect("activate",self.on_entered_city)
+        if not defaultcountry or defaultcountry == 'None':
+            self.cityentry.set_text('%s' % defaultcity)
+        else:
+            self.cityentry.set_text('%s, %s' % (defaultcity, defaultcountry))
+        #self.cityentry.connect("activate", self.on_entered_city_activate)
+        self.cityentry.connect("changed", self.on_entered_city)
+        self.cityentry.connect("focus-out-event", self.on_entered_city_focus_out)
         settings.add_setting(self.cityentry, citylabel)
 
         # Latitude
@@ -266,7 +271,7 @@ class Silaty(Gtk.Window):
         latadj          = Gtk.Adjustment(value=0, lower=-90, upper=90, step_incr=0.01, page_incr=1, page_size=1)
         self.latentry   = Gtk.SpinButton(adjustment=latadj, digits=3, halign=Gtk.Align.FILL)
         self.latentry.set_value(float(defaultlatitude))
-        self.latentry.connect("value-changed",self.on_entered_latitude)
+        self.latentry.connect("value-changed", self.on_entered_latitude)
         settings.add_setting(self.latentry, latlabel)
 
         # Longitude
@@ -275,8 +280,17 @@ class Silaty(Gtk.Window):
         lngadj         = Gtk.Adjustment(value=0, lower=-180, upper=180, step_incr=0.01, page_incr=1, page_size=1)
         self.longentry = Gtk.SpinButton(adjustment=lngadj, digits=3, halign=Gtk.Align.FILL)
         self.longentry.set_value(float(defaultlong))
-        self.longentry.connect("value-changed",self.on_entered_longitude)
+        self.longentry.connect("value-changed", self.on_entered_longitude)
         settings.add_setting(self.longentry, longlabel)
+
+        # Timezone
+        defaulttmz    = self.prayertimes.options.timezone
+        tmzlabel      = Gtk.Label("Timezone:", halign=Gtk.Align.START)
+        tmzadj        = Gtk.Adjustment(value=0, lower=-12, upper=14, step_incr=1, page_incr=1, page_size=1)
+        self.tmzentry = Gtk.SpinButton(adjustment=tmzadj, digits=1, halign=Gtk.Align.FILL)
+        self.tmzentry.set_value(float(defaulttmz))
+        self.tmzentry.connect("value-changed", self.on_entered_timezone)
+        settings.add_setting(self.tmzentry, tmzlabel)
 
         # Link to get location
         infolabel = Gtk.Label("You can get your location on ", halign=Gtk.Align.START)
@@ -315,8 +329,7 @@ class Silaty(Gtk.Window):
         # Set up the about icon
         act_icon   = os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/aboutA.svg"
         inact_icon = os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/aboutN.svg"
-        sidebaricon = self.sidebar.new_button(inact_icon, act_icon, False)
-        sidebaricon.connect("button-press-event", self.parent.about_dialog, self)
+        self.sidebar.new_button(inact_icon, act_icon, self.parent.about_dialog)
 
     def on_entered_audio_notifications(self, widget, event):
         self.prayertimes.options.audio_notifications = (not widget.get_active())
@@ -326,7 +339,7 @@ class Silaty(Gtk.Window):
 
     def on_fajr_play_pressed(self, widget, event):
         if self.fajrplaying == False:
-            uri =  "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Fajr/"+self.fajradhan.get_active_text()+".ogg"
+            uri = "file://"+ os.path.dirname(os.path.realpath(__file__))+"/audio/Fajr/"+self.fajradhan.get_active_text()+".ogg"
             self.fajrplayer = Gst.ElementFactory.make("playbin", "player")
             fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
             bus = self.fajrplayer.get_bus()
@@ -394,40 +407,34 @@ class Silaty(Gtk.Window):
 
     def on_entered_latitude(self, widget):
         self.prayertimes.options.latitude = widget.get_value()
+        self.refresh_prayers()
+        self.update_qibla()
 
     def on_entered_longitude(self, widget):
         self.prayertimes.options.longitude = widget.get_value()
+        self.refresh_prayers()
+        self.update_qibla()
 
     def on_entered_timezone(self, widget):
         self.prayertimes.options.timezone = widget.get_value()
+        self.refresh_prayers()
 
     def on_entered_notification_time(self, widget):
         self.prayertimes.options.notification_time = widget.get_value()
 
     def on_entered_clock_format(self, widget):
         self.prayertimes.options.clock_format = widget.get_active_text()
-        self.refresh_prayer_times()
-
-    def refresh_prayer_times(self):
-        # Update prayer times
-        prayertimes = {
-            'Fajr': self.get_times(self.prayertimes.fajr_time()),
-            'Shuruk': self.get_times(self.prayertimes.shrouk_time()),
-            'Dhuhr': self.get_times(self.prayertimes.zuhr_time()),
-            'Asr': self.get_times(self.prayertimes.asr_time()),
-            'Maghrib': self.get_times(self.prayertimes.maghrib_time()),
-            'Isha': self.get_times(self.prayertimes.isha_time()),
-        }
-        nextprayer = self.prayertimes.next_prayer()
-        self.homebox.update_prayers_time(self, prayertimes, nextprayer)
+        self.refresh_prayers(False)
 
     def on_entered_calculation_method_name(self, widget):
         self.prayertimes.options.calculation_method_name = widget.get_active_text()
+        self.refresh_prayers()
 
     def on_entered_madhab_name(self, widget):
         self.prayertimes.options.madhab_name = widget.get_active_text()
+        self.refresh_prayers()
 
-    def fetch(self, city):
+    def fetch_location(self, city):
         entry = self.cityentry.get_text()
         print ("DEBUG: fetching city '%s' from internet @", (city, str(datetime.datetime.now())))
         try:
@@ -440,9 +447,9 @@ class Silaty(Gtk.Window):
 
         return None
 
-    def on_entered_city(self, widget):
+    def on_entered_city_activate(self, widget):
         entry = self.cityentry.get_text()
-        data = self.fetch(entry)
+        data = self.fetch_location(entry)
         success = False
         if data != None:
             if data["status"] == "ZERO_RESULTS":
@@ -469,39 +476,56 @@ class Silaty(Gtk.Window):
             self.prayertimes.options.longitude = float(data["results"][0]['geometry']['location']['lng'])
             self.prayertimes.options.timezone = float(time.timezone / 60 / 60 * -1)
 
-            # Update the Compass direction
-            self.prayertimes.calculate()
-            new_qibla = self.prayertimes.get_qibla()
-            new_country = self.prayertimes.options.country
-            new_city = self.prayertimes.options.city
-            self.qiblacompass.update_compass(new_qibla, new_country, new_city)
+            # Update qibla
+            self.update_qibla()
 
-            # Update home prayers, I need to change this algorithm, it's inefficient
-            for prayer in self.homebox.prayers:
-                if prayer.name == "Fajr":
-                    prayer.time = self.get_times(self.prayertimes.fajr_time())
+            # Update home prayers
+            self.refresh_prayers()
 
-            for prayer in self.homebox.prayers:
-                if prayer.name == "Shuruk":
-                    prayer.time = self.get_times(self.prayertimes.shrouk_time())
+    def on_entered_city(self, widget):
+        entry = self.cityentry.get_text()
+        values = entry.split(',')
+        if len(values) > 1:
+            self.prayertimes.options.city = values[0].strip()
+            self.prayertimes.options.country = values[1].strip()
+        else:
+            self.prayertimes.options.city = values[0].strip()
+            self.prayertimes.options.country = 'None'
 
-            for prayer in self.homebox.prayers:
-                if prayer.name == "Dhuhr":
-                    prayer.time = self.get_times(self.prayertimes.zuhr_time())
+    def on_entered_city_focus_out(self, widget, event):
+        self.update_qibla()
 
-            for prayer in self.homebox.prayers:
-                if prayer.name == "Asr":
-                    prayer.time = self.get_times(self.prayertimes.asr_time())
+    def update_qibla(self):
+        print ("DEBUG: updating qibla @", (str(datetime.datetime.now())))
+        # Update the Compass direction
+        new_qibla = self.prayertimes.get_qibla()
+        new_country = self.prayertimes.options.country
+        new_city = self.prayertimes.options.city
+        self.qiblacompass.update_compass(new_qibla, new_country, new_city)
 
-            for prayer in self.homebox.prayers:
-                if prayer.name == "Maghrib":
-                    prayer.time = self.get_times(self.prayertimes.maghrib_time())
-
-            for prayer in self.homebox.prayers:
-                if prayer.name == "Isha":
-                    prayer.time = self.get_times(self.prayertimes.isha_time())
-
-            self.homebox.emit("prayers-updated", self.prayertimes.next_prayer())
+    def refresh_prayers(self, recalculate_prayer_times = True):
+        print ("DEBUG: refreshing prayer times @", (str(datetime.datetime.now())))
+        # Re-calculate prayer times first
+        if recalculate_prayer_times:
+            self.prayertimes.calculate(True)
+        # Update prayer times
+        i = 0
+        for prayer in self.homebox.prayers:
+            if prayer.name == 'Fajr':
+                self.homebox.prayers[i].time = self.get_times(self.prayertimes.fajr_time())
+            elif prayer.name == 'Shuruk':
+                self.homebox.prayers[i].time = self.get_times(self.prayertimes.shrouk_time())
+            elif prayer.name == 'Dhuhr':
+                self.homebox.prayers[i].time = self.get_times(self.prayertimes.zuhr_time())
+            elif prayer.name == 'Asr':
+                self.homebox.prayers[i].time = self.get_times(self.prayertimes.asr_time())
+            elif prayer.name == 'Maghrib':
+                self.homebox.prayers[i].time = self.get_times(self.prayertimes.maghrib_time())
+            elif prayer.name == 'Isha':
+                self.homebox.prayers[i].time = self.get_times(self.prayertimes.isha_time())
+            i += 1
+        nextprayer = self.prayertimes.next_prayer()
+        self.homebox.emit("prayers-updated", nextprayer)
 
     def hide_window(self, widget, data):
         self.prayertimes.options.save_options()

@@ -45,6 +45,9 @@ sudo ./uninstall.sh
 * updates prayer times when changing clock format from settings.
 * useless debug messages commented (especially those used in main loop).
 * attempt to fix [installing error #4](https://github.com/Jessewb786/Silaty/issues/4) by ignoring pycompile cmd.
+* timezone added to location settings.
+* display country beside city in location settings.
+* get location using Google Maps API disabled (no longer works).
 
 ### v1.0
 
@@ -52,9 +55,8 @@ sudo ./uninstall.sh
 
 ## ToDo
 
-- [ ] fix settings issues (especially Location settings).
+- [x] fix settings issues (especially Location settings).
 - [ ] use a custom list to get/set location (@see Minbar Prayer Times).
-- [ ] prayer time calculation don't seems to be correct when using a custom location (longitude/latitude).
 - [ ] translate to other languages.
 
 ## Credits
