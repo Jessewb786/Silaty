@@ -59,6 +59,7 @@ python3 silaty-indicator.py
 * display country beside city in location settings.
 * get location using Google Maps API disabled (no longer works).
 * daylight saving time setting added.
+* display/hide main window from indicator menu fixed.
 
 ### v1.0
 
@@ -67,7 +68,7 @@ python3 silaty-indicator.py
 ## ToDo
 
 - [x] fix settings issues (especially Location settings).
-- [ ] use a custom list to get/set location (@see Minbar Prayer Times).
+- [ ] use a custom list to get/set location (@see [Minbar](https://github.com/fajran/minbar)).
 - [ ] translate to other languages.
 
 ## Credits

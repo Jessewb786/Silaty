@@ -196,6 +196,9 @@ class SilatyIndicator():
 		# Show main window
 		if (not self.silaty.is_visible()):
 			self.silaty.show_all()
+			#self.silaty.set_keep_above(True)
+			self.silaty.set_position(Gtk.WindowPosition.CENTER)
+		self.silaty.present()
 		# Get current tab
 		current_tab = self.silaty.sidebar.stack.get_visible_child_name()
 		if (current_tab != tab_name):
