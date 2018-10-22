@@ -269,7 +269,8 @@ class Silaty(Gtk.Window):
         else:
             self.cityentry.set_text('%s, %s' % (defaultcity, defaultcountry))
         #self.cityentry.connect("activate", self.on_entered_city_activate)
-        self.cityentry.connect("changed", self.on_entered_city)
+        self.cityentry.connect("activate", lambda widget: self.update_qibla())
+        self.cityentry.connect("changed", self.on_entered_city_changed)
         self.cityentry.connect("focus-out-event", self.on_entered_city_focus_out)
         citybox.pack_start(self.cityentry, True, True, 0)
 
@@ -502,7 +503,7 @@ class Silaty(Gtk.Window):
             # Update home prayers
             self.update_prayers()
 
-    def on_entered_city(self, widget):
+    def on_entered_city_changed(self, widget):
         entry = self.cityentry.get_text()
         values = entry.split(',')
         if len(values) > 1:

@@ -45,7 +45,6 @@ python3 silaty-indicator.py
 * README updated.
 * attempt to clean code.
 * GTK warnings fixed.
-* wrong time suffix (AM/PM) when using 12h clock format fixed.
 * switching between sidebar tabs from indicator menu fixed.
 * about tab added/implemented into sidebar.
 * fixed a crash when closing the main window.
@@ -61,6 +60,7 @@ python3 silaty-indicator.py
 * daylight saving time setting added.
 * display/hide main window from indicator menu fixed.
 * location search button added.
+* wrong time suffix (AM/PM) when using 12h clock format fixed.
 
 ### v1.0
 

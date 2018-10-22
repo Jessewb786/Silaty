@@ -367,14 +367,14 @@ def to_hrtime(var):
     time = ''
     hours = int(var) # cast var (initially a double) as an int
 
-    # If Division by 24 = 0, it's morning, else afternoon
-    if hours // 24 == 0:
-        zone = "AM"
-    else:
+    # If 24 <= hours < 36, it's afternoon, else morning
+    if hours >= 24 and hours < 36:
         zone = "PM"
+    else:
+        zone = "AM"
 
     # This will give us the time from 0 to 12
-    time += str(hours%12)            
+    time += str(hours%12)
     time += ":"
     var -= hours
 
@@ -393,6 +393,8 @@ def to_hrtime(var):
 
     # Add the AM or PM
     time += zone
+
+    #print ('%s' % time)
     return time
 
 def as_pytime(string_to_parse, fmt="%I:%M:%SS %p"):
