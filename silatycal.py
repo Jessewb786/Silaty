@@ -67,17 +67,17 @@ class SilatyCal(Gtk.Box):
 
 	def on_entered_hijri(self, widget, event):
 		if not(widget.get_active()) == True:
-			self.cal.state = State.Hijri
+			self.cal.state = CalendarState.Hijri
 			self.titlestack.set_visible_child_name("Hijri")
 			for row in range(0, 6):
 				for column in range(0, 7):
-					self.cal.caltable.get_child_at(column,row).state = State.Hijri
+					self.cal.caltable.get_child_at(column,row).state = CalendarState.Hijri
 		else:
-			self.cal.state = State.Gregorian
+			self.cal.state = CalendarState.Gregorian
 			self.titlestack.set_visible_child_name("Gregorian")
 			for row in range(0, 6):
 				for column in range(0, 7):
-					self.cal.caltable.get_child_at(column,row).state = State.Gregorian
+					self.cal.caltable.get_child_at(column,row).state = CalendarState.Gregorian
 
 class Cal(Gtk.Box):
 	def __init__(self):
@@ -90,7 +90,7 @@ class Cal(Gtk.Box):
 		self.weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 		self.gmonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 		self.hmonths = ['Muharram', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab',  "Sha'ban",  'Ramadhan',  'Shawwal',  "Dhu al Qa'da", 'Dhu al Hijja']
-		self._state = State.Gregorian
+		self._state = CalendarState.Gregorian
 
 		self.gmonthstack = Gtk.Stack()
 		self.gmonthstack.set_transition_duration(300)
@@ -267,11 +267,11 @@ class Cal(Gtk.Box):
 		for row in range(0, 6):
 			for column in range(0, 7):
 				if (column == 0) or (column == 6):
-					gcolor = Color.LGrey
-					hcolor = Color.LGrey
+					gcolor = CalendarColor.LGrey
+					hcolor = CalendarColor.LGrey
 				else:
-					gcolor = Color.White
-					hcolor = Color.White
+					gcolor = CalendarColor.White
+					hcolor = CalendarColor.White
 
 				cgdday = int((datetime.datetime.now() + timedelta(days=calendarindex)).strftime("%d"))
 				cgmday = self.gmonths.index((datetime.datetime.now() + timedelta(days=calendarindex)).strftime("%B"))
@@ -280,16 +280,16 @@ class Cal(Gtk.Box):
 				chyday, chmday, chdday = hijrical.goto_gregorian_day(cgyday, (cgmday+1), cgdday)
 
 				if (cgmday != self.gmtoday):
-					gcolor = Color.DGrey
+					gcolor = CalendarColor.DGrey
 
 				if (cgdday == self.gdtoday and cgmday == self.gmtoday and cgyday == self.gytoday):
-					gcolor = Color.Blue
+					gcolor = CalendarColor.Blue
 
 				if (chmday != self.hmtoday):
-					hcolor = Color.DGrey
+					hcolor = CalendarColor.DGrey
 
 				if (chdday == self.hdtoday and chmday == self.hmtoday and chyday == self.hytoday):
-					hcolor = Color.Blue
+					hcolor = CalendarColor.Blue
 
 				entry = CalEntry(cgdday, chdday, gcolor, hcolor)
 				self.caltable.attach(entry,column,row,1,1)
@@ -304,7 +304,7 @@ class Cal(Gtk.Box):
 
 	@state.setter
 	def state(self, value):
-		if value == State.Hijri:
+		if value == CalendarState.Hijri:
 			self.combinedstack.set_visible_child_name('Hijri')
 		else:
 			self.combinedstack.set_visible_child_name('Gregorian')
@@ -319,7 +319,7 @@ class Cal(Gtk.Box):
 		self._refdate = value
 
 	def left_arrow_pressed(self, widget, event):
-		if self.state == State.Gregorian:
+		if self.state == CalendarState.Gregorian:
 			# Get the size of previous month
 			first = datetime.date(day=1, month=self.refdate.month, year=self.refdate.year)
 			ndays = int((first - datetime.timedelta(days=1)).strftime("%d"))
@@ -343,12 +343,12 @@ class Cal(Gtk.Box):
 			hyear, hmonth, hday = self.hijcal.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
 			refwd = self.weekdays.index(self.refdate.strftime("%A"))
 			calendarindex = -(refwd+(((6-refwd)+hday)//7)*7)
-		self.shift_days_of_table(gday, gmonth, gyear, hday, hmonth, hyear, calendarindex, Direction.RIGHT)
+		self.shift_days_of_table(gday, gmonth, gyear, hday, hmonth, hyear, calendarindex, CalendarDirection.RIGHT)
 		self.gmonthstack.set_visible_child_full(self.refdate.strftime("%B"), Gtk.StackTransitionType.SLIDE_RIGHT)
 		self.hmonthstack.set_visible_child_full(self.hmonths[int(hmonth)-1], Gtk.StackTransitionType.SLIDE_RIGHT)
 
 	def right_arrow_pressed(self, widget, event):
-		if self.state == State.Gregorian:
+		if self.state == CalendarState.Gregorian:
 			# Get the size of this month
 			first = (datetime.date(day=28, month=self.refdate.month, year=self.refdate.year)+timedelta(days=4)).replace(day=1)
 			ndays = int((first - datetime.timedelta(days=1)).strftime("%d"))
@@ -372,7 +372,7 @@ class Cal(Gtk.Box):
 			hyear, hmonth, hday = self.hijcal.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
 			refwd = self.weekdays.index(self.refdate.strftime("%A"))
 			calendarindex = -(refwd+(((6-refwd)+hday)//7)*7)
-		self.shift_days_of_table(gday, gmonth, gyear, hday, hmonth, hyear, calendarindex, Direction.LEFT)
+		self.shift_days_of_table(gday, gmonth, gyear, hday, hmonth, hyear, calendarindex, CalendarDirection.LEFT)
 		self.gmonthstack.set_visible_child_full(self.refdate.strftime("%B"), Gtk.StackTransitionType.SLIDE_LEFT)
 		self.hmonthstack.set_visible_child_full(self.hmonths[int(hmonth)-1], Gtk.StackTransitionType.SLIDE_LEFT)
 
@@ -396,28 +396,28 @@ class Cal(Gtk.Box):
 				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next = newhday
 
 				if (column == 0) or (column == 6):
-					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = Color.LGrey
-					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = Color.LGrey
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = CalendarColor.LGrey
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = CalendarColor.LGrey
 				else:
-					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = Color.White
-					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = Color.White
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = CalendarColor.White
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = CalendarColor.White
 
 				if newgmonth != self.gmonths.index(self.refdate.strftime("%B")):
-					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = Color.DGrey
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = CalendarColor.DGrey
 
 				if newhmonth != hmonth:
-					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = Color.DGrey
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = CalendarColor.DGrey
 
 				if (newgday == self.gdtoday and newgmonth == self.gmtoday and newgyear == self.gytoday):
-					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = Color.Blue
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = CalendarColor.Blue
 
 				if (newhday == self.hdtoday and newhmonth == self.hmtoday and newhyear == self.hytoday):
-					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = Color.Blue
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = CalendarColor.Blue
 
 				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').set_transition_duration(300)
 				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').set_transition_duration(300)
 
-				if direction == Direction.LEFT:
+				if direction == CalendarDirection.LEFT:
 					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').set_visible_child_full('next', Gtk.StackTransitionType.SLIDE_LEFT)
 					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').set_visible_child_full('next', Gtk.StackTransitionType.SLIDE_LEFT)
 				else:
@@ -432,7 +432,7 @@ class Cal(Gtk.Box):
 				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day = newhday
 				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_background = newhbackground
 
-				if direction == Direction.LEFT:
+				if direction == CalendarDirection.LEFT:
 					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').set_visible_child_full('day', Gtk.StackTransitionType.SLIDE_LEFT)
 					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').set_visible_child_full('day', Gtk.StackTransitionType.SLIDE_LEFT)
 				else:
@@ -447,7 +447,7 @@ class CalEntry(Gtk.EventBox):
 		self.set_events(Gdk.EventMask.BUTTON_PRESS_MASK)
 		self.connect("button-press-event", self.on_day_pressed)
 
-		self._state = State.Gregorian
+		self._state = CalendarState.Gregorian
 
 		# Set up the stack for the labels
 		self.labelstack = Gtk.Stack()
@@ -469,17 +469,17 @@ class CalEntry(Gtk.EventBox):
 
 	@state.setter
 	def state(self, value):
-		if value == State.Hijri:
+		if value == CalendarState.Hijri:
 			self.labelstack.set_visible_child_name('Hijri')
 		else:
 			self.labelstack.set_visible_child_name('Gregorian')
 		self._state = value	
 
 	def on_day_pressed(self, widget, data):	
-		if self.state == State.Hijri:
-			self.state = State.Gregorian
+		if self.state == CalendarState.Hijri:
+			self.state = CalendarState.Gregorian
 		else:
-			self.state = State.Hijri
+			self.state = CalendarState.Hijri
 
 class CalEntryLabel(Gtk.Stack):
 	def __init__(self, day, background):
@@ -536,16 +536,16 @@ class CalEntryLabel(Gtk.Stack):
 
 	@day_background.setter
 	def day_background(self, value):    
-		if value == Color.White:
+		if value == CalendarColor.White:
 			self.labelboxday.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA.from_color(Gdk.Color.from_floats(1.0, 1.0, 1.0)))
 			self.labelday.set_markup("<span>"+str(self.day)+"</span>")
-		elif value == Color.Blue:
+		elif value == CalendarColor.Blue:
 			self.labelboxday.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA.from_color(Gdk.Color.from_floats(0.316406, 0.671875, 0.996094)))
 			self.labelday.set_markup("<span color=\"#ffffff\">"+str(self.day)+"</span>")
-		elif value == Color.LGrey:
+		elif value == CalendarColor.LGrey:
 			self.labelboxday.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA.from_color(Gdk.Color.from_floats(0.917969, 0.917969, 0.917969)))
 			self.labelday.set_markup("<span>"+str(self.day)+"</span>")
-		elif value == Color.DGrey:
+		elif value == CalendarColor.DGrey:
 			self.labelboxday.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA.from_color(Gdk.Color.from_floats(0.839844, 0.839844, 0.839844)))
 			self.labelday.set_markup("<span>"+str(self.day)+"</span>")
 		self._daybackground = value
@@ -556,27 +556,27 @@ class CalEntryLabel(Gtk.Stack):
 
 	@day_next_background.setter
 	def day_next_background(self, value):
-		if value == Color.White:
+		if value == CalendarColor.White:
 			self.labelboxnext.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA.from_color(Gdk.Color.from_floats(1.0, 1.0, 1.0)))
 			self.labelnext.set_markup("<span>"+str(self.day_next)+"</span>")
-		elif value == Color.Blue:
+		elif value == CalendarColor.Blue:
 			self.labelboxnext.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA.from_color(Gdk.Color.from_floats(0.316406, 0.671875, 0.996094)))
 			self.labelnext.set_markup("<span color=\"#ffffff\">"+str(self.day_next)+"</span>")
-		elif value == Color.LGrey:
+		elif value == CalendarColor.LGrey:
 			self.labelboxnext.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA.from_color(Gdk.Color.from_floats(0.917969, 0.917969, 0.917969)))
 			self.labelnext.set_markup("<span>"+str(self.day_next)+"</span>")
-		elif value == Color.DGrey:
+		elif value == CalendarColor.DGrey:
 			self.labelboxnext.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA.from_color(Gdk.Color.from_floats(0.839844, 0.839844, 0.839844)))
 			self.labelnext.set_markup("<span>"+str(self.day_next)+"</span>")
 		self._daynextbackground = value
 
-class Direction(object):
+class CalendarDirection(object):
 	LEFT, RIGHT = True, False
 
-class State(object):
+class CalendarState(object):
 	Hijri, Gregorian = True, False
 
-class Color(object):
+class CalendarColor(object):
 	White, Blue, LGrey, DGrey = range(4)
 
 GObject.type_register(CalEntry)

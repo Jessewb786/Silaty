@@ -299,14 +299,14 @@ class Silaty(Gtk.Window):
         self.longentry.connect("value-changed", self.on_entered_longitude)
         settings.add_setting(self.longentry, longlabel)
 
-        # Timezone
-        defaulttmz    = self.prayertimes.options.timezone
-        tmzlabel      = Gtk.Label("Timezone:", halign=Gtk.Align.START)
-        tmzadj        = Gtk.Adjustment(value=0, lower=-12, upper=14, step_incr=1, page_incr=1, page_size=1)
-        self.tmzentry = Gtk.SpinButton(adjustment=tmzadj, digits=1, halign=Gtk.Align.FILL)
-        self.tmzentry.set_value(float(defaulttmz))
-        self.tmzentry.connect("value-changed", self.on_entered_timezone)
-        settings.add_setting(self.tmzentry, tmzlabel)
+        # Time zone
+        defaulttz    = self.prayertimes.options.timezone
+        tzlabel      = Gtk.Label("Time Zone:", halign=Gtk.Align.START)
+        tzadj        = Gtk.Adjustment(value=0, lower=-12, upper=14, step_incr=1, page_incr=1, page_size=1)
+        self.tzentry = Gtk.SpinButton(adjustment=tzadj, digits=1, halign=Gtk.Align.FILL)
+        self.tzentry.set_value(float(defaulttz))
+        self.tzentry.connect("value-changed", self.on_entered_timezone)
+        settings.add_setting(self.tzentry, tzlabel)
 
         # Add settings to the Stack
         scrolledwindow = Gtk.ScrolledWindow()

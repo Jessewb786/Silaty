@@ -61,6 +61,7 @@ python3 silaty-indicator.py
 * display/hide main window from indicator menu fixed.
 * location search button added.
 * wrong time suffix (AM/PM) when using 12h clock format fixed.
+* solve some class naming conflicts.
 
 ### v1.0
 
