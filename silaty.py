@@ -30,6 +30,9 @@ class Silaty(Gtk.Window):
         # Set parent widget
         self.parent = parent
 
+        # Init dialog
+        self.dialog = None
+
         # Tweak window
         self.set_decorated(True)
         self.set_icon_name('silaty')
@@ -343,9 +346,11 @@ class Silaty(Gtk.Window):
         self.sidebar.new_button(inact_icon, act_icon, self.parent.about_dialog)
 
     def on_city_search_pressed(self, widget, event):
-        dialog = LocationDialog(self)
-        dialog.run()
-        dialog.destroy()
+        if self.dialog is None:
+            self.dialog = LocationDialog(self)
+            self.dialog.run()
+        else:
+            self.dialog.show()
 
     def on_entered_audio_notifications(self, widget, event):
         self.prayertimes.options.audio_notifications = (not widget.get_active())
@@ -505,9 +510,10 @@ class Silaty(Gtk.Window):
     def on_entered_city_changed(self, widget):
         entry = self.cityentry.get_text()
         values = entry.split(',')
-        if len(values) > 1:
-            self.prayertimes.options.city = values[0].strip()
-            self.prayertimes.options.country = values[1].strip()
+        values_len = len(values)
+        if values_len > 1:
+            self.prayertimes.options.city = ','.join(values[:-1])
+            self.prayertimes.options.country = values[values_len-1].strip()
         else:
             self.prayertimes.options.city = values[0].strip()
             self.prayertimes.options.country = 'None'

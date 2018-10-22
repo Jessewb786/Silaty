@@ -84,6 +84,8 @@ class LocationDialog(Gtk.Dialog):
 		self.parent = parent
 		self.set_border_width(10)
 		self.set_resizable(False)
+		self.connect('delete-event', self.hide_dialog)
+		self.connect('response', self.hide_dialog)
 		self.locations = []
 		self.locations_count = 0
 		# Location
@@ -134,6 +136,10 @@ class LocationDialog(Gtk.Dialog):
 		self.add_action_widget(self.apply_button, Gtk.ResponseType.OK)
 		self.add_action_widget(cancel_button, Gtk.ResponseType.CANCEL)
 		self.show_all()
+
+	def hide_dialog(self, widget, response):
+		self.hide()
+		return True
 
 	def on_apply_button_clicked(self, widget):
 		location_num = self.get_selected_location()
