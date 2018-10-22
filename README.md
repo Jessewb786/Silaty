@@ -63,7 +63,7 @@ python3 silaty-indicator.py
 * wrong time suffix (AM/PM) when using 12h clock format fixed.
 * solve some class naming conflicts.
 * [Locations.xml](data/Locations.xml) updated from [libgweather](https://github.com/GNOME/libgweather) repository.
-* grabbing time zone from locations xml file done.
+* grabbing timezone from locations xml file done.
 
 ### v1.0
 

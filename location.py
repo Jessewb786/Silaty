@@ -169,16 +169,16 @@ class LocationDialog(Gtk.Dialog):
 		if not widget.get_text():
 			self.apply_button.set_sensitive(False)
 
-	def get_location(self, num):
-		if num is not None:
+	def get_location(self, location_num):
+		if location_num is not None:
 			for location in self.locations:
-				if location.num == num:
+				if location.num == location_num:
 					return location
 
 		return None
 
-	def is_location(self, name):
-		if self.get_location(name) is None:
+	def is_location(self, location_num):
+		if self.get_location(location_num) is None:
 			return False
 		else:
 			return True
