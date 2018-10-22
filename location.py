@@ -74,7 +74,7 @@ class Location():
 class LocationDialog(Gtk.Dialog):
 
 	def __init__(self, parent, title='Silaty'):
-		Gtk.Dialog.__init__(self, modal=True, transient_for=parent, title=title)
+		Gtk.Dialog.__init__(self, modal=True, transient_for=parent, title=title, flags=Gtk.DialogFlags.DESTROY_WITH_PARENT)
 		self.parent = parent
 		self.set_border_width(10)
 		self.set_resizable(False)

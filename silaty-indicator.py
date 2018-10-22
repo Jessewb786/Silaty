@@ -184,30 +184,30 @@ class SilatyIndicator():
 		return (str(wd)+", "+str(h_date))
 
 	def show_home(self, widget):
-		self.show_tab("home")
+		self.show_window("home")
 
 	def show_qibla(self, widget):
-		self.show_tab("qibla")
+		self.show_window("qibla")
 
 	def show_settings(self, widget, data):
-		self.show_tab("options")
+		self.show_window("options")
 
-	def show_tab(self, tab_name):
+	def show_window(self, active_tab_name):
 		# Show main window
-		if (not self.silaty.is_visible()):
+		#print ('DEBUG: window is visible: %s, active: %s' % (self.silaty.is_visible(), self.silaty.is_active()))
+		if not self.silaty.is_visible():
 			self.silaty.show_all()
-			#self.silaty.set_keep_above(True)
-			self.silaty.set_position(Gtk.WindowPosition.CENTER)
-		self.silaty.present()
-		# Get current tab
-		current_tab = self.silaty.sidebar.stack.get_visible_child_name()
-		if (current_tab != tab_name):
+		elif not self.silaty.is_active():
+			self.silaty.present()
+		# Set active tab
+		current_tab_name = self.silaty.sidebar.stack.get_visible_child_name()
+		if (current_tab_name != active_tab_name):
 			# If another tab was activated before, set its state to OFF
-			index = self.silaty.sidebar.stackchildnames.index(current_tab)
+			index = self.silaty.sidebar.stackchildnames.index(current_tab_name)
 			self.silaty.sidebar.get_child(index).state = State.OFF
-		# Activate/show new tab
-		self.silaty.sidebar.stack.set_visible_child_name(tab_name)
-		self.silaty.sidebar.emit("window-shown")
+			# Activate/show new tab
+			self.silaty.sidebar.stack.set_visible_child_name(active_tab_name)
+			self.silaty.sidebar.emit("window-shown")
 
 	def about_dialog(self, widget, data=None):# The About Dialog
 		print ("DEBUG: opening about dialog @", (str(datetime.datetime.now())))
@@ -248,8 +248,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.''')
 
 	def quit(self, widget):
 		self.silaty.prayertimes.options.save_options()
-		if self.silaty.dialog is not None:
-			self.silaty.dialog.destroy()
+		self.silaty.destroy()
 		Gtk.main_quit()
 
 	def main(self):

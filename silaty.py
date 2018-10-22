@@ -27,15 +27,15 @@ class Silaty(Gtk.Window):
         GLib.threads_init()
         Gst.init()
 
-        # Set parent & dialog widgets
+        # Set parent widget
         self.parent = parent
-        self.dialog = None
 
         # Tweak window
         self.set_decorated(True)
         self.set_icon_name('silaty')
         self.set_modal(True)
         self.set_resizable(False)
+        self.set_position(Gtk.WindowPosition.CENTER)
         self.connect('delete-event', self.hide_window)
         #self.set_default_size(429, 440)
         self.headerbar = Gtk.HeaderBar()
@@ -343,10 +343,9 @@ class Silaty(Gtk.Window):
         self.sidebar.new_button(inact_icon, act_icon, self.parent.about_dialog)
 
     def on_city_search_pressed(self, widget, event):
-        self.dialog = LocationDialog(self)
-        self.dialog.run()
-        self.dialog.destroy()
-        self.dialog = None
+        dialog = LocationDialog(self)
+        dialog.run()
+        dialog.destroy()
 
     def on_entered_audio_notifications(self, widget, event):
         self.prayertimes.options.audio_notifications = (not widget.get_active())
@@ -550,8 +549,7 @@ class Silaty(Gtk.Window):
 
     def hide_window(self, widget, data):
         self.prayertimes.options.save_options()
-        self.hide_on_delete()
-        return True # we must return true, to confirm that we have handled the event
+        return self.hide_on_delete()
 
     def get_times(self, prayer):# If User Sets Clock Format 12hr or 24hr Return It As He Likes!
         if self.prayertimes.options.clock_format == '12h':
