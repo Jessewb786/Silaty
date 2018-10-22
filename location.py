@@ -6,43 +6,66 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
+import datetime
+import pytz
+from prayertime import is_dst
 try:
 	import xml.etree.cElementTree as ET # C implementation is much faster
 except ImportError:
 	import xml.etree.ElementTree as ET
 
+class TimeZone():
+
+	def __init__(self, zone_name):
+		self.zone_name = zone_name
+		self._tz = None
+
+	@property
+	def tz(self):
+		if self._tz is None and self.zone_name is not None:
+			self._tz = datetime.datetime.now(pytz.timezone(self.zone_name))
+		return self._tz
+
+	@tz.setter
+	def tz(self, value):
+		self._tz = value
+
+	def get_value(self):
+		if self.tz is not None:
+			return self.tz.utcoffset().total_seconds()/60/60
+		else:
+			return None
+
+	def is_dst(self):
+		if self.tz is not None:
+			return bool(self.tz.dst())
+		else:
+			False
+
+class Country():
+
+	def __init__(self, name, timezone):
+		self.name = name
+		self.timezone = TimeZone(timezone)
+
 class Location():
 
-	def __init__(self, name, code, coordinates, country, city):
+	def __init__(self, num, name, coordinates, country, is_city):
+		self.num = num
 		self.name = name
-		self.code = code
 		self.coordinates = coordinates
 		self.country = country
-		self.city = city
+		self.is_city = is_city
 
 	def get_full_name(self):
-		if self.city and self.city not in self.name:
-			return ('%s (%s), %s' % (self.city, self.name, self.country))
-		else:
-			return ('%s, %s' % (self.name, self.country))
+		return ('%s, %s' % (self.name, self.country.name))
 
 	def get_latitude(self):
 		if self.coordinates is None:
 			return None
 		else:
 			coordinates = self.coordinates.split(' ')
-			parts = coordinates[0].split('-')
-			parts_len = len(parts)
-			index = parts_len - 1
-			direction = parts[index][-1:]
-			parts[index] = parts[index][:-1]
-			if parts_len == 3:
-				latitude = self.dms2dd(parts[0], parts[1], parts[2], direction)
-			elif parts_len == 2:
-				latitude = self.dms2dd(parts[0], parts[1], 0, direction)
-			else:
-				latitude = None
-			return latitude
+			return float(coordinates[0])
 
 	def get_longitude(self):
 		if self.coordinates is None:
@@ -52,24 +75,7 @@ class Location():
 			if len(coordinates) <= 1:
 				return None
 			else:
-				parts = coordinates[1].split('-')
-				parts_len = len(parts)
-				index = parts_len - 1
-				direction = parts[index][-1:]
-				parts[index] = parts[index][:-1]
-				if parts_len == 3:
-					longitude = self.dms2dd(parts[0], parts[1], parts[2], direction)
-				elif parts_len == 2:
-					longitude = self.dms2dd(parts[0], parts[1], 0, direction)
-				else:
-					longitude = None
-				return longitude
-
-	def dms2dd(self, degrees, minutes, seconds, direction):
-		dd = float(degrees) + float(minutes)/60 + float(seconds)/(60*60)
-		if direction == 'W' or direction == 'S':
-			dd *= -1
-		return dd
+				return float(coordinates[1])
 
 class LocationDialog(Gtk.Dialog):
 
@@ -79,13 +85,14 @@ class LocationDialog(Gtk.Dialog):
 		self.set_border_width(10)
 		self.set_resizable(False)
 		self.locations = []
+		self.locations_count = 0
 		# Location
 		content_area = self.get_content_area()
 		content_area.set_spacing(5)
 		scrolledwindow = Gtk.ScrolledWindow()
 		scrolledwindow.set_size_request(150, 250)
 		content_area.add(scrolledwindow)
-		self.treestore = Gtk.TreeStore(str)
+		self.treestore = Gtk.TreeStore(str, int)
 		self.parse_locations()
 		treemodelsort = Gtk.TreeModelSort(self.treestore)
 		treemodelsort.set_sort_column_id(0, Gtk.SortType.ASCENDING)
@@ -129,16 +136,25 @@ class LocationDialog(Gtk.Dialog):
 		self.show_all()
 
 	def on_apply_button_clicked(self, widget):
-		location_name = self.get_selected_location()
-		location = self.get_location(location_name)
+		location_num = self.get_selected_location()
+		location = self.get_location(location_num)
 		if location is not None:
 			self.parent.cityentry.set_text(location.get_full_name())
 			latitude  = location.get_latitude()
 			longitude = location.get_longitude()
+			timezone  = location.country.timezone.get_value()
 			if latitude is not None:
 				self.parent.latentry.set_value(latitude)
 			if longitude is not None:
 				self.parent.longentry.set_value(longitude)
+			if timezone is not None:
+				'''
+				is_dst() will return the current system timezone daylight saving
+				location.country.timezone.is_dst() will return the specified country timezone daylight saving
+				'''
+				if self.parent.prayertimes.options.daylight_saving_time and is_dst() and location.country.timezone.is_dst():
+					timezone -= 1
+				self.parent.tzentry.set_value(timezone)
 
 	def on_cancel_button_clicked(self, widget):
 		pass
@@ -147,10 +163,10 @@ class LocationDialog(Gtk.Dialog):
 		if not widget.get_text():
 			self.apply_button.set_sensitive(False)
 
-	def get_location(self, name):
-		if name and name is not None:
+	def get_location(self, num):
+		if num is not None:
 			for location in self.locations:
-				if location.name == name:
+				if location.num == num:
 					return location
 
 		return None
@@ -166,14 +182,14 @@ class LocationDialog(Gtk.Dialog):
 			selection = self.treeview.get_selection()
 		model, tree_iter = selection.get_selected()
 		if tree_iter and not model.iter_has_child(tree_iter): # a location should not have children
-			value = model.get_value(tree_iter, 0)
+			value = model.get_value(tree_iter, 1) # 0 => location name, 1 => location num
 			return value
 		else:
 			return None
 
 	def on_selection_changed(self, selection):
-		location_name = self.get_selected_location(selection)
-		if self.is_location(location_name):
+		location_num = self.get_selected_location(selection)
+		if self.is_location(location_num):
 			self.apply_button.set_sensitive(True)
 		else:
 			self.apply_button.set_sensitive(False)
@@ -181,90 +197,90 @@ class LocationDialog(Gtk.Dialog):
 	# @see https://stackoverflow.com/questions/23355866/user-search-collapsed-rows-in-a-gtk-treeview
 	def search_function(self, model, column, key, rowiter):
 		row = model[rowiter]
-		if key.lower() in list(row)[column-1].lower():
+		if key.lower() in list(row)[column-2].lower():
 			return False # Search matches
 
 		# Search in child rows. If one of the rows matches, expand the row so that it will be open in later checks.
 		for level_1 in row.iterchildren():
-			if key.lower() in list(level_1)[column-1].lower():
+			if key.lower() in list(level_1)[column-2].lower():
 				self.treeview.expand_to_path(row.path)
 				return True
 			else:
 				for level_2 in level_1.iterchildren():
-					if key.lower() in list(level_2)[column-1].lower():
+					if key.lower() in list(level_2)[column-2].lower():
 						self.treeview.expand_to_path(level_1.path)
 						return True
 					else:
 						for level_3 in level_2.iterchildren():
-							if key.lower() in list(level_3)[column-1].lower():
+							if key.lower() in list(level_3)[column-2].lower():
 								self.treeview.expand_to_path(level_2.path)
 								return True
 							else:
-								for level_4 in level_3.iterchildren():
-									if key.lower() in list(level_4)[column-1].lower():
-										self.treeview.expand_to_path(level_3.path)
-										return True
-									else:
-										self.treeview.collapse_row(level_3.path)
 								self.treeview.collapse_row(level_2.path)
 						self.treeview.collapse_row(level_1.path)
 				self.treeview.collapse_row(row.path)
 
 		return True # Search does not match
 
-	def add_location(self, location, country, city):
+	def add_location(self, location, country, is_city = False):
 		name = location[0].text
-		location_code = location.find('code')
 		location_coordinates = location.find('coordinates')
-		if location_code is not None:
-			code = location_code.text
-		else:
-			print ('WARNING: %s > %s has no code.' % (country, name))
-			code = None
 		if location_coordinates is not None:
 			coordinates = location_coordinates.text
 		else:
-			print ('WARNING: %s > %s has no coordinates.' % (country, name))
+			print ('WARNING: %s > %s has no coordinates.' % (country.name, name))
 			coordinates = None
-		self.locations.append(Location(name, code, coordinates, country, city))
+		self.locations_count += 1
+		new_location = Location(self.locations_count, name, coordinates, country, is_city)
+		# add new location
+		self.locations.append(new_location)
 
 	def parse_locations(self):
 		# Parse XML file
 		tree = ET.parse(os.path.dirname(os.path.realpath(__file__)) + '/data/Locations.xml')
 		root = tree.getroot()
 		for child in root:
-			#print ('%s' % child[0].text)
-			region = self.treestore.append(None, [child[0].text])
-			for region_child in child:
-				if region_child.tag == 'country':
-					#print ('├── %s' % region_child[0].text)
-					country = self.treestore.append(region, [region_child[0].text])
-					for country_child in region_child:
-						if country_child.tag == 'location':
-							#print ('│   ├── %s' % country_child[0].text)
-							self.treestore.append(country, [country_child[0].text])
-							self.add_location(country_child, region_child[0].text, country_child[0].text)
-						elif country_child.tag == 'city':
-							#print ('│   ├── %s' % country_child[0].text)
-							city = self.treestore.append(country, [country_child[0].text])
-							for city_child in country_child:
-								if city_child.tag == 'location':
-									#print ('│   │   ├── %s' % city_child[0].text)
-									self.treestore.append(city, [city_child[0].text])
-									self.add_location(city_child, region_child[0].text, country_child[0].text)
-						elif country_child.tag == 'state':
-							#print ('│   ├── %s' % country_child[0].text)
-							state = self.treestore.append(country, [country_child[0].text])
-							for state_child in country_child:
-								if state_child.tag == 'location':
-									#print ('│   │   ├── %s' % state_child[0].text)
-									self.treestore.append(state, [state_child[0].text])
-									self.add_location(state_child, region_child[0].text, country_child[0].text)
-								elif state_child.tag == 'city':
-									#print ('│   │   ├── %s' % state_child[0].text)
-									city = self.treestore.append(state, [state_child[0].text])
-									for city_child in state_child:
-										if city_child.tag == 'location':
-											#print ('│   │   │   ├── %s' % city_child[0].text)
-											self.treestore.append(city, [city_child[0].text])
-											self.add_location(city_child, region_child[0].text, state_child[0].text)
+			if child.tag == 'region':
+				region_name = child[0].text
+				#region_name = child.find('_name').text
+				#print ('%s' % region_name)
+				region_node = self.treestore.append(None, [region_name, 0])
+				for region_child in child:
+					if region_child.tag == 'country':
+						country_name = region_child[0].text
+						#country_name = region_child.find('_name').text
+						#print ('├── %s' % country_name)
+						timezone = region_child.find('timezones')
+						if timezone is not None:
+							country_timezone = timezone[0].attrib['id']
+						else:
+							print ('WARNING: %s has no timezone.' % (country_name))
+							country_timezone = None
+						country = Country(country_name, country_timezone)
+						country_node = self.treestore.append(region_node, [country_name, 0])
+						for country_child in region_child:
+							if country_child.tag == 'location':
+								location_name = country_child[0].text
+								#print ('│   ├── %s' % location_name)
+								self.add_location(country_child, country)
+								self.treestore.append(country_node, [location_name, self.locations_count])
+							elif country_child.tag == 'city':
+								city_name = country_child[0].text
+								#print ('│   ├── %s' % city_name)
+								self.add_location(country_child, country, True)
+								self.treestore.append(country_node, [city_name, self.locations_count])
+							elif country_child.tag == 'state':
+								state_name = country_child[0].text
+								#print ('│   ├── %s' % state_name)
+								state_node = self.treestore.append(country_node, [state_name, 0])
+								for state_child in country_child:
+									if state_child.tag == 'location':
+										location_name = state_child[0].text
+										#print ('│   │   ├── %s' % location_name)
+										self.add_location(state_child, country)
+										self.treestore.append(state_node, [location_name, self.locations_count])
+									elif state_child.tag == 'city':
+										city_name = state_child[0].text
+										#print ('│   │   ├── %s' % city_name)
+										self.add_location(state_child, country, True)
+										self.treestore.append(state_node, [city_name, self.locations_count])

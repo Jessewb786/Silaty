@@ -62,6 +62,8 @@ python3 silaty-indicator.py
 * location search button added.
 * wrong time suffix (AM/PM) when using 12h clock format fixed.
 * solve some class naming conflicts.
+* [Locations.xml](data/Locations.xml) updated from [libgweather](https://github.com/GNOME/libgweather) repository.
+* grabbing time zone from locations xml file done.
 
 ### v1.0
 
@@ -71,7 +73,7 @@ python3 silaty-indicator.py
 
 - [x] fix settings issues (especially Location settings).
 - [x] use a custom list to get/set location (@see [Minbar](https://github.com/fajran/minbar)).
-- [ ] add timezone for each location in [Locations.xml](data/Locations.xml).
+- [ ] remove duplicate locations/cities in [Locations.xml](data/Locations.xml).
 - [ ] translate to other languages.
 
 ## Credits
