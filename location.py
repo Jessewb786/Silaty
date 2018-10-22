@@ -27,7 +27,7 @@ class Location():
 			return ('%s, %s' % (self.name, self.country))
 
 	def get_latitude(self):
-		if not self.coordinates:
+		if self.coordinates is None:
 			return None
 		else:
 			coordinates = self.coordinates.split(' ')
@@ -45,7 +45,7 @@ class Location():
 			return latitude
 
 	def get_longitude(self):
-		if not self.coordinates:
+		if self.coordinates is None:
 			return None
 		else:
 			coordinates = self.coordinates.split(' ')
@@ -220,12 +220,12 @@ class LocationDialog(Gtk.Dialog):
 			code = location_code.text
 		else:
 			print ('WARNING: %s > %s has no code.' % (country, name))
-			code = ''
+			code = None
 		if location_coordinates is not None:
 			coordinates = location_coordinates.text
 		else:
 			print ('WARNING: %s > %s has no coordinates.' % (country, name))
-			coordinates = ''
+			coordinates = None
 		self.locations.append(Location(name, code, coordinates, country, city))
 
 	def parse_locations(self):
