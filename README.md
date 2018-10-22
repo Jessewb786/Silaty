@@ -60,6 +60,7 @@ python3 silaty-indicator.py
 * get location using Google Maps API disabled (no longer works).
 * daylight saving time setting added.
 * display/hide main window from indicator menu fixed.
+* location search button added.
 
 ### v1.0
 
@@ -68,7 +69,8 @@ python3 silaty-indicator.py
 ## ToDo
 
 - [x] fix settings issues (especially Location settings).
-- [ ] use a custom list to get/set location (@see [Minbar](https://github.com/fajran/minbar)).
+- [x] use a custom list to get/set location (@see [Minbar](https://github.com/fajran/minbar)).
+- [ ] add timezone for each location in [Locations.xml](data/Locations.xml).
 - [ ] translate to other languages.
 
 ## Credits

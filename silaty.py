@@ -12,6 +12,7 @@ from prayertime import *
 from silatycal import *
 from sidebar import *
 from home import *
+from location import *
 import urllib.request
 import datetime
 import time
@@ -26,8 +27,9 @@ class Silaty(Gtk.Window):
         GLib.threads_init()
         Gst.init()
 
-        # Set parent widget
+        # Set parent & dialog widgets
         self.parent = parent
+        self.dialog = None
 
         # Tweak window
         self.set_decorated(True)
@@ -257,6 +259,7 @@ class Silaty(Gtk.Window):
         settings.add_category("Location")
 
         # City name
+        citybox        = Gtk.Box(halign=Gtk.Align.FILL, spacing=3)
         defaultcity    = self.prayertimes.options.city
         defaultcountry = self.prayertimes.options.country
         citylabel      = Gtk.Label('City:', halign=Gtk.Align.START)
@@ -268,7 +271,14 @@ class Silaty(Gtk.Window):
         #self.cityentry.connect("activate", self.on_entered_city_activate)
         self.cityentry.connect("changed", self.on_entered_city)
         self.cityentry.connect("focus-out-event", self.on_entered_city_focus_out)
-        settings.add_setting(self.cityentry, citylabel)
+        citybox.pack_start(self.cityentry, True, True, 0)
+
+        self.citysearch = Gtk.Button.new_from_icon_name("system-search-symbolic", Gtk.IconSize.BUTTON)
+        self.citysearch.set_relief(Gtk.ReliefStyle.HALF)
+        self.citysearch.connect("button-press-event", self.on_city_search_pressed)
+        citybox.pack_start(self.citysearch, False, False, 0)
+
+        settings.add_setting(citybox, citylabel)
 
         # Latitude
         defaultlatitude = self.prayertimes.options.latitude
@@ -296,11 +306,6 @@ class Silaty(Gtk.Window):
         self.tmzentry.set_value(float(defaulttmz))
         self.tmzentry.connect("value-changed", self.on_entered_timezone)
         settings.add_setting(self.tmzentry, tmzlabel)
-
-        # Link to get location
-        infolabel = Gtk.Label("You can get your location on ", halign=Gtk.Align.START)
-        linklabel = Gtk.Label('<a href="https://www.islamicfinder.org/">www.islamicfinder.org</a>', use_markup=True, halign=Gtk.Align.FILL)
-        settings.add_setting(linklabel, infolabel)
 
         # Add settings to the Stack
         scrolledwindow = Gtk.ScrolledWindow()
@@ -335,6 +340,12 @@ class Silaty(Gtk.Window):
         act_icon   = os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/aboutA.svg"
         inact_icon = os.path.dirname(os.path.realpath(__file__)) + "/icons/sidebar/aboutN.svg"
         self.sidebar.new_button(inact_icon, act_icon, self.parent.about_dialog)
+
+    def on_city_search_pressed(self, widget, event):
+        self.dialog = LocationDialog(self)
+        self.dialog.run()
+        self.dialog.destroy()
+        self.dialog = None
 
     def on_entered_audio_notifications(self, widget, event):
         self.prayertimes.options.audio_notifications = (not widget.get_active())

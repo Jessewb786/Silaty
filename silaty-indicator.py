@@ -248,6 +248,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.''')
 
 	def quit(self, widget):
 		self.silaty.prayertimes.options.save_options()
+		if self.silaty.dialog is not None:
+			self.silaty.dialog.destroy()
 		Gtk.main_quit()
 
 	def main(self):

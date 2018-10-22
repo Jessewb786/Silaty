@@ -10,6 +10,7 @@ sh uninstall.sh
 mkdir /usr/share/silaty
 cp -R icons /usr/share/silaty/
 cp -R audio /usr/share/silaty/
+cp -R data /usr/share/silaty/
 
 cp /usr/share/silaty/icons/hicolor/128x128/apps/silaty.svg /usr/share/icons/hicolor/scalable/apps/
 chmod 644  /usr/share/icons/hicolor/scalable/apps/silaty.svg
