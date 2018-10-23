@@ -6,9 +6,6 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
-import datetime
-import pytz
-from prayertime import is_dst
 try:
 	import xml.etree.cElementTree as ET # C implementation is much faster
 except ImportError:
@@ -16,37 +13,15 @@ except ImportError:
 
 class TimeZone():
 
-	def __init__(self, zone_name):
+	def __init__(self, zone_name, value):
 		self.zone_name = zone_name
-		self._tz = None
-
-	@property
-	def tz(self):
-		if self._tz is None and self.zone_name is not None:
-			self._tz = datetime.datetime.now(pytz.timezone(self.zone_name))
-		return self._tz
-
-	@tz.setter
-	def tz(self, value):
-		self._tz = value
-
-	def get_value(self):
-		if self.tz is not None:
-			return self.tz.utcoffset().total_seconds()/60/60
-		else:
-			return None
-
-	def is_dst(self):
-		if self.tz is not None:
-			return bool(self.tz.dst())
-		else:
-			False
+		self.value = value
 
 class Country():
 
 	def __init__(self, name, timezone):
 		self.name = name
-		self.timezone = TimeZone(timezone)
+		self.timezone = timezone
 
 class Location():
 
@@ -148,19 +123,13 @@ class LocationDialog(Gtk.Dialog):
 			self.parent.cityentry.set_text(location.get_full_name())
 			latitude  = location.get_latitude()
 			longitude = location.get_longitude()
-			timezone  = location.country.timezone.get_value()
+			timezone  = location.country.timezone
 			if latitude is not None:
 				self.parent.latentry.set_value(latitude)
 			if longitude is not None:
 				self.parent.longentry.set_value(longitude)
 			if timezone is not None:
-				'''
-				is_dst() will return the current system timezone daylight saving
-				location.country.timezone.is_dst() will return the specified country timezone daylight saving
-				'''
-				if self.parent.prayertimes.options.daylight_saving_time and is_dst() and location.country.timezone.is_dst():
-					timezone -= 1
-				self.parent.tzentry.set_value(timezone)
+				self.parent.tzentry.set_value(timezone.value)
 
 	def on_cancel_button_clicked(self, widget):
 		pass
@@ -248,21 +217,23 @@ class LocationDialog(Gtk.Dialog):
 		for child in root:
 			if child.tag == 'region':
 				region_name = child[0].text
-				#region_name = child.find('_name').text
+				#region_name = child.find('name').text
 				#print ('%s' % region_name)
 				region_node = self.treestore.append(None, [region_name, 0])
 				for region_child in child:
 					if region_child.tag == 'country':
 						country_name = region_child[0].text
-						#country_name = region_child.find('_name').text
+						#country_name = region_child.find('name').text
 						#print ('├── %s' % country_name)
-						timezone = region_child.find('timezones')
-						if timezone is not None:
-							country_timezone = timezone[0].attrib['id']
+						timezones = region_child.find('timezones')
+						if timezones is not None:
+							zone = timezones[0].attrib['id']
+							value = float(timezones[0].attrib['value'])
+							timezone = TimeZone(zone, value)
 						else:
 							print ('WARNING: %s has no timezone.' % (country_name))
-							country_timezone = None
-						country = Country(country_name, country_timezone)
+							timezone = None
+						country = Country(country_name, timezone)
 						country_node = self.treestore.append(region_node, [country_name, 0])
 						for country_child in region_child:
 							if country_child.tag == 'location':
