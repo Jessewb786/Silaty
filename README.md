@@ -13,27 +13,14 @@ cd /path/to/silaty
 sudo ./install.sh
 ```
 
-To uninstall run:
-```bash
-sudo ./uninstall.sh
-```
-
-## Test
-
-If you already installed Silaty, you can simply start it from your applications menu, you can also open a terminal & run:
+Once installed, you can run Silaty from your applications menu, or using the command bellow:
 ```bash
 silaty-indicator
 ```
 
-If you didn't install Silaty & you want to test it, you can start by cloning this repository:
+To uninstall run:
 ```bash
-git clone https://github.com/AXeL-dev/Silaty.git
-```
-
-Then, make sure that you have python3 installed using `python3 -V` before run: 
-```bash
-cd /path/to/silaty
-python3 silaty-indicator.py
+sudo ./uninstall.sh
 ```
 
 ## Changelog
