@@ -216,14 +216,12 @@ class LocationDialog(Gtk.Dialog):
 		root = tree.getroot()
 		for child in root:
 			if child.tag == 'region':
-				region_name = child[0].text
-				#region_name = child.find('name').text
+				region_name = child.find('name').text
 				#print ('%s' % region_name)
 				region_node = self.treestore.append(None, [region_name, 0])
 				for region_child in child:
 					if region_child.tag == 'country':
-						country_name = region_child[0].text
-						#country_name = region_child.find('name').text
+						country_name = region_child.find('name').text
 						#print ('├── %s' % country_name)
 						timezones = region_child.find('timezones')
 						if timezones is not None:
@@ -237,27 +235,27 @@ class LocationDialog(Gtk.Dialog):
 						country_node = self.treestore.append(region_node, [country_name, 0])
 						for country_child in region_child:
 							if country_child.tag == 'location':
-								location_name = country_child[0].text
+								location_name = country_child.find('name').text
 								#print ('│   ├── %s' % location_name)
 								self.add_location(country_child, country)
 								self.treestore.append(country_node, [location_name, self.locations_count])
 							elif country_child.tag == 'city':
-								city_name = country_child[0].text
+								city_name = country_child.find('name').text
 								#print ('│   ├── %s' % city_name)
 								self.add_location(country_child, country, True)
 								self.treestore.append(country_node, [city_name, self.locations_count])
 							elif country_child.tag == 'state':
-								state_name = country_child[0].text
+								state_name = country_child.find('name').text
 								#print ('│   ├── %s' % state_name)
 								state_node = self.treestore.append(country_node, [state_name, 0])
 								for state_child in country_child:
 									if state_child.tag == 'location':
-										location_name = state_child[0].text
+										location_name = state_child.find('name').text
 										#print ('│   │   ├── %s' % location_name)
 										self.add_location(state_child, country)
 										self.treestore.append(state_node, [location_name, self.locations_count])
 									elif state_child.tag == 'city':
-										city_name = state_child[0].text
+										city_name = state_child.find('name').text
 										#print ('│   │   ├── %s' % city_name)
 										self.add_location(state_child, country, True)
 										self.treestore.append(state_node, [city_name, self.locations_count])
