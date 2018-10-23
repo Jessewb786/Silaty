@@ -109,10 +109,7 @@ class SilatyIndicator():
 		self.silaty.prayertimes.calculate()# Calculate PrayerTimes
 
 		# Update City menu item
-		if not self.silaty.prayertimes.options.country or self.silaty.prayertimes.options.country == 'None':
-			self.CityItem.set_label("Location: %s" % self.silaty.prayertimes.options.city)
-		else:
-			self.CityItem.set_label("Location: %s, %s" % (self.silaty.prayertimes.options.city, self.silaty.prayertimes.options.country))
+		self.CityItem.set_label("Location: %s" % self.silaty.prayertimes.options.city)
 
 		# Update Hijri Date Menu item
 		self.HijriDateItem.set_label(self.get_hijri_date())

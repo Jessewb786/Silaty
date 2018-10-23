@@ -32,9 +32,6 @@ class Location():
 		self.country = country
 		self.is_city = is_city
 
-	def get_full_name(self):
-		return ('%s, %s' % (self.name, self.country.name))
-
 	def get_latitude(self):
 		if self.coordinates is None:
 			return None
@@ -120,7 +117,10 @@ class LocationDialog(Gtk.Dialog):
 		location_num = self.get_selected_location()
 		location = self.get_location(location_num)
 		if location is not None:
-			self.parent.cityentry.set_text(location.get_full_name())
+			self.parent.lock_location_updates = True
+			self.parent.prayertimes.options.country = location.country.name
+			self.parent.prayertimes.options.city = location.name
+			self.parent.cityentry.set_text(location.name)
 			latitude  = location.get_latitude()
 			longitude = location.get_longitude()
 			timezone  = location.country.timezone
@@ -130,6 +130,8 @@ class LocationDialog(Gtk.Dialog):
 				self.parent.longentry.set_value(longitude)
 			if timezone is not None:
 				self.parent.tzentry.set_value(timezone.value)
+			self.parent.update_location()
+			self.parent.lock_location_updates = False
 
 	def on_cancel_button_clicked(self, widget):
 		pass

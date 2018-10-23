@@ -42,7 +42,6 @@ sudo ./uninstall.sh
 * useless debug messages commented (especially those used in main loop).
 * attempt to fix [installing error #4](https://github.com/Jessewb786/Silaty/issues/4) by ignoring pycompile cmd.
 * timezone added to location settings.
-* display country beside city in location settings.
 * get location using Google Maps API disabled (no longer works).
 * daylight saving time setting added.
 * display/hide main window from indicator menu fixed.

@@ -29,6 +29,7 @@ class Silaty(Gtk.Window):
 
         # Set parent widget
         self.parent = parent
+        self.lock_location_updates = False
 
         # Init dialog
         self.dialog = None
@@ -267,13 +268,8 @@ class Silaty(Gtk.Window):
         defaultcountry = self.prayertimes.options.country
         citylabel      = Gtk.Label('City:', halign=Gtk.Align.START)
         self.cityentry = Gtk.Entry(halign=Gtk.Align.FILL)
-        if not defaultcountry or defaultcountry == 'None':
-            self.cityentry.set_text('%s' % defaultcity)
-        else:
-            self.cityentry.set_text('%s, %s' % (defaultcity, defaultcountry))
+        self.cityentry.set_text('%s' % defaultcity)
         #self.cityentry.connect("activate", self.on_entered_city_activate)
-        self.cityentry.connect("activate", lambda widget: self.update_qibla())
-        self.cityentry.connect("changed", self.on_entered_city_changed)
         self.cityentry.connect("focus-out-event", self.on_entered_city_focus_out)
         citybox.pack_start(self.cityentry, True, True, 0)
 
@@ -430,19 +426,24 @@ class Silaty(Gtk.Window):
         self.prayertimes.options.daylight_saving_time = (not widget.get_active())
         self.update_prayers()
 
-    def on_entered_latitude(self, widget):
-        self.prayertimes.options.latitude = widget.get_value()
+    def update_location(self):
         self.update_prayers()
         self.update_qibla()
+
+    def on_entered_latitude(self, widget):
+        self.prayertimes.options.latitude = widget.get_value()
+        if not self.lock_location_updates:
+            self.update_location()
 
     def on_entered_longitude(self, widget):
         self.prayertimes.options.longitude = widget.get_value()
-        self.update_prayers()
-        self.update_qibla()
+        if not self.lock_location_updates:
+            self.update_location()
 
     def on_entered_timezone(self, widget):
         self.prayertimes.options.timezone = widget.get_value()
-        self.update_prayers()
+        if not self.lock_location_updates:
+            self.update_prayers()
 
     def on_entered_notification_time(self, widget):
         self.prayertimes.options.notification_time = widget.get_value()
@@ -507,18 +508,8 @@ class Silaty(Gtk.Window):
             # Update home prayers
             self.update_prayers()
 
-    def on_entered_city_changed(self, widget):
-        entry = self.cityentry.get_text()
-        values = entry.split(',')
-        values_len = len(values)
-        if values_len > 1:
-            self.prayertimes.options.city = ','.join(values[:-1])
-            self.prayertimes.options.country = values[values_len-1].strip()
-        else:
-            self.prayertimes.options.city = values[0].strip()
-            self.prayertimes.options.country = 'None'
-
     def on_entered_city_focus_out(self, widget, event):
+        self.prayertimes.options.city = widget.get_text()
         self.update_qibla()
 
     def update_qibla(self):
