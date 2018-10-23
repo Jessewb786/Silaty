@@ -73,7 +73,8 @@ python3 silaty-indicator.py
 
 - [x] fix settings issues (especially Location settings).
 - [x] use a custom list to get/set location (@see [Minbar](https://github.com/fajran/minbar)).
-- [ ] remove duplicate locations/cities in [Locations.xml](data/Locations.xml).
+- [x] remove duplicate locations/cities.
+- [ ] fill empty countries with locations in [Locations.xml](data/Locations.xml).
 - [ ] translate to other languages.
 
 ## Credits
