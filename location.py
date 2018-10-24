@@ -171,6 +171,18 @@ class LocationDialog(Gtk.Dialog):
 		else:
 			self.apply_button.set_sensitive(False)
 
+	def toggle_rows(self, row, key, column):
+		for child in row.iterchildren():
+			if key.lower() in list(child)[column].lower():
+				self.treeview.expand_to_path(row.path)
+				return True
+			else:
+				if self.toggle_rows(child, key, column):
+					return True
+				self.treeview.collapse_row(row.path)
+
+		return False
+
 	# @see https://stackoverflow.com/questions/23355866/user-search-collapsed-rows-in-a-gtk-treeview
 	def search_function(self, model, column, key, rowiter):
 		row = model[rowiter]
@@ -178,24 +190,7 @@ class LocationDialog(Gtk.Dialog):
 			return False # Search matches
 
 		# Search in child rows. If one of the rows matches, expand the row so that it will be open in later checks.
-		for level_1 in row.iterchildren():
-			if key.lower() in list(level_1)[column-2].lower():
-				self.treeview.expand_to_path(row.path)
-				return True
-			else:
-				for level_2 in level_1.iterchildren():
-					if key.lower() in list(level_2)[column-2].lower():
-						self.treeview.expand_to_path(level_1.path)
-						return True
-					else:
-						for level_3 in level_2.iterchildren():
-							if key.lower() in list(level_3)[column-2].lower():
-								self.treeview.expand_to_path(level_2.path)
-								return True
-							else:
-								self.treeview.collapse_row(level_2.path)
-						self.treeview.collapse_row(level_1.path)
-				self.treeview.collapse_row(row.path)
+		self.toggle_rows(row, key, column-2)
 
 		return True # Search does not match
 
