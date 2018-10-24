@@ -144,24 +144,36 @@ class SilatyIndicator():
 
 	def secs_to_hrtime(self, secs):
 		# Transform Seconds into Hours and Minutes
-		if (secs//3600) != 0:
-			return str(secs//3600)+" Hours and "+str(((secs//60)%60))+" Minutes"
-		else:
-			return str(((secs//60)%60))+" Minutes"
-	def secs_to_nrtime(self, secs):
-		# Transform Seconds into Hours and Minutes
-		# Using the same standard and iPray
 		hours = secs//3600
 		minutes = (secs//60)%60
+		minutes += 1 # correct minutes (to avoid values like "0min")
+		if hours == 0:
+			return str(minutes)+" Minutes"
+		elif minutes == 60:
+			hours += 1
+			return str(hours)+" Hours"
+		else:
+			return str(hours)+" Hours and "+str(minutes)+" Minutes"
+
+	def secs_to_nrtime(self, secs):
+		# Transform Seconds into Hours and Minutes
+		# Using the same standard in iPray
+		hours = secs//3600
+		minutes = (secs//60)%60
+		minutes += 1 # correct minutes (to avoid values like "0min")
 		if hours == 0:
 			return str(minutes)+"min"
+		elif minutes == 60:
+			hours += 1
+			return str(hours)+"hr"
 		else:
 			return str(hours)+"hr "+str(minutes)+"min"
 
-	def icon(self):# Get Icon
+	def icon(self):
+		# Get Icon
 		print ("DEBUG: getting Icons @", (str(datetime.datetime.now())))
 		PathDir = os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/scalable/silaty-indicator.svg"
-		print (PathDir)
+		#print (PathDir)
 
 		if os.path.exists(PathDir):
 			print ("DEBUG: icon found in the OS @", (str(datetime.datetime.now())))
