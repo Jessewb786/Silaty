@@ -50,6 +50,7 @@ sudo ./uninstall.sh
 * solve some class naming conflicts.
 * [Locations.xml](data/Locations.xml) updated from [libgweather](https://github.com/GNOME/libgweather) repository.
 * grabbing timezone from locations xml file done.
+* remaining time until next prayer corrected.
 
 ### v1.0
 

@@ -524,7 +524,7 @@ class Silaty(Gtk.Window):
         print ("DEBUG: updating prayer times @", (str(datetime.datetime.now())))
         # Re-calculate prayer times first
         if recalculate_prayer_times:
-            self.prayertimes.calculate(True)
+            self.prayertimes.calculate(False)
         # Update prayer times
         i = 0
         for prayer in self.homebox.prayers:

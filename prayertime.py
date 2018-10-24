@@ -108,7 +108,7 @@ class Prayertime(object):
     def time_to_next_prayer(self):
         return self._tnprayer
 
-    def calculate(self, only_prayer_times = False):
+    def calculate(self, notify_also = True):
         """Calculations of prayertimes."""
         year = self.date.year
         month = self.date.month
@@ -192,88 +192,88 @@ class Prayertime(object):
         self._maghrib = maghrib
         self._isha = isha
 
-        if not only_prayer_times:
-            # Transform Times To DateTimes ,so We Can Make Calculations on it
-            Fajr    = datetime.datetime.strptime(self.fajr_time(),"%I:%M:%S %p")
-            Dhuhr   = datetime.datetime.strptime(self.zuhr_time(),"%I:%M:%S %p")
-            Asr     = datetime.datetime.strptime(self.asr_time(),"%I:%M:%S %p")
-            Maghrib = datetime.datetime.strptime(self.maghrib_time(),"%I:%M:%S %p")
-            Isha    = datetime.datetime.strptime(self.isha_time(),"%I:%M:%S %p")
+        # Transform Times To DateTimes ,so We Can Make Calculations on it
+        Fajr    = datetime.datetime.strptime(self.fajr_time(),"%I:%M:%S %p")
+        Dhuhr   = datetime.datetime.strptime(self.zuhr_time(),"%I:%M:%S %p")
+        Asr     = datetime.datetime.strptime(self.asr_time(),"%I:%M:%S %p")
+        Maghrib = datetime.datetime.strptime(self.maghrib_time(),"%I:%M:%S %p")
+        Isha    = datetime.datetime.strptime(self.isha_time(),"%I:%M:%S %p")
 
-            # Assign Times to A List
-            PrayerTimes = [Fajr, Dhuhr, Asr, Maghrib, Isha]
-            Time = datetime.datetime.now()# Time Now
-            Time = Time.replace(microsecond=0, year=1900, month=1, day=1)# Replace year,month and day to be the same on PrayerTimes
+        # Assign Times to A List
+        PrayerTimes = [Fajr, Dhuhr, Asr, Maghrib, Isha]
+        Time = datetime.datetime.now()# Time Now
+        Time = Time.replace(microsecond=0, year=1900, month=1, day=1)# Replace year,month and day to be the same on PrayerTimes
 
-            NotifTime = Time+datetime.timedelta(minutes=self.options.notification_time)# Ten Minutes Before Next Prayer
-            ClosestPrayer = self.closest(Time, PrayerTimes)# Get The Closest Prayer Time
-            PrayerIndex = PrayerTimes.index(ClosestPrayer)# Get Index From List
+        NotifTime = Time+datetime.timedelta(minutes=self.options.notification_time)# Ten Minutes Before Next Prayer
+        ClosestPrayer = self.closest(Time, PrayerTimes)# Get The Closest Prayer Time
+        PrayerIndex = PrayerTimes.index(ClosestPrayer)# Get Index From List
 
-            if PrayerIndex==0:
-                CurrentPrayer='Fajr'
-                if Time<Fajr:
-                    PrevPrayer='Isha'
-                    NextPrayer='Fajr'
-                    NextPrayerDT=Fajr
-                else:
-                    PrevPrayer='Fajr'
-                    NextPrayer='Dhuhr'
-                    NextPrayerDT=Dhuhr
+        if PrayerIndex == 0:
+            CurrentPrayer='Fajr'
+            if Time < Fajr:
+                PrevPrayer = 'Isha'
+                NextPrayer = 'Fajr'
+                NextPrayerDT = Fajr
+            else:
+                PrevPrayer = 'Fajr'
+                NextPrayer = 'Dhuhr'
+                NextPrayerDT = Dhuhr
 
-            if PrayerIndex==1:
-                CurrentPrayer='Dhuhr'
-                if Time<Dhuhr:
-                    PrevPrayer='Fajr'
-                    NextPrayer='Dhuhr'
-                    NextPrayerDT=Dhuhr
-                else:
-                    PrevPrayer='Dhuhr'
-                    NextPrayer='Asr'
-                    NextPrayerDT=Asr
+        if PrayerIndex == 1:
+            CurrentPrayer = 'Dhuhr'
+            if Time < Dhuhr:
+                PrevPrayer = 'Fajr'
+                NextPrayer = 'Dhuhr'
+                NextPrayerDT = Dhuhr
+            else:
+                PrevPrayer = 'Dhuhr'
+                NextPrayer = 'Asr'
+                NextPrayerDT = Asr
 
-            elif PrayerIndex==2:
-                CurrentPrayer='Asr'
-                if Time<Asr:
-                    PrevPrayer='Dhuhr'
-                    NextPrayer='Asr'
-                    NextPrayerDT=Asr
-                else:
-                    PrevPrayer='Asr'
-                    NextPrayer='Maghrib'
-                    NextPrayerDT=Maghrib
+        elif PrayerIndex == 2:
+            CurrentPrayer = 'Asr'
+            if Time < Asr:
+                PrevPrayer = 'Dhuhr'
+                NextPrayer = 'Asr'
+                NextPrayerDT = Asr
+            else:
+                PrevPrayer = 'Asr'
+                NextPrayer = 'Maghrib'
+                NextPrayerDT = Maghrib
 
-            elif PrayerIndex==3:
-                CurrentPrayer='Maghrib'
-                if Time<Maghrib:
-                    PrevPrayer='Asr'
-                    NextPrayer='Maghrib'
-                    NextPrayerDT=Maghrib
-                else:
-                    PrevPrayer='Maghrib'
-                    NextPrayer='Isha'
-                    NextPrayerDT=Isha
+        elif PrayerIndex == 3:
+            CurrentPrayer = 'Maghrib'
+            if Time < Maghrib:
+                PrevPrayer = 'Asr'
+                NextPrayer = 'Maghrib'
+                NextPrayerDT = Maghrib
+            else:
+                PrevPrayer = 'Maghrib'
+                NextPrayer = 'Isha'
+                NextPrayerDT = Isha
 
-            elif PrayerIndex==4:
-                CurrentPrayer='Isha'
-                if Time<Isha:
-                    PrevPrayer='Maghrib'
-                    NextPrayer='Isha'
-                    NextPrayerDT=Isha
-                else:
-                    PrevPrayer='Isha'
-                    NextPrayer='Fajr'
-                    NextPrayerDT=Fajr
+        elif PrayerIndex == 4:
+            CurrentPrayer = 'Isha'
+            if Time < Isha:
+                PrevPrayer = 'Maghrib'
+                NextPrayer = 'Isha'
+                NextPrayerDT = Isha
+            else:
+                PrevPrayer = 'Isha'
+                NextPrayer = 'Fajr'
+                NextPrayerDT = Fajr
 
-            # Calculate Time to The Next Prayer
-            TimeToNextPrayer=NextPrayerDT-Time
-            if TimeToNextPrayer.total_seconds() < 0:
-                # Add a day to fix the timining
-                TimeToNextPrayer = TimeToNextPrayer + timedelta(days=1)
+        # Calculate Time to The Next Prayer
+        TimeToNextPrayer = NextPrayerDT-Time
+        if TimeToNextPrayer.total_seconds() < 0:
+            # Add a day to fix the timining
+            TimeToNextPrayer = TimeToNextPrayer + timedelta(days=1)
 
-            self._nextprayer = NextPrayer
-            self._tnprayer = TimeToNextPrayer
+        self._nextprayer = NextPrayer
+        self._tnprayer = TimeToNextPrayer
 
-            # Notification
+        # Notification
+        if notify_also:
             for time in PrayerTimes:
                 if time == NotifTime:
                     self.notify('Get Ready', '%s minutes left until the %s prayer.' % (str(int(self.options.notification_time)), NextPrayer))
