@@ -7,7 +7,12 @@ A neat prayer reminder app in GTK
 
 ## Installation
 
-To install open a terminal & run: 
+Make sure that you have all the dependencies installed using the following command:
+```bash
+sudo apt install gir1.2-gtk-3.0 gir1.2-appindicator3-0.1 gir1.2-notify-0.7 gir1.2-gstreamer-1.0
+```
+
+To install run:
 ```bash
 cd /path/to/silaty
 sudo ./install.sh
