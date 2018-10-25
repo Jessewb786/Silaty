@@ -220,11 +220,11 @@ class SilatyIndicator():
 
 	def about_dialog(self, widget, data=None):# The About Dialog
 		print ("DEBUG: opening about dialog @", (str(datetime.datetime.now())))
+		about_dialog = Gtk.AboutDialog()
 		if self.silaty.is_visible():
-			parent = self.silaty
+			about_dialog.set_transient_for(self.silaty)
 		else:
-			parent = None
-		about_dialog = Gtk.AboutDialog(transient_for=parent)
+			about_dialog.set_position(Gtk.WindowPosition.CENTER)
 		logo = GdkPixbuf.Pixbuf.new_from_file(os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/48x48/apps/silaty.svg")
 		about_dialog.set_logo(logo)
 		about_dialog.set_program_name("Silaty")
