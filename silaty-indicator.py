@@ -214,9 +214,9 @@ class SilatyIndicator():
 			# If another tab was activated before, set its state to OFF
 			index = self.silaty.sidebar.stackchildnames.index(current_tab_name)
 			self.silaty.sidebar.get_child(index).state = SideBarButtonState.OFF
-			# Activate/show new tab
-			self.silaty.sidebar.stack.set_visible_child_name(active_tab_name)
-			self.silaty.sidebar.emit("window-shown")
+		# Activate/show new tab
+		self.silaty.sidebar.stack.set_visible_child_name(active_tab_name)
+		self.silaty.sidebar.emit("window-shown")
 
 	def about_dialog(self, widget, data=None):# The About Dialog
 		print ("DEBUG: opening about dialog @", (str(datetime.datetime.now())))
