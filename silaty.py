@@ -25,7 +25,7 @@ class Silaty(Gtk.Window):
     def __init__(self, parent):
         Gtk.Window.__init__(self)
         GLib.threads_init()
-        Gst.init()
+        Gst.init(None)
 
         # Set parent widget
         self.parent = parent

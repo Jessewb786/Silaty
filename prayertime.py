@@ -41,7 +41,7 @@ class Prayertime(object):
 
     def __init__(self):
         GLib.threads_init()
-        Gst.init()
+        Gst.init(None)
 
         self.options = Options()
 
