@@ -147,11 +147,11 @@ class SilatyIndicator():
 		hours = secs//3600
 		minutes = (secs//60)%60
 		minutes += 1 # correct minutes (to avoid values like "0min")
-		if hours == 0:
-			return str(minutes)+" Minutes"
-		elif minutes == 60:
+		if minutes == 60:
 			hours += 1
 			return str(hours)+" Hours"
+		elif hours == 0:
+			return str(minutes)+" Minutes"
 		else:
 			return str(hours)+" Hours and "+str(minutes)+" Minutes"
 
@@ -161,11 +161,11 @@ class SilatyIndicator():
 		hours = secs//3600
 		minutes = (secs//60)%60
 		minutes += 1 # correct minutes (to avoid values like "0min")
-		if hours == 0:
-			return str(minutes)+"min"
-		elif minutes == 60:
+		if minutes == 60:
 			hours += 1
 			return str(hours)+"hr"
+		elif hours == 0:
+			return str(minutes)+"min"
 		else:
 			return str(hours)+"hr "+str(minutes)+"min"
 
