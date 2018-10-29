@@ -240,20 +240,6 @@
       </city>
       </country>
     <country>
-      <!-- AO - Angola -->
-      <name>Angola</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Luanda
-        -->
-      <iso-code>AO</iso-code>
-      <fips-code>AO</fips-code>
-      <timezones>
-        <timezone id="Africa/Luanda" value="1.0" />
-      </timezones>
-      <tz-hint>Africa/Luanda</tz-hint>
-    </country>
-    <country>
       <!-- BJ - Benin -->
       <name>Benin</name>
       <iso-code>BJ</iso-code>
@@ -755,48 +741,6 @@
       </city>
     </country>
     <country>
-      <!-- ER - Eritrea -->
-      <name>Eritrea</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Asmera
-        -->
-      <iso-code>ER</iso-code>
-      <fips-code>ER</fips-code>
-      <timezones>
-        <timezone id="Africa/Asmara" value="3.0" />
-      </timezones>
-      <tz-hint>Africa/Asmara</tz-hint>
-    </country>
-    <country>
-      <!-- ET - Ethiopia -->
-      <name>Ethiopia</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Addis Ababa
-        -->
-      <iso-code>ET</iso-code>
-      <fips-code>ET</fips-code>
-      <timezones>
-        <timezone id="Africa/Addis_Ababa" value="3.0" />
-      </timezones>
-      <tz-hint>Africa/Addis_Ababa</tz-hint>
-    </country>
-    <country>
-      <!-- TF - French Southern Territories, a territory of France
-           consisting of several mostly-uninhabited islands in the
-           Indian Ocean. The French name is "Terres australes
-           françaises".
-        -->
-      <name>French Southern Territories</name>
-      <iso-code>TF</iso-code>
-      <fips-code>FS</fips-code>
-      <timezones>
-        <timezone id="Indian/Kerguelen" value="5.0" />
-      </timezones>
-      <tz-hint>Indian/Kerguelen</tz-hint>
-    </country>
-    <country>
       <!-- GA - Gabon -->
       <name>Gabon</name>
       <iso-code>GA</iso-code>
@@ -882,20 +826,6 @@
       </city>
     </country>
     <country>
-      <!-- GW - Guinea-Bissau -->
-      <name>Guinea-Bissau</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Bissau
-        -->
-      <iso-code>GW</iso-code>
-      <fips-code>PU</fips-code>
-      <timezones>
-        <timezone id="Africa/Bissau" value="0.0" />
-      </timezones>
-      <tz-hint>Africa/Bissau</tz-hint>
-    </country>
-    <country>
       <!-- KE - Kenya -->
       <name>Kenya</name>
       <iso-code>KE</iso-code>
@@ -929,34 +859,6 @@
         <name>Nairobi</name>
         <coordinates>-1.283333 36.816667</coordinates>
       </city>
-    </country>
-    <country>
-      <!-- LS - Lesotho -->
-      <name>Lesotho</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Maseru
-        -->
-      <iso-code>LS</iso-code>
-      <fips-code>LT</fips-code>
-      <timezones>
-        <timezone id="Africa/Maseru" value="2.0" />
-      </timezones>
-      <tz-hint>Africa/Maseru</tz-hint>
-    </country>
-    <country>
-      <!-- LR - Liberia -->
-      <name msgctxt="Country">Liberia</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Monrovia
-        -->
-      <iso-code>LR</iso-code>
-      <fips-code>LI</fips-code>
-      <timezones>
-        <timezone id="Africa/Monrovia" value="0.0" />
-      </timezones>
-      <tz-hint>Africa/Monrovia</tz-hint>
     </country>
     <country>
       <!-- LY - Libyan Arab Jamahiriya -->
@@ -1051,34 +953,6 @@
         <coordinates>-13.300000 48.316667</coordinates>
       </city>
       </country>
-    <country>
-      <!-- MW - Malawi -->
-      <name>Malawi</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Lilongwe
-        -->
-      <iso-code>MW</iso-code>
-      <fips-code>MI</fips-code>
-      <timezones>
-        <timezone id="Africa/Blantyre" value="2.0" />
-      </timezones>
-      <tz-hint>Africa/Blantyre</tz-hint>
-    </country>
-    <country>
-      <!-- ML - Mali -->
-      <name>Mali</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Bamako
-        -->
-      <iso-code>ML</iso-code>
-      <fips-code>ML</fips-code>
-      <timezones>
-        <timezone id="Africa/Bamako" value="0.0" />
-      </timezones>
-      <tz-hint>Africa/Bamako</tz-hint>
-    </country>
     <country>
       <!-- MR - Mauritania -->
       <name>Mauritania</name>
@@ -1458,23 +1332,6 @@
       </city>
       </country>
     <country>
-      <!-- ST - Sao Tome and Principe. The local (Portuguese) name is
-           "São Tomé and Príncipe". The official ISO 3166 short English
-           name does not have the accents.
-        -->
-      <name>Sao Tome and Principe</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           São Tomé
-        -->
-      <iso-code>ST</iso-code>
-      <fips-code>TP</fips-code>
-      <timezones>
-        <timezone id="Africa/Sao_Tome" value="1.0" />
-      </timezones>
-      <tz-hint>Africa/Sao_Tome</tz-hint>
-    </country>
-    <country>
       <!-- SN - Senegal -->
       <name>Senegal</name>
       <iso-code>SN</iso-code>
@@ -1564,20 +1421,6 @@
         <coordinates>8.490000 -13.234167</coordinates>
       </city>
       </country>
-    <country>
-      <!-- SO - Somalia -->
-      <name>Somalia</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Mogadishu
-        -->
-      <iso-code>SO</iso-code>
-      <fips-code>SO</fips-code>
-      <timezones>
-        <timezone id="Africa/Mogadishu" value="3.0" />
-      </timezones>
-      <tz-hint>Africa/Mogadishu</tz-hint>
-    </country>
     <country>
       <!-- ZA - South Africa -->
       <name>South Africa</name>
@@ -1996,16 +1839,6 @@
       </city>
     </country>
     <country>
-      <!-- EH - Western Sahara, a disputed territory in western Africa -->
-      <name>Western Sahara</name>
-      <iso-code>EH</iso-code>
-      <fips-code>WI</fips-code>
-      <timezones>
-        <timezone id="Africa/El_Aaiun" value="0.0" />
-      </timezones>
-      <tz-hint>Africa/El_Aaiun</tz-hint>
-    </country>
-    <country>
       <!-- ZM - Zambia -->
       <name>Zambia</name>
       <iso-code>ZM</iso-code>
@@ -2045,21 +1878,7 @@
         <coordinates>-15.416667 28.283333</coordinates>
       </city>
       </country>
-    <country>
-      <!-- ZW - Zimbabwe -->
-      <name>Zimbabwe</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Harare
-        -->
-      <iso-code>ZW</iso-code>
-      <fips-code>ZI</fips-code>
-      <timezones>
-        <timezone id="Africa/Harare" value="2.0" />
-      </timezones>
-      <tz-hint>Africa/Harare</tz-hint>
-    </country>
-  </region>
+    </region>
   <region>
     <name msgctxt="Region">Antarctica</name>
     <country>
@@ -2279,20 +2098,6 @@
       </city>
     </country>
     <country>
-      <!-- BT - Bhutan -->
-      <name>Bhutan</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Thimphu
-        -->
-      <iso-code>BT</iso-code>
-      <fips-code>BT</fips-code>
-      <timezones>
-        <timezone id="Asia/Thimphu" value="6.0" />
-      </timezones>
-      <tz-hint>Asia/Thimphu</tz-hint>
-    </country>
-    <country>
       <!-- BN - Brunei Darussalam -->
       <name>Brunei</name>
       <iso-code>BN</iso-code>
@@ -2457,11 +2262,6 @@
           <coordinates>22.816667 108.350000</coordinates>
         </location>
         </state>
-      <state>
-        <!-- A state/province/territory in China -->
-        <name>Guizhou</name>
-        <fips-code>CH18</fips-code>
-      </state>
       <state>
         <!-- A state/province/territory in China -->
         <name>Hainan</name>
@@ -5322,18 +5122,6 @@
       </city>
     </country>
     <country>
-      <!-- BL - Saint Barthélemy, an overseas territory of France in
-           the Caribbean, formerly part of Guadeloupe.
-        -->
-      <name>Saint Barthélemy</name>
-      <iso-code>BL</iso-code>
-      <fips-code>TB</fips-code>
-      <timezones>
-        <timezone id="America/St_Barthelemy" value="-4.0" />
-      </timezones>
-      <tz-hint>America/St_Barthelemy</tz-hint>
-    </country>
-    <country>
       <!-- SH - Saint Helena, a British territory in the South Atlantic -->
       <name>Saint Helena</name>
       <!-- Could not find weather stations for the following major
@@ -5882,21 +5670,6 @@
       </state>
     </country>
     <country>
-      <!-- IO - British Indian Ocean Territory, which is exactly what
-           it sounds like.
-        -->
-      <name>British Indian Ocean Territory</name>
-      <!-- Could not find cities for the following weather stations:
-           FJDG - Diego Garcia (-7.300000 72.400000)
-        -->
-      <iso-code>IO</iso-code>
-      <fips-code>IO</fips-code>
-      <timezones>
-        <timezone id="Indian/Chagos" value="6.0" />
-      </timezones>
-      <tz-hint>Indian/Chagos</tz-hint>
-    </country>
-    <country>
       <!-- CX - Christmas Island, a territory of Australia in the
            Indian Ocean, not to be confused with various other islands
            of the same name.
@@ -6274,16 +6047,6 @@
       </city>
     </country>
     <country>
-      <!-- NR - Nauru -->
-      <name>Nauru</name>
-      <iso-code>NR</iso-code>
-      <fips-code>NR</fips-code>
-      <timezones>
-        <timezone id="Pacific/Nauru" value="12.0" />
-      </timezones>
-      <tz-hint>Pacific/Nauru</tz-hint>
-    </country>
-    <country>
       <!-- NC - New Caledonia, a French territory in the South Pacific.
            The French name is "Nouvelle-Calédonie".
         -->
@@ -6483,20 +6246,6 @@
       </city>
     </country>
     <country>
-      <!-- PN - Pitcairn, a British territory in the South Pacific -->
-      <name>Pitcairn</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Adamstown
-        -->
-      <iso-code>PN</iso-code>
-      <fips-code>PC</fips-code>
-      <timezones>
-        <timezone id="Pacific/Pitcairn" value="-8.0" />
-      </timezones>
-      <tz-hint>Pacific/Pitcairn</tz-hint>
-    </country>
-    <country>
       <!-- WS - Samoa, an independent nation not to be confused with
            "American Samoa"
         -->
@@ -6537,26 +6286,6 @@
         <name>Honiara</name>
         <coordinates>-9.433333 159.950000</coordinates>
       </city>
-    </country>
-    <country>
-      <!-- TL - Timor-Leste (formerly known as "East Timor") -->
-      <name>Timor-Leste</name>
-      <iso-code>TL</iso-code>
-      <fips-code>TT</fips-code>
-      <timezones>
-        <timezone id="Asia/Dili" value="9.0" />
-      </timezones>
-      <tz-hint>Asia/Dili</tz-hint>
-    </country>
-    <country>
-      <!-- TK - Tokelau, a territory of New Zealand -->
-      <name>Tokelau</name>
-      <iso-code>TK</iso-code>
-      <fips-code>TL</fips-code>
-      <timezones>
-        <timezone id="Pacific/Fakaofo" value="13.0" />
-      </timezones>
-      <tz-hint>Pacific/Fakaofo</tz-hint>
     </country>
     <country>
       <!-- TO - Tonga -->
@@ -6636,20 +6365,6 @@
         <coordinates>19.283333 166.650000</coordinates>
       </location>
       </country>
-    <country>
-      <!-- VU - Vanuatu -->
-      <name>Vanuatu</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Port-Vila
-        -->
-      <iso-code>VU</iso-code>
-      <fips-code>NH</fips-code>
-      <timezones>
-        <timezone id="Pacific/Efate" value="11.0" />
-      </timezones>
-      <tz-hint>Pacific/Efate</tz-hint>
-    </country>
     <country>
       <!-- WF - Wallis and Futuna, a French territory in the South
            Pacific
@@ -8134,12 +7849,7 @@
           <tz-hint>America/Sao_Paulo</tz-hint>
         </city>
       </state>
-      <state>
-        <!-- A state/province/territory in Brazil -->
-        <name>Tocantis</name>
-        <fips-code>BR31</fips-code>
-      </state>
-    </country>
+      </country>
     <country>
       <!-- VG - British Virgin Islands, a British territory in the
            Caribbean
@@ -9147,20 +8857,6 @@
       </city>
       </country>
     <country>
-      <!-- MS - Montserrat, a British territory in the Caribbean. -->
-      <name>Montserrat</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Plymouth
-        -->
-      <iso-code>MS</iso-code>
-      <fips-code>MH</fips-code>
-      <timezones>
-        <timezone id="America/Montserrat" value="-4.0" />
-      </timezones>
-      <tz-hint>America/Montserrat</tz-hint>
-    </country>
-    <country>
       <!-- AN - Netherlands Antilles, a group of Caribbean islands; one
            of the three constituent countries of the Kingdom of the
            Netherlands.
@@ -9456,19 +9152,6 @@
       </city>
       </country>
     <country>
-      <!-- MF - Saint Martin, the French half of the island of Saint
-           Martin / Sint Maarten. (The Dutch half is considered part of
-           the Netherlands Antilles.)
-        -->
-      <name>Saint Martin</name>
-      <iso-code>MF</iso-code>
-      <fips-code>RN</fips-code>
-      <timezones>
-        <timezone id="America/Marigot" value="-4.0" />
-      </timezones>
-      <tz-hint>America/Marigot</tz-hint>
-    </country>
-    <country>
       <!-- VC - Saint Vincent and the Grenadines -->
       <name>Saint Vincent and the Grenadines</name>
       <iso-code>VC</iso-code>
@@ -9487,18 +9170,6 @@
         <name>Kingstown</name>
         <coordinates>13.133333 -61.216667</coordinates>
       </city>
-    </country>
-    <country>
-      <!-- GS - South Georgia and the South Sandwich Islands, a British
-           territory in the South Atlantic.
-        -->
-      <name>South Georgia and the South Sandwich Islands</name>
-      <iso-code>GS</iso-code>
-      <fips-code>SX</fips-code>
-      <timezones>
-        <timezone id="Atlantic/South_Georgia" value="-2.0" />
-      </timezones>
-      <tz-hint>Atlantic/South_Georgia</tz-hint>
     </country>
     <country>
       <!-- SR - Suriname -->
@@ -9563,22 +9234,6 @@
         <name>Port-of-Spain</name>
         <coordinates>10.650000 -61.516667</coordinates>
       </city>
-    </country>
-    <country>
-      <!-- TC - Turks and Caicos Islands, a British territory in the
-           Caribbean
-        -->
-      <name>Turks and Caicos Islands</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Grand Turk
-        -->
-      <iso-code>TC</iso-code>
-      <fips-code>TK</fips-code>
-      <timezones>
-        <timezone id="America/Grand_Turk" value="-5.0" />
-      </timezones>
-      <tz-hint>America/Grand_Turk</tz-hint>
     </country>
     <country>
       <!-- UY - Uruguay -->
@@ -9884,20 +9539,6 @@
       </location>
       </country>
     <country>
-      <!-- AD - Andorra -->
-      <name>Andorra</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Andorra la Vella
-        -->
-      <iso-code>AD</iso-code>
-      <fips-code>AN</fips-code>
-      <timezones>
-        <timezone id="Europe/Andorra" value="1.0" />
-      </timezones>
-      <tz-hint>Europe/Andorra</tz-hint>
-    </country>
-    <country>
       <!-- AT - Austria -->
       <name>Austria</name>
       <iso-code>AT</iso-code>
@@ -10132,11 +9773,6 @@
         </city>
         </state>
       <state>
-        <!-- A state/province/territory in Belgium -->
-        <name>East-Flanders</name>
-        <fips-code>BE08</fips-code>
-      </state>
-      <state>
         <!-- A state in Belgium. local name (fr): Hainaut. local name
              (fr_BE): Hinnot. local name (nl): Henegouwen. local name
              (de): Hennegau.
@@ -10189,11 +9825,6 @@
           <coordinates>50.466667 6.183333</coordinates>
         </location>
         </state>
-      <state>
-        <!-- A state/province/territory in Belgium -->
-        <name msgctxt="State in Belgium">Luxembourg</name>
-        <fips-code>BE06</fips-code>
-      </state>
       <state>
         <!-- A state/province/territory in Belgium -->
         <name>Namur</name>
@@ -11701,11 +11332,6 @@
           <name msgctxt="City in Berlin, Germany">Berlin</name>
           <coordinates>52.516667 13.400000</coordinates>
         </city>
-      </state>
-      <state>
-        <!-- A state/province/territory in Germany -->
-        <name>Brandenburg</name>
-        <fips-code>GM11</fips-code>
       </state>
       <state>
         <!-- A state/province/territory in Germany -->
@@ -17700,16 +17326,6 @@
       </city>
     </country>
     <country>
-      <!-- VA - Holy See (Vatican City State) -->
-      <name>Vatican City</name>
-      <iso-code>VA</iso-code>
-      <fips-code>VT</fips-code>
-      <timezones>
-        <timezone id="Europe/Vatican" value="1.0" />
-      </timezones>
-      <tz-hint>Europe/Vatican</tz-hint>
-    </country>
-    <country>
       <!-- AX - Åland Islands, an autonomous province of Finland -->
       <name>Åland Islands</name>
       <iso-code>AX</iso-code>
@@ -18106,20 +17722,6 @@
       </city>
       </country>
     <country>
-      <!-- IQ - Iraq -->
-      <name>Iraq</name>
-      <!-- Could not find weather stations for the following major
-           cities:
-           Baghdad
-        -->
-      <iso-code>IQ</iso-code>
-      <fips-code>IZ</fips-code>
-      <timezones>
-        <timezone id="Asia/Baghdad" value="3.0" />
-      </timezones>
-      <tz-hint>Asia/Baghdad</tz-hint>
-    </country>
-    <country>
       <!-- IL - Israel -->
       <name>Israel</name>
       <iso-code>IL</iso-code>
@@ -18311,16 +17913,6 @@
         <coordinates>23.613333 58.593333</coordinates>
       </city>
       </country>
-    <country>
-      <!-- PS - Occupied Palestinian Territory -->
-      <name>Palestinian Territory</name>
-      <iso-code>PS</iso-code>
-      <fips-code>GZ|WE</fips-code>
-      <timezones>
-        <timezone id="Asia/Gaza" value="2.0" />
-      </timezones>
-      <tz-hint>Asia/Gaza</tz-hint>
-    </country>
     <country>
       <!-- QA - Qatar -->
       <name>Qatar</name>
@@ -22403,12 +21995,6 @@
       </state>
       <state>
         <!-- A state/province/territory in Mexico -->
-        <name>Hidalgo</name>
-        <fips-code>MX13</fips-code>
-        <tz-hint>America/Mexico_City</tz-hint>
-      </state>
-      <state>
-        <!-- A state/province/territory in Mexico -->
         <name>Jalisco</name>
         <fips-code>MX14</fips-code>
         <tz-hint>America/Mexico_City</tz-hint>
@@ -22485,12 +22071,6 @@
           <name>Toluca</name>
           <coordinates>19.288333 -99.667222</coordinates>
         </city>
-      </state>
-      <state>
-        <!-- A state/province/territory in Mexico -->
-        <name>Nayarit</name>
-        <fips-code>MX18</fips-code>
-        <tz-hint>America/Mazatlan</tz-hint>
       </state>
       <state>
         <!-- A state/province/territory in Mexico -->
@@ -22746,12 +22326,6 @@
           <name>Tampico</name>
           <coordinates>22.300000 -97.850000</coordinates>
         </city>
-      </state>
-      <state>
-        <!-- A state/province/territory in Mexico -->
-        <name>Tlaxcala</name>
-        <fips-code>MX29</fips-code>
-        <tz-hint>America/Mexico_City</tz-hint>
       </state>
       <state>
         <!-- A state/province/territory in Mexico -->
