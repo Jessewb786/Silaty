@@ -7,10 +7,28 @@ A neat prayer reminder app in GTK
 
 ## Installation
 
+### Install using debian package
+
+Download the [package](https://github.com/AXeL-dev/Silaty/releases/download/v1.1/silaty_1.1_all.deb).
+
+Install it using apt or any similar tool:
+```bash
+sudo apt install silaty_1.1_all.deb
+```
+
+### Install from source
+
+Download or clone this repository with git:
+```bash
+git clone https://github.com/AXeL-dev/Silaty.git
+```
+
 Make sure that you have all the dependencies installed using the following command:
 ```bash
 sudo apt install gir1.2-gtk-3.0 gir1.2-appindicator3-0.1 gir1.2-notify-0.7 gir1.2-gstreamer-1.0
 ```
+
+**Note:** this command may change depending on your linux distribution.
 
 To install run:
 ```bash
