@@ -56,7 +56,7 @@ class HijriCal:
             wd = hijri_day_of_week (Y, M, D)
             self.today= (Y, M, D, wd)
             return True
-    
+
     def goto_gregorian_day(self,yy, mm, dd):
         """Jump to some Hijri day"""
         try:
@@ -64,7 +64,7 @@ class HijriCal:
             self.goto_hijri_day(Y, M, D)
         except:
             self.validate()
-        
+
         return (self.Y,self.M,self.D)
 
     def goto_hijri_day(self,Y,M,D):
@@ -72,7 +72,7 @@ class HijriCal:
         self.Y, self.M, self.D = Y, M, D
         self.gy,self.gm,self.gd = hijri_to_gregorian(Y, M, D)
         self.validate()
-        
+
         self.mn=hijri_month_days(self.Y, self.M)
         self.ms=(7 - self.__ws + hijri_day_of_week(self.Y, self.M, 1))% 7
         self.fill_month_days()
@@ -103,11 +103,11 @@ class HijriCal:
         if (gd>gn):
             gd=1
             gm+=1
-     
+
         if gm>12:
             gm=1
             gy+=1
-   
+
         col+=self.__direct
         if (col==endcol):
             row+=1
@@ -130,7 +130,7 @@ class HijriCal:
         if self.D<1:
             self.D=1
             f=1
-        
+
         d=hijri_month_days(self.Y, self.M)
         if self.D>d :
             self.D=d

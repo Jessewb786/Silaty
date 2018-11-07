@@ -1,3 +1,9 @@
+# Silaty
+# Copyright (c) 2018 - 2019 AXeL
+# Copyright (c) 2014 - 2015 Jessewb786
+
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GLib, Gio, Gdk, GdkPixbuf
 
 class QiblaCompass(Gtk.Box):
@@ -6,7 +12,7 @@ class QiblaCompass(Gtk.Box):
 
 		self.mainbox = Gtk.Box()
 		self.mainbox.set_orientation(Gtk.Orientation.VERTICAL)
-		
+
 		qibla = self.set_compass(qibladirection)
 		qibla.props.valign = Gtk.Align.START
 
@@ -15,10 +21,10 @@ class QiblaCompass(Gtk.Box):
 		qiblatitle.props.halign = Gtk.Align.START
 		self.mainbox.pack_start(qiblatitle, False, False, 12)
 
-		##Set the compass image
+		## Set the compass image
 		self.mainbox.pack_start(qibla, False, True, 0)
 
-		##Set the country and city
+		## Set the country and city
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=6)
 		qiblalabel = Gtk.Label(label="Country : "+ country)
 		qiblalabel.props.halign = Gtk.Align.CENTER
@@ -30,10 +36,10 @@ class QiblaCompass(Gtk.Box):
 		qiblalabel.props.valign = Gtk.Align.CENTER
 		vbox.pack_start(qiblalabel, True, True, 0)
 
-		##Add it all in the end
+		## Add it all in the end
 		self.mainbox.pack_start(vbox, False, False, 12)
 		self.pack_start(self.mainbox, True, True, 0)
-	
+
 	def set_compass(self, qibladirection):
 		print ("DEBUG: Showing Qibla window")
 		img='''<?xml version="1.0"?>
@@ -66,13 +72,12 @@ class QiblaCompass(Gtk.Box):
 		return svgwidget
 
 	def update_compass(self, qibladirection, country, city):
-
-		##The only way to update so far is to remove the whole thing and create it again
+		## The only way to update so far is to remove the whole thing and create it again
 		self.remove(self.mainbox)
 
 		self.mainbox = Gtk.Box()
 		self.mainbox.set_orientation(Gtk.Orientation.VERTICAL)
-		
+
 		qibla = self.set_compass(qibladirection)
 		qibla.props.valign = Gtk.Align.START
 
@@ -81,10 +86,10 @@ class QiblaCompass(Gtk.Box):
 		qiblatitle.props.halign = Gtk.Align.START
 		self.mainbox.pack_start(qiblatitle, False, False, 12)
 
-		##Set the compass image
+		## Set the compass image
 		self.mainbox.pack_start(qibla, False, True, 0)
 
-		##Set the country and city
+		## Set the country and city
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=6)
 		qiblalabel = Gtk.Label(label="Country : "+ country)
 		qiblalabel.props.halign = Gtk.Align.CENTER
@@ -96,7 +101,7 @@ class QiblaCompass(Gtk.Box):
 		qiblalabel.props.valign = Gtk.Align.CENTER
 		vbox.pack_start(qiblalabel, True, True, 0)
 
-		##Add it all in the end
+		## Add it all in the end
 		self.mainbox.pack_start(vbox, False, False, 12)
 		self.pack_start(self.mainbox, True, True, 0)
 		self.show_all()
