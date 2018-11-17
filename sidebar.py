@@ -41,12 +41,14 @@ class SideBar(Gtk.Grid):
 
 	def change_visible_stack(self, widget, position):
 		self.stack.set_visible_child_name(self.stackchildnames[position])
+		self.emit("stack-changed", self.stackchildnames[position])
 
 	def activate_button(self, widget):
 		visiblechild = self.stack.get_visible_child_name()
 		index = self.stackchildnames.index(visiblechild)
 		self.get_child(index).state = SideBarButtonState.ON
 		self.get_child(index).iconstack.set_visible_child_name('active')
+		self.emit("stack-changed", visiblechild)
 
 	def get_child(self, index):
 		return self.get_child_at(0, index)
@@ -123,3 +125,4 @@ GObject.signal_new("sidebar-button-pressed", SideBarButton, GObject.SIGNAL_RUN_F
 
 GObject.type_register(SideBar)
 GObject.signal_new("window-shown", SideBar, GObject.SIGNAL_RUN_FIRST, GObject.TYPE_NONE, ())
+GObject.signal_new("stack-changed", SideBar, GObject.SIGNAL_RUN_FIRST, GObject.TYPE_NONE, [GObject.TYPE_STRING])

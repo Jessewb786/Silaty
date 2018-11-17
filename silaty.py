@@ -133,6 +133,12 @@ class Silaty(Gtk.Window):
             self.homebox.add_prayer('Isha', self.get_times(self.prayertimes.isha_time()), False)
 
         self.sidebar.add_to_stack(self.homebox, 'home')
+        self.sidebar.connect('stack-changed', self.on_stack_changed)
+
+    def on_stack_changed(self, widget, visiblechild):
+        print ("DEBUG: stack changed @", (visiblechild))
+        if visiblechild == 'home':
+            self.homebox.set_title()
 
     def set_options(self):
         ## Options
