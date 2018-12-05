@@ -39,6 +39,7 @@ class Options:
 			self._normaladhan        = cparse.get('DEFAULT', 'normal-adhan')
 			self._audionotifications = cparse.get('DEFAULT', 'audio-notifications')
 			self._daylightsavingtime = cparse.get('DEFAULT', 'daylight-saving-time')
+			self._hijricaladjustment = cparse.get('DEFAULT', 'hijrical-adjustment')
 
 		except configparser.NoOptionError:
 			print ("DEBUG: No configration file using default settings")
@@ -57,6 +58,7 @@ class Options:
 			self._normaladhan        = (self.get_normal_adhans())[0]
 			self._audionotifications = '1'
 			self._daylightsavingtime = '1'
+			self._hijricaladjustment = '0'
 			self.save_options()
 
 		except ValueError:
@@ -77,6 +79,7 @@ class Options:
 			self._normaladhan        = (self.get_normal_adhans())[0]
 			self._audionotifications = '1'
 			self._daylightsavingtime = '1'
+			self._hijricaladjustment = '0'
 			self.save_options()
 
 	## Functions with lists for the Buttons
@@ -250,6 +253,16 @@ class Options:
 		self._notif = str(data)
 
 	@property
+	def hijrical_adjustment(self):
+		#print ("DEBUG: getting hijri cal adjustment settings @", (str(datetime.datetime.now())))
+		return float(self._hijricaladjustment)
+
+	@hijrical_adjustment.setter
+	def hijrical_adjustment(self, data):
+		#print ("DEBUG: setting hijri cal adjustment settings @", (str(datetime.datetime.now())))
+		self._hijricaladjustment = str(data)
+
+	@property
 	def iconlabel_num(self):
 		return self._iconlabel
 
@@ -378,6 +391,9 @@ minimized = %s
 # Should the application use daylight saving time
 daylight-saving-time = %s
 
+# Adjust Hijri Calendar
+hijrical-adjustment = %s
+
 # Paths to the audio files
 fajr-adhan = %s
 normal-adhan = %s
@@ -385,6 +401,6 @@ normal-adhan = %s
 ''' %  (self.city, self.country, self.latitude, self.longitude, self.timezone, \
         self.calculation_method_name, self.madhab_name, self.clock_format, \
         self.notification_time, self.iconlabel_num, self.audio_notifications_num, self.start_minimized_num, \
-        self.daylight_saving_time_num, self.fajr_adhan, self.normal_adhan)
+        self.daylight_saving_time_num, self.hijrical_adjustment, self.fajr_adhan, self.normal_adhan)
 		config.write(Text)
 		config.close()

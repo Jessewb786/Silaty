@@ -51,12 +51,13 @@ Copyright (C) 1995, 1997, 2001 Free Software Foundation, Inc.
 __p_const=191
 __q_const=360
 __a_const=48
-__hijri_epoch=227015; # = Julian 0622-7-16 = gregorian 0759-6-11 (I think it should be 622, 7, 19)
+__hijri_epoch=227015 # = Julian 0622-7-16 = gregorian 0759-6-11 (I think it should be 622, 7, 19)
 # TODO: Why does the the hijri_epoch 227015 does not give the expected value when converted to gregorian
 
 def get_consts():
    """Return a tuple of the 3 constants (p,q,a) used by this algothim, for debuging"""
    return (__p_const, __q_const, __a_const)
+
 def get_epoch():
    """Return Hijri epoch, number of days since gregorian epoch, (should be Julian 0622-7-16 (ie. 227015 days)"""
    return __hijri_epoch
