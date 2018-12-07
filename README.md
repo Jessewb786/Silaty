@@ -48,6 +48,11 @@ sudo ./uninstall.sh
 
 ## Changelog
 
+### v1.2
+
+* [Hijri Date #8](https://github.com/Jessewb786/Silaty/issues/8) fixed.
+* update home title when stack changes.
+
 ### v1.1
 
 * LICENSE added.
