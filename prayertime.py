@@ -367,8 +367,9 @@ def to_hrtime(var):
     time = ''
     hours = int(var) # cast var (initially a double) as an int
 
-    # If 24 <= hours < 36, it's afternoon, else morning
-    if hours >= 24 and hours < 36:
+    # If 12 <= hours < 24 or 24 <= hours < 36, it's afternoon, else morning
+    #print ('%s' % hours)
+    if (hours >= 12 and hours < 24) or (hours >= 24 and hours < 36):
         zone = "PM"
     else:
         zone = "AM"

@@ -84,8 +84,8 @@ class Silaty(Gtk.Window):
         self.sidebar.add_to_stack(self.qiblacompass, 'qibla')
 
         # Set up calendar panel
-        cal = SilatyCal()
-        self.sidebar.add_to_stack(cal, "calendar")
+        self.calendar = SilatyCal()
+        self.sidebar.add_to_stack(self.calendar, "calendar")
 
         # Set up the options pane
         self.set_options()
@@ -102,7 +102,7 @@ class Silaty(Gtk.Window):
 
     def set_home(self):
         ## Home - Prayers
-        self.homebox = Home()
+        self.homebox = Home(self)
 
         nextprayer = self.prayertimes.next_prayer()
         if nextprayer == 'Fajr':
@@ -133,6 +133,12 @@ class Silaty(Gtk.Window):
             self.homebox.add_prayer('Isha', self.get_times(self.prayertimes.isha_time()), False)
 
         self.sidebar.add_to_stack(self.homebox, 'home')
+        self.sidebar.connect('stack-changed', self.on_stack_changed)
+
+    def on_stack_changed(self, widget, visiblechild):
+        print ("DEBUG: stack changed @", (visiblechild))
+        if visiblechild == 'home':
+            self.homebox.set_title()
 
     def set_options(self):
         ## Options
@@ -166,6 +172,15 @@ class Silaty(Gtk.Window):
         self.cfmenu.set_active(clockformats.index(defaultcf))
         self.cfmenu.connect("changed", self.on_entered_clock_format)
         settings.add_setting(self.cfmenu, cflabel)
+
+        # Adjust Hijri Calendar
+        defaultvalue = self.prayertimes.options.hijrical_adjustment
+        hijrilabel   = Gtk.Label('Adjust Hijri Calendar:', halign=Gtk.Align.START)
+        hijriadj     = Gtk.Adjustment(value=0, lower=-1, upper=1, step_incr=1, page_incr=1, page_size=0)
+        self.hijrivalue = Gtk.SpinButton(adjustment=hijriadj, halign=Gtk.Align.FILL)
+        self.hijrivalue.set_value(float(defaultvalue))
+        self.hijrivalue.connect("value-changed",self.on_entered_hijrical_adjustment)
+        settings.add_setting(self.hijrivalue, hijrilabel)
 
         settings.add_category("Notifications")
 
@@ -237,7 +252,7 @@ class Silaty(Gtk.Window):
 
         settings.add_category("Jurisprudence")
 
-        # Cal Method
+        # Calculation Method
         defaultmethod    = self.prayertimes.options.calculation_method_name
         methods          = self.prayertimes.options.get_cal_methods()
         calmethodlabel   = Gtk.Label('Calculation Method:', halign=Gtk.Align.START)
@@ -447,6 +462,11 @@ class Silaty(Gtk.Window):
 
     def on_entered_notification_time(self, widget):
         self.prayertimes.options.notification_time = widget.get_value()
+
+    def on_entered_hijrical_adjustment(self, widget):
+        self.prayertimes.options.hijrical_adjustment = widget.get_value()
+        self.calendar.cal.hijrical.adjustment = widget.get_value()
+        self.calendar.cal.refresh()
 
     def on_entered_clock_format(self, widget):
         self.prayertimes.options.clock_format = widget.get_active_text()

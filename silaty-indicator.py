@@ -186,7 +186,7 @@ class SilatyIndicator():
 
 	def get_hijri_date(self):
 		wd = datetime.datetime.now().strftime("%A")
-		calc = HijriCal()
+		calc = HijriCal(self.silaty.prayertimes.options.hijrical_adjustment)
 		h_months = ['Muharram ', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab', "Sha'ban", 'Ramadan', 'Shawwal', "Dhu al Qa'da", 'Dhu al Hijja']
 		h_year,  h_month,  h_day,  h_week_day = calc.today
 		h_date = '%i %s %i' % ( h_day,  h_months[int(h_month-1)],  h_year)
@@ -249,7 +249,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.''')
-		about_dialog.set_version("1.1")
+		about_dialog.set_version("1.2")
 		about_dialog.set_comments("A neat Prayer Time Reminder App.\n Simple and complete so no prayer is missed")
 		about_dialog.set_copyright("Copyright © 2018 Silaty Team")
 		about_dialog.run()

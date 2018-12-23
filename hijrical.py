@@ -29,7 +29,8 @@ from hijra import *
 
 class HijriCal:
     """a Class that provide a high level Islamic Hijri calendar API"""
-    def __init__(self):
+    def __init__(self, adjustment=0):
+        self.adjustment = adjustment
         """Create HijriCal Object"""
         self.__md = [[""]*7,[""]*7,[""]*7,[""]*7,[""]*7,[""]*7] # 7 days on at most 6 weeks
         self.__g_md = [[""]*7,[""]*7,[""]*7,[""]*7,[""]*7,[""]*7] # 7 days on at most 6 weeks
@@ -52,6 +53,7 @@ class HijriCal:
         else:
             yy, mm, dd = localtime()[:3]
             self.g_today= (yy, mm, dd)
+            dd += int(self.adjustment) # adjust hijri calendar
             Y, M, D = gregorian_to_hijri(yy, mm, dd)
             wd = hijri_day_of_week (Y, M, D)
             self.today= (Y, M, D, wd)
@@ -60,6 +62,7 @@ class HijriCal:
     def goto_gregorian_day(self,yy, mm, dd):
         """Jump to some Hijri day"""
         try:
+            dd += int(self.adjustment) # adjust hijri calendar
             Y, M, D = gregorian_to_hijri(yy, mm, dd)
             self.goto_hijri_day(Y, M, D)
         except:

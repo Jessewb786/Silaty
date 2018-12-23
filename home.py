@@ -9,24 +9,28 @@ from hijrical import *
 import datetime
 
 class Home(Gtk.Box):
-	def __init__(self):
+	def __init__(self, parent):
 		Gtk.Box.__init__(self)
+		self.parent = parent
 		self.set_orientation(Gtk.Orientation.VERTICAL)
 		self.set_margin_bottom(6)
+		self.titlelabel = Gtk.Label(halign=Gtk.Align.FILL, margin_bottom=12, margin_top=12)
+		self.set_title()
+		self.pack_start(self.titlelabel, False, True, 0)
+		self.prayers = []
+		self.nprayers = 0
+		self.connect("prayers-updated", self.update_prayers_highlight)
+
+	def set_title(self):
 		# Set the Date in the Title
 		now_wd = datetime.datetime.now().strftime("%H:%M - %A")
 		g_date = datetime.datetime.now().strftime("%d %B %Y")
-		calc = HijriCal()
+		calc = HijriCal(self.parent.prayertimes.options.hijrical_adjustment)
 		h_months = ['Muharram', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab',  "Sha'ban",  'Ramadan',  'Shawwal',  "Dhu al Qa'da", 'Dhu al Hijja']
 		h_year,  h_month,  h_day,  h_week_day = calc.today
 		h_date = '%i %s %i' % ( h_day,  h_months[int(h_month-1)],  h_year)
 
-		titlelabel = Gtk.Label(label=(now_wd+", "+h_date+" / "+g_date), margin_bottom=12, margin_top=12)
-		titlelabel.props.halign = Gtk.Align.FILL
-		self.pack_start(titlelabel, False, True, 0)
-		self.prayers = []
-		self.nprayers = 0
-		self.connect("prayers-updated", self.update_prayers_highlight)
+		self.titlelabel.set_label(now_wd+", "+h_date+" / "+g_date)
 
 	def add_prayer(self, prayer, prayertime, colored):
 		# Prayer Listbox

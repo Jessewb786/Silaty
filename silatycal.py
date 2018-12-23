@@ -7,6 +7,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import GObject, GLib, Gtk, Gdk, GdkPixbuf
 from datetime import date, timedelta
 from hijrical import *
+from options import *
 import datetime
 import os
 
@@ -27,7 +28,9 @@ class SilatyCal(Gtk.Box):
 		gtitlelabel = Gtk.Label(label=(now_wd+", "+g_date))
 		gtitlelabel.props.halign = Gtk.Align.START
 
-		calc = HijriCal()
+		self.options = Options()
+
+		calc = HijriCal(self.options.hijrical_adjustment)
 		h_months = ['Muharram', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab',  "Sha'ban",  'Ramadan',  'Shawwal',  "Dhu al Qa'da", 'Dhu al Hijja']
 		h_year,  h_month,  h_day,  h_week_day = calc.today
 		h_date = '%i %s %i' % ( h_day,  h_months[int(h_month-1)],  h_year)
@@ -52,7 +55,7 @@ class SilatyCal(Gtk.Box):
 		topbox.pack_end(box, False, False, 0)
 
 		# Set up the date switcher
-		self.cal = Cal()
+		self.cal = Cal(self)
 
 		#bottombox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, halign=Gtk.Align.FILL, margin=24)
 		#opmaya = Gtk.Button(label="Open Maya")
@@ -80,13 +83,15 @@ class SilatyCal(Gtk.Box):
 					self.cal.caltable.get_child_at(column,row).state = CalendarState.Gregorian
 
 class Cal(Gtk.Box):
-	def __init__(self):
+	def __init__(self, parent):
 		Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
 		self.dateswitcher = Gtk.Grid(row_homogeneous=True)
 		self.dateswitcher.set_halign(Gtk.Align.CENTER)
 
+		self.parent = parent
+
 		self._refdate = datetime.datetime.today()
-		self.hijcal = HijriCal()
+		self.hijrical = HijriCal(self.parent.options.hijrical_adjustment)
 		self.weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 		self.gmonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 		self.hmonths = ['Muharram', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab',  "Sha'ban",  'Ramadhan',  'Shawwal',  "Dhu al Qa'da", 'Dhu al Hijja']
@@ -195,7 +200,7 @@ class Cal(Gtk.Box):
 		gday   = (self.refdate).strftime("%d")
 		gmonth = (self.refdate).strftime("%B")
 		gyear  = (self.refdate).strftime("%Y")
-		hyear, hmonth, hday = self.hijcal.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
+		hyear, hmonth, hday = self.hijrical.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
 
 		self.gmonthstack.set_visible_child_name(self.refdate.strftime("%B"))
 		self.hmonthstack.set_visible_child_name(self.hmonths[int(hmonth-1)])
@@ -258,9 +263,7 @@ class Cal(Gtk.Box):
 		self.gmtoday = self.gmonths.index(_gmonth)
 		self.gytoday = int(_gyear)
 
-		hijrical = HijriCal()
-
-		self.hytoday, self.hmtoday, self.hdtoday = hijrical.goto_gregorian_day(self.gytoday, (self.gmtoday+1), self.gdtoday)
+		self.hytoday, self.hmtoday, self.hdtoday = self.hijrical.goto_gregorian_day(self.gytoday, (self.gmtoday+1), self.gdtoday)
 
 		calendarindex = -(wtoday+(((6-wtoday)+self.gdtoday)//7)*7)
 
@@ -277,7 +280,7 @@ class Cal(Gtk.Box):
 				cgmday = self.gmonths.index((datetime.datetime.now() + timedelta(days=calendarindex)).strftime("%B"))
 				cgyday = int((datetime.datetime.now() + timedelta(days=calendarindex)).strftime("%Y"))
 
-				chyday, chmday, chdday = hijrical.goto_gregorian_day(cgyday, (cgmday+1), cgdday)
+				chyday, chmday, chdday = self.hijrical.goto_gregorian_day(cgyday, (cgmday+1), cgdday)
 
 				if (cgmday != self.gmtoday):
 					gcolor = CalendarColor.DGrey
@@ -327,20 +330,20 @@ class Cal(Gtk.Box):
 			gday   = self.refdate.strftime("%d")
 			gmonth = self.refdate.strftime("%B")
 			gyear  = self.refdate.strftime("%Y")
-			hyear, hmonth, hday = self.hijcal.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
+			hyear, hmonth, hday = self.hijrical.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
 			refwd = self.weekdays.index(self.refdate.strftime("%A"))
 			calendarindex = -(refwd+(((6-refwd)+int(self.refdate.strftime("%d")))//7)*7)
 		else:
 			gday   = self.refdate.strftime("%d")
 			gmonth = self.refdate.strftime("%B")
 			gyear  = self.refdate.strftime("%Y")
-			hyear, hmonth, hday = self.hijcal.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
+			hyear, hmonth, hday = self.hijrical.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
 			ndays = hijri_month_days(hyear, hmonth-2)
 			self.refdate = self.refdate-timedelta(days=ndays)
 			gday   = self.refdate.strftime("%d")
 			gmonth = self.refdate.strftime("%B")
 			gyear  = self.refdate.strftime("%Y")
-			hyear, hmonth, hday = self.hijcal.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
+			hyear, hmonth, hday = self.hijrical.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
 			refwd = self.weekdays.index(self.refdate.strftime("%A"))
 			calendarindex = -(refwd+(((6-refwd)+hday)//7)*7)
 		self.shift_days_of_table(gday, gmonth, gyear, hday, hmonth, hyear, calendarindex, CalendarDirection.RIGHT)
@@ -356,20 +359,20 @@ class Cal(Gtk.Box):
 			gday   = (self.refdate).strftime("%d")
 			gmonth = (self.refdate).strftime("%B")
 			gyear  = (self.refdate).strftime("%Y")
-			hyear, hmonth, hday = self.hijcal.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
+			hyear, hmonth, hday = self.hijrical.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
 			refwd = self.weekdays.index(self.refdate.strftime("%A"))
 			calendarindex = -(refwd+(((6-refwd)+int(self.refdate.strftime("%d")))//7)*7)
 		else:
 			gday   = (self.refdate).strftime("%d")
 			gmonth = (self.refdate).strftime("%B")
 			gyear  = (self.refdate).strftime("%Y")
-			hyear, hmonth, hday = self.hijcal.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
+			hyear, hmonth, hday = self.hijrical.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
 			ndays = timedelta(days=hijri_month_days(hyear, hmonth))
 			self.refdate = self.refdate+ndays
 			gday   = self.refdate.strftime("%d")
 			gmonth = self.refdate.strftime("%B")
 			gyear  = self.refdate.strftime("%Y")
-			hyear, hmonth, hday = self.hijcal.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
+			hyear, hmonth, hday = self.hijrical.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
 			refwd = self.weekdays.index(self.refdate.strftime("%A"))
 			calendarindex = -(refwd+(((6-refwd)+hday)//7)*7)
 		self.shift_days_of_table(gday, gmonth, gyear, hday, hmonth, hyear, calendarindex, CalendarDirection.LEFT)
@@ -384,13 +387,72 @@ class Cal(Gtk.Box):
 			icon = Gtk.Image.new_from_stock(Gtk.STOCK_MISSING_IMAGE, 22)
 		return icon
 
+	def refresh(self):
+		# update hijri date
+		self.hytoday, self.hmtoday, self.hdtoday = self.hijrical.goto_gregorian_day(self.gytoday, (self.gmtoday+1), self.gdtoday)
+		# update hijri title label
+		now_wd = datetime.datetime.now().strftime("%A")
+		h_date = '%i %s %i' % ( self.hdtoday,  self.hmonths[int(self.hmtoday-1)],  self.hytoday)
+		self.parent.titlestack.get_child_by_name("Hijri").set_label(now_wd+", "+h_date)
+		# update calendar
+		gday   = (self.refdate).strftime("%d")
+		gmonth = (self.refdate).strftime("%B")
+		gyear  = (self.refdate).strftime("%Y")
+		if self.state == CalendarState.Gregorian:
+			# Get the size of this month
+			hyear, hmonth, hday = self.hijrical.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
+			refwd = self.weekdays.index(self.refdate.strftime("%A"))
+			calendarindex = -(refwd+(((6-refwd)+int(self.refdate.strftime("%d")))//7)*7)
+		else:
+			hyear, hmonth, hday = self.hijrical.goto_gregorian_day(int(gyear), (self.gmonths.index(gmonth)+1), int(gday))
+			refwd = self.weekdays.index(self.refdate.strftime("%A"))
+			calendarindex = -(refwd+(((6-refwd)+hday)//7)*7)
+		for row in range(0, 6):
+			for column in range(0, 7):
+				newgday = int((self.refdate + timedelta(days=(calendarindex))).strftime("%d"))
+				newgmonth = self.gmonths.index((self.refdate + timedelta(days=(calendarindex))).strftime("%B"))
+				newgyear = int((self.refdate + timedelta(days=(calendarindex))).strftime("%Y"))
+				newhyear, newhmonth, newhday = self.hijrical.goto_gregorian_day(newgyear, newgmonth+1, newgday)
+
+				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next = newgday
+				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next = newhday
+
+				if (column == 0) or (column == 6):
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = CalendarColor.LGrey
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = CalendarColor.LGrey
+				else:
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = CalendarColor.White
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = CalendarColor.White
+
+				if newgmonth != self.gmonths.index(self.refdate.strftime("%B")):
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = CalendarColor.DGrey
+
+				if newhmonth != hmonth:
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = CalendarColor.DGrey
+
+				if (newgday == self.gdtoday and newgmonth == self.gmtoday and newgyear == self.gytoday):
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background = CalendarColor.Blue
+
+				if (newhday == self.hdtoday and newhmonth == self.hmtoday and newhyear == self.hytoday):
+					self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background = CalendarColor.Blue
+
+				newgbackground = self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next_background
+				newhbackground = self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next_background
+
+				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day = newgday
+				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_background = newgbackground
+				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day = newhday
+				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_background = newhbackground
+
+				calendarindex += 1
+
 	def shift_days_of_table(self, gday, gmonth, gyear, hday, hmonth, hyear, calendarindex, direction):
 		for row in range(0, 6):
 			for column in range(0, 7):
 				newgday = int((self.refdate + timedelta(days=(calendarindex))).strftime("%d"))
 				newgmonth = self.gmonths.index((self.refdate + timedelta(days=(calendarindex))).strftime("%B"))
 				newgyear = int((self.refdate + timedelta(days=(calendarindex))).strftime("%Y"))
-				newhyear, newhmonth, newhday = self.hijcal.goto_gregorian_day(newgyear, newgmonth+1, newgday)
+				newhyear, newhmonth, newhday = self.hijrical.goto_gregorian_day(newgyear, newgmonth+1, newgday)
 
 				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Gregorian').day_next = newgday
 				self.caltable.get_child_at(column,row).labelstack.get_child_by_name('Hijri').day_next = newhday
