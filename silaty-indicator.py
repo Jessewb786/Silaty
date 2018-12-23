@@ -186,7 +186,7 @@ class SilatyIndicator():
 
 	def get_hijri_date(self):
 		wd = datetime.datetime.now().strftime("%A")
-		calc = HijriCal()
+		calc = HijriCal(self.silaty.prayertimes.options.hijrical_adjustment)
 		h_months = ['Muharram ', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab', "Sha'ban", 'Ramadan', 'Shawwal', "Dhu al Qa'da", 'Dhu al Hijja']
 		h_year,  h_month,  h_day,  h_week_day = calc.today
 		h_date = '%i %s %i' % ( h_day,  h_months[int(h_month-1)],  h_year)

@@ -102,7 +102,7 @@ class Silaty(Gtk.Window):
 
     def set_home(self):
         ## Home - Prayers
-        self.homebox = Home()
+        self.homebox = Home(self)
 
         nextprayer = self.prayertimes.next_prayer()
         if nextprayer == 'Fajr':
