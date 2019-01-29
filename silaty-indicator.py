@@ -135,6 +135,7 @@ class SilatyIndicator():
 
 		self.NextPrayerItem.set_label("%s until %s" % (self.secs_to_hrtime(tonextprayer.seconds), nextprayer))
 		self.silaty.headerbar.set_title("%s until %s" % (self.secs_to_hrtime(tonextprayer.seconds), nextprayer))
+		self.Indicator.set_title("%s in %s" % (nextprayer, (self.secs_to_nrtime(tonextprayer.seconds))))
 
 		if self.silaty.prayertimes.options.iconlabel == True:
 			self.Indicator.set_label("%s in %s" % (nextprayer, (self.secs_to_nrtime(tonextprayer.seconds))),"")
