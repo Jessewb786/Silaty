@@ -48,6 +48,11 @@ sudo ./uninstall.sh
 
 ## Changelog
 
+### v1.3
+
+* arabic language is now supported.
+* app crash on KDE desktop fixed.
+
 ### v1.2
 
 * [Silaty unable to sync prayer times correctly !! #9](https://github.com/Jessewb786/Silaty/issues/9) fixed.
