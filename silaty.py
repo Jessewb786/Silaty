@@ -13,6 +13,7 @@ from silatycal import *
 from sidebar import *
 from home import *
 from location import *
+from translate import set_language, translate_text as _
 import urllib.request
 import datetime
 import time
@@ -51,6 +52,13 @@ class Silaty(Gtk.Window):
         self.prayertimes = Prayertime()
         self.prayertimes.calculate()
         #self.prayertimes.notify('Title', 'This is a test.')
+
+        # Set language
+        set_language(self.prayertimes.options.language)
+        if self.prayertimes.options.language == 'Arabic':
+            #self.set_gravity(Gdk.Gravity.NORTH_EAST)
+            #self.set_direction(Gtk.TextDirection.RTL)
+            Gtk.Widget.set_default_direction(Gtk.TextDirection.RTL)
 
         # Set layout
         self.set_layout()
@@ -106,31 +114,31 @@ class Silaty(Gtk.Window):
 
         nextprayer = self.prayertimes.next_prayer()
         if nextprayer == 'Fajr':
-            self.homebox.add_prayer('Fajr', self.get_times(self.prayertimes.fajr_time()), True)
+            self.homebox.add_prayer(_('Fajr'), self.get_times(self.prayertimes.fajr_time()), True)
         else:
-            self.homebox.add_prayer('Fajr', self.get_times(self.prayertimes.fajr_time()), False)
+            self.homebox.add_prayer(_('Fajr'), self.get_times(self.prayertimes.fajr_time()), False)
 
-        self.homebox.add_prayer('Shuruk', self.get_times(self.prayertimes.shrouk_time()), False)
+        self.homebox.add_prayer(_('Shuruk'), self.get_times(self.prayertimes.shrouk_time()), False)
 
         if nextprayer == 'Dhuhr':
-            self.homebox.add_prayer('Dhuhr', self.get_times(self.prayertimes.zuhr_time()), True)
+            self.homebox.add_prayer(_('Dhuhr'), self.get_times(self.prayertimes.zuhr_time()), True)
         else:
-            self.homebox.add_prayer('Dhuhr', self.get_times(self.prayertimes.zuhr_time()), False)
+            self.homebox.add_prayer(_('Dhuhr'), self.get_times(self.prayertimes.zuhr_time()), False)
 
         if nextprayer == 'Asr':
-            self.homebox.add_prayer('Asr', self.get_times(self.prayertimes.asr_time()), True)
+            self.homebox.add_prayer(_('Asr'), self.get_times(self.prayertimes.asr_time()), True)
         else:
-            self.homebox.add_prayer('Asr', self.get_times(self.prayertimes.asr_time()), False)
+            self.homebox.add_prayer(_('Asr'), self.get_times(self.prayertimes.asr_time()), False)
 
         if nextprayer == 'Maghrib':
-            self.homebox.add_prayer('Maghrib', self.get_times(self.prayertimes.maghrib_time()), True)
+            self.homebox.add_prayer(_('Maghrib'), self.get_times(self.prayertimes.maghrib_time()), True)
         else:
-            self.homebox.add_prayer('Maghrib', self.get_times(self.prayertimes.maghrib_time()), False)
+            self.homebox.add_prayer(_('Maghrib'), self.get_times(self.prayertimes.maghrib_time()), False)
 
         if nextprayer == 'Isha':
-            self.homebox.add_prayer('Isha', self.get_times(self.prayertimes.isha_time()), True)
+            self.homebox.add_prayer(_('Isha'), self.get_times(self.prayertimes.isha_time()), True)
         else:
-            self.homebox.add_prayer('Isha', self.get_times(self.prayertimes.isha_time()), False)
+            self.homebox.add_prayer(_('Isha'), self.get_times(self.prayertimes.isha_time()), False)
 
         self.sidebar.add_to_stack(self.homebox, 'home')
         self.sidebar.connect('stack-changed', self.on_stack_changed)
@@ -144,11 +152,11 @@ class Silaty(Gtk.Window):
         ## Options
         settings = SettingsPane()
 
-        settings.add_category("System")
+        settings.add_category(_("System"))
 
         # Start minimized
         startmin     = self.prayertimes.options.start_minimized
-        smlabel      = Gtk.Label('Start Minimized:')
+        smlabel      = Gtk.Label(_('Start Minimized:'))
         self.smvalue = Gtk.Switch(halign=Gtk.Align.START)
         self.smvalue.set_active(startmin)
         self.smvalue.connect('button-press-event', self.on_entered_start_minimized)
@@ -156,37 +164,48 @@ class Silaty(Gtk.Window):
 
         # Daylight saving time
         defaultdst    = self.prayertimes.options.daylight_saving_time
-        dstlabel      = Gtk.Label('Daylight Saving Time:')
+        dstlabel      = Gtk.Label(_('Daylight Saving Time:'))
         self.dstvalue = Gtk.Switch(halign=Gtk.Align.START)
         self.dstvalue.set_active(defaultdst)
         self.dstvalue.connect('button-press-event', self.on_entered_daylight_saving_time)
         settings.add_setting(self.dstvalue, dstlabel)
 
         # Clock Format
-        defaultcf    = self.prayertimes.options.clock_format
-        clockformats = self.prayertimes.options.get_clock_formats()
-        cflabel      = Gtk.Label('Clock Format:')
-        self.cfmenu  = Gtk.ComboBoxText(halign=Gtk.Align.FILL)
-        for cf in clockformats:
-            self.cfmenu.append(cf, cf)
-        self.cfmenu.set_active(clockformats.index(defaultcf))
+        defaultcf   = self.prayertimes.options.clock_format
+        cflabel     = Gtk.Label(_('Clock Format:'))
+        self.cfmenu = Gtk.ComboBoxText(halign=Gtk.Align.FILL)
+        self.clockformats = self.prayertimes.options.get_clock_formats()
+        for cf in self.clockformats:
+            self.cfmenu.append(cf, _(cf))
+        self.cfmenu.set_active(self.clockformats.index(defaultcf))
         self.cfmenu.connect("changed", self.on_entered_clock_format)
         settings.add_setting(self.cfmenu, cflabel)
 
         # Adjust Hijri Calendar
         defaultvalue = self.prayertimes.options.hijrical_adjustment
-        hijrilabel   = Gtk.Label('Adjust Hijri Calendar:', halign=Gtk.Align.START)
+        hijrilabel   = Gtk.Label(_('Adjust Hijri Calendar:'), halign=Gtk.Align.START)
         hijriadj     = Gtk.Adjustment(value=0, lower=-1, upper=1, step_incr=1, page_incr=1, page_size=0)
         self.hijrivalue = Gtk.SpinButton(adjustment=hijriadj, halign=Gtk.Align.FILL)
         self.hijrivalue.set_value(float(defaultvalue))
         self.hijrivalue.connect("value-changed",self.on_entered_hijrical_adjustment)
         settings.add_setting(self.hijrivalue, hijrilabel)
 
-        settings.add_category("Notifications")
+        # Language
+        defaultlang   = self.prayertimes.options.language
+        langlabel     = Gtk.Label(_('Language:'))
+        self.langmenu = Gtk.ComboBoxText(halign=Gtk.Align.FILL)
+        self.langlist = self.prayertimes.options.get_languages()
+        for lang in self.langlist:
+            self.langmenu.append(lang, _(lang))
+        self.langmenu.set_active(self.langlist.index(defaultlang))
+        self.langmenu.connect("changed", self.on_entered_language)
+        settings.add_setting(self.langmenu, langlabel)
+
+        settings.add_category(_("Notifications"))
 
         # Show Icon with label
         showstat     = self.prayertimes.options.iconlabel
-        silabel      = Gtk.Label('Show Time left with Icon:')
+        silabel      = Gtk.Label(_('Show Time left with Icon:'))
         self.sivalue = Gtk.Switch(halign=Gtk.Align.START)
         self.sivalue.set_active(showstat)
         self.sivalue.connect('button-press-event', self.on_entered_iconlabel)
@@ -194,7 +213,7 @@ class Silaty(Gtk.Window):
 
         # Enable Audio
         enableaudio     = self.prayertimes.options.audio_notifications
-        audiolabel      = Gtk.Label('Enable audio notifications:')
+        audiolabel      = Gtk.Label(_('Enable audio notifications:'))
         self.audiovalue = Gtk.Switch(halign=Gtk.Align.START)
         self.audiovalue.set_active(enableaudio)
         self.audiovalue.connect('button-press-event', self.on_entered_audio_notifications)
@@ -202,7 +221,7 @@ class Silaty(Gtk.Window):
 
         # Notification Time
         defaultvalue = self.prayertimes.options.notification_time
-        ntlabel      = Gtk.Label('Time before notification:', halign=Gtk.Align.START)
+        ntlabel      = Gtk.Label(_('Time before notification:'), halign=Gtk.Align.START)
         notifadj     = Gtk.Adjustment(value=0, lower=5, upper=60, step_incr=1, page_incr=1, page_size=0)
         self.ntvalue = Gtk.SpinButton(adjustment=notifadj, halign=Gtk.Align.FILL)
         self.ntvalue.set_value(float(defaultvalue))
@@ -218,7 +237,7 @@ class Silaty(Gtk.Window):
 
         defaultadhan   = self.prayertimes.options.fajr_adhan
         adhans         = self.prayertimes.options.get_fajr_adhans()
-        fajrlabel      = Gtk.Label('Fajr Adhan:', halign=Gtk.Align.START)
+        fajrlabel      = Gtk.Label(_('Fajr Adhan:'), halign=Gtk.Align.START)
         self.fajradhan = Gtk.ComboBoxText(halign=Gtk.Align.FILL)
         for adhan in adhans:
             self.fajradhan.append(adhan, adhan)
@@ -238,7 +257,7 @@ class Silaty(Gtk.Window):
 
         defaultadhan     = self.prayertimes.options.normal_adhan
         adhans           = self.prayertimes.options.get_normal_adhans()
-        normallabel      = Gtk.Label('Normal Adhan:', halign=Gtk.Align.START)
+        normallabel      = Gtk.Label(_('Normal Adhan:'), halign=Gtk.Align.START)
         self.normaladhan = Gtk.ComboBoxText(halign=Gtk.Align.FILL)
         for adhan in adhans:
             self.normaladhan.append(adhan, adhan)
@@ -250,38 +269,38 @@ class Silaty(Gtk.Window):
 
         settings.add_setting(adhanbox, normallabel)
 
-        settings.add_category("Jurisprudence")
+        settings.add_category(_("Jurisprudence"))
 
         # Calculation Method
         defaultmethod    = self.prayertimes.options.calculation_method_name
-        methods          = self.prayertimes.options.get_cal_methods()
-        calmethodlabel   = Gtk.Label('Calculation Method:', halign=Gtk.Align.START)
+        self.methods     = self.prayertimes.options.get_cal_methods()
+        calmethodlabel   = Gtk.Label(_('Calculation Method:'), halign=Gtk.Align.START)
         self.methodsmenu = Gtk.ComboBoxText(halign=Gtk.Align.FILL)
-        for method in methods:
-            self.methodsmenu.append(method, method)
-        active_text      = methods.index(defaultmethod)
+        for method in self.methods:
+            self.methodsmenu.append(method, _(method))
+        active_text      = self.methods.index(defaultmethod)
         self.methodsmenu.set_active(active_text)
         self.methodsmenu.connect("changed", self.on_entered_calculation_method_name)
         settings.add_setting(self.methodsmenu, calmethodlabel)
 
         # Madhab
         defaultmadhab    = self.prayertimes.options.madhab_name
-        madaheb          = self.prayertimes.options.get_madhahed()
-        madhablabel      = Gtk.Label('Madhab:', halign=Gtk.Align.START)
+        self.madaheb     = self.prayertimes.options.get_madhahed()
+        madhablabel      = Gtk.Label(_('Madhab:'), halign=Gtk.Align.START)
         self.madahebmenu = Gtk.ComboBoxText(halign=Gtk.Align.FILL)
-        for madhab in madaheb:
-            self.madahebmenu.append(madhab, madhab)
-        self.madahebmenu.set_active(madaheb.index(defaultmadhab))
+        for madhab in self.madaheb:
+            self.madahebmenu.append(madhab, _(madhab))
+        self.madahebmenu.set_active(self.madaheb.index(defaultmadhab))
         self.madahebmenu.connect("changed", self.on_entered_madhab_name)
         settings.add_setting(self.madahebmenu, madhablabel)
 
-        settings.add_category("Location")
+        settings.add_category(_("Location"))
 
         # City name
         citybox        = Gtk.Box(halign=Gtk.Align.FILL, spacing=3)
         defaultcity    = self.prayertimes.options.city
         defaultcountry = self.prayertimes.options.country
-        citylabel      = Gtk.Label('City:', halign=Gtk.Align.START)
+        citylabel      = Gtk.Label(_('City:'), halign=Gtk.Align.START)
         self.cityentry = Gtk.Entry(halign=Gtk.Align.FILL)
         self.cityentry.set_text('%s' % defaultcity)
         #self.cityentry.connect("activate", self.on_entered_city_activate)
@@ -297,7 +316,7 @@ class Silaty(Gtk.Window):
 
         # Latitude
         defaultlatitude = self.prayertimes.options.latitude
-        latlabel        = Gtk.Label('Latitude:', halign=Gtk.Align.START)
+        latlabel        = Gtk.Label(_('Latitude:'), halign=Gtk.Align.START)
         latadj          = Gtk.Adjustment(value=0, lower=-90, upper=90, step_incr=0.01, page_incr=1, page_size=1)
         self.latentry   = Gtk.SpinButton(adjustment=latadj, digits=3, halign=Gtk.Align.FILL)
         self.latentry.set_value(float(defaultlatitude))
@@ -306,7 +325,7 @@ class Silaty(Gtk.Window):
 
         # Longitude
         defaultlong    = self.prayertimes.options.longitude
-        longlabel      = Gtk.Label("Longitude:", halign=Gtk.Align.START)
+        longlabel      = Gtk.Label(_("Longitude:"), halign=Gtk.Align.START)
         lngadj         = Gtk.Adjustment(value=0, lower=-180, upper=180, step_incr=0.01, page_incr=1, page_size=1)
         self.longentry = Gtk.SpinButton(adjustment=lngadj, digits=3, halign=Gtk.Align.FILL)
         self.longentry.set_value(float(defaultlong))
@@ -315,7 +334,7 @@ class Silaty(Gtk.Window):
 
         # Time zone
         defaulttz    = self.prayertimes.options.timezone
-        tzlabel      = Gtk.Label("Time Zone:", halign=Gtk.Align.START)
+        tzlabel      = Gtk.Label(_("Time Zone:"), halign=Gtk.Align.START)
         tzadj        = Gtk.Adjustment(value=0, lower=-12, upper=14, step_incr=1, page_incr=1, page_size=1)
         self.tzentry = Gtk.SpinButton(adjustment=tzadj, digits=1, halign=Gtk.Align.FILL)
         self.tzentry.set_value(float(defaulttz))
@@ -469,15 +488,30 @@ class Silaty(Gtk.Window):
         self.calendar.cal.refresh()
 
     def on_entered_clock_format(self, widget):
-        self.prayertimes.options.clock_format = widget.get_active_text()
+        index = widget.get_active()
+        self.prayertimes.options.clock_format = self.clockformats[index]
         self.update_prayers(False)
 
+    def on_entered_language(self, widget):
+        index = widget.get_active()
+        self.prayertimes.options.language = self.langlist[index]
+        # Show our message dialog
+        dialog = Gtk.MessageDialog(text=_('Silaty needs to be restarted, restart now?'), transient_for=self, buttons=Gtk.ButtonsType.OK_CANCEL, message_type=Gtk.MessageType.QUESTION)
+        response = dialog.run()
+        dialog.destroy()
+        # We only restart when the user presses the OK button
+        if response == Gtk.ResponseType.OK:
+            self.prayertimes.options.save_options()
+            os.execl(sys.executable, sys.executable, *sys.argv)
+
     def on_entered_calculation_method_name(self, widget):
-        self.prayertimes.options.calculation_method_name = widget.get_active_text()
+        index = widget.get_active()
+        self.prayertimes.options.calculation_method_name = self.methods[index]
         self.update_prayers()
 
     def on_entered_madhab_name(self, widget):
-        self.prayertimes.options.madhab_name = widget.get_active_text()
+        index = widget.get_active()
+        self.prayertimes.options.madhab_name = self.madaheb[index]
         self.update_prayers()
 
     def fetch_location(self, city):
@@ -548,17 +582,17 @@ class Silaty(Gtk.Window):
         # Update prayer times
         i = 0
         for prayer in self.homebox.prayers:
-            if prayer.name == 'Fajr':
+            if prayer.name == _('Fajr'):
                 self.homebox.prayers[i].time = self.get_times(self.prayertimes.fajr_time())
-            elif prayer.name == 'Shuruk':
+            elif prayer.name == _('Shuruk'):
                 self.homebox.prayers[i].time = self.get_times(self.prayertimes.shrouk_time())
-            elif prayer.name == 'Dhuhr':
+            elif prayer.name == _('Dhuhr'):
                 self.homebox.prayers[i].time = self.get_times(self.prayertimes.zuhr_time())
-            elif prayer.name == 'Asr':
+            elif prayer.name == _('Asr'):
                 self.homebox.prayers[i].time = self.get_times(self.prayertimes.asr_time())
-            elif prayer.name == 'Maghrib':
+            elif prayer.name == _('Maghrib'):
                 self.homebox.prayers[i].time = self.get_times(self.prayertimes.maghrib_time())
-            elif prayer.name == 'Isha':
+            elif prayer.name == _('Isha'):
                 self.homebox.prayers[i].time = self.get_times(self.prayertimes.isha_time())
             i += 1
         nextprayer = self.prayertimes.next_prayer()

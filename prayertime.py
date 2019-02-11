@@ -33,6 +33,7 @@ from math import degrees, radians, atan, atan2, asin, acos, cos, sin, tan, fabs
 from datetime import date, timedelta
 from time import strptime
 from options import *
+from translate import translate_text as _
 import datetime
 import time
 import os
@@ -276,9 +277,9 @@ class Prayertime(object):
         if notify_also:
             for time in PrayerTimes:
                 if time == NotifTime:
-                    self.notify('Get Ready', '%s minutes left until the %s prayer.' % (str(int(self.options.notification_time)), NextPrayer))
+                    self.notify(_('Get Ready'), _('%s minutes left until the %s prayer.') % (str(int(self.options.notification_time)), _(NextPrayer)))
                 elif time == Time:
-                    self.notify('Prayer time for %s' % CurrentPrayer, "It's time for the %s prayer." % CurrentPrayer, self.options.audio_notifications, CurrentPrayer)
+                    self.notify(_('Prayer time for %s') % _(CurrentPrayer), _("It's time for the %s prayer.") % _(CurrentPrayer), self.options.audio_notifications, CurrentPrayer)
 
     def notify(self, title, message, play_audio = False, current_prayer = ''):
         Notify.init("Silaty")

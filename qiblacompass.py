@@ -5,6 +5,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GLib, Gio, Gdk, GdkPixbuf
+from translate import translate_text as _
 
 class QiblaCompass(Gtk.Box):
 	def __init__(self, qibladirection, country, city):
@@ -17,7 +18,7 @@ class QiblaCompass(Gtk.Box):
 		qibla.props.valign = Gtk.Align.START
 
 		## Make the top label
-		qiblatitle = Gtk.Label(label="Qibla direction :", margin_left=20)
+		qiblatitle = Gtk.Label(label=_("Qibla direction :"), margin_left=20, margin_right=20)
 		qiblatitle.props.halign = Gtk.Align.START
 		self.mainbox.pack_start(qiblatitle, False, False, 12)
 
@@ -26,12 +27,12 @@ class QiblaCompass(Gtk.Box):
 
 		## Set the country and city
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=6)
-		qiblalabel = Gtk.Label(label="Country : "+ country)
+		qiblalabel = Gtk.Label(label=_("Country : %s") % country)
 		qiblalabel.props.halign = Gtk.Align.CENTER
 		qiblalabel.props.valign = Gtk.Align.CENTER
 		vbox.pack_start(qiblalabel, True,True, 0)
 
-		qiblalabel = Gtk.Label(label="City : "+ city)
+		qiblalabel = Gtk.Label(label=_("City : %s") % city)
 		qiblalabel.props.halign = Gtk.Align.CENTER
 		qiblalabel.props.valign = Gtk.Align.CENTER
 		vbox.pack_start(qiblalabel, True, True, 0)
@@ -82,7 +83,7 @@ class QiblaCompass(Gtk.Box):
 		qibla.props.valign = Gtk.Align.START
 
 		## Make the top label
-		qiblatitle = Gtk.Label(label="Qibla direction :", margin_left=20)
+		qiblatitle = Gtk.Label(label=_("Qibla direction :"), margin_left=20, margin_right=20)
 		qiblatitle.props.halign = Gtk.Align.START
 		self.mainbox.pack_start(qiblatitle, False, False, 12)
 
@@ -91,12 +92,12 @@ class QiblaCompass(Gtk.Box):
 
 		## Set the country and city
 		vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=6)
-		qiblalabel = Gtk.Label(label="Country : "+ country)
+		qiblalabel = Gtk.Label(label=_("Country : %s") % country)
 		qiblalabel.props.halign = Gtk.Align.CENTER
 		qiblalabel.props.valign = Gtk.Align.CENTER
 		vbox.pack_start(qiblalabel, True,True, 0)
 
-		qiblalabel = Gtk.Label(label="City : "+ city)
+		qiblalabel = Gtk.Label(label=_("City : %s") % city)
 		qiblalabel.props.halign = Gtk.Align.CENTER
 		qiblalabel.props.valign = Gtk.Align.CENTER
 		vbox.pack_start(qiblalabel, True, True, 0)

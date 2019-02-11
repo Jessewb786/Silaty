@@ -8,6 +8,7 @@ from gi.repository import GObject, GLib, Gtk, Gdk, GdkPixbuf
 from datetime import date, timedelta
 from hijrical import *
 from options import *
+from translate import translate_text as _
 import datetime
 import os
 
@@ -16,16 +17,18 @@ class SilatyCal(Gtk.Box):
 		Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12, margin_bottom=12)
 
 		# Set the Date in the Title
-		topbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, halign=Gtk.Align.FILL, margin_right=0, margin_left=12, margin_top=12, margin_bottom=12)
+		topbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, halign=Gtk.Align.FILL, margin_right=12, margin_left=12, margin_top=12, margin_bottom=12)
 		self.titlestack = Gtk.Stack()
 		self.titlestack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
 		self.titlestack.set_transition_duration(300)
 		self.titlestack.set_halign = Gtk.Align.START
 
 		now_wd = datetime.datetime.now().strftime("%A")
-
-		g_date = datetime.datetime.now().strftime("%d %B %Y")
-		gtitlelabel = Gtk.Label(label=(now_wd+", "+g_date))
+		g_day = datetime.datetime.now().strftime("%d")
+		g_month = datetime.datetime.now().strftime("%B")
+		g_year = datetime.datetime.now().strftime("%Y")
+		g_date = '%s %s %s' % (g_day, _(g_month), g_year)
+		gtitlelabel = Gtk.Label(label=(_('%s, %s') % (_(now_wd), g_date)))
 		gtitlelabel.props.halign = Gtk.Align.START
 
 		self.options = Options()
@@ -33,8 +36,8 @@ class SilatyCal(Gtk.Box):
 		calc = HijriCal(self.options.hijrical_adjustment)
 		h_months = ['Muharram', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab',  "Sha'ban",  'Ramadan',  'Shawwal',  "Dhu al Qa'da", 'Dhu al Hijja']
 		h_year,  h_month,  h_day,  h_week_day = calc.today
-		h_date = '%i %s %i' % ( h_day,  h_months[int(h_month-1)],  h_year)
-		htitlelabel = Gtk.Label(label=(now_wd+", "+h_date))
+		h_date = '%i %s %i' % (h_day, _(h_months[int(h_month-1)]), h_year)
+		htitlelabel = Gtk.Label(label=(_('%s, %s') % (_(now_wd), h_date)))
 		htitlelabel.props.halign = Gtk.Align.START
 
 		self.titlestack.add_named(gtitlelabel, "Gregorian")
@@ -43,7 +46,7 @@ class SilatyCal(Gtk.Box):
 		topbox.pack_start(self.titlestack , False, False, 0)
 
 		# Set up the Hijri/Gregorian Switch
-		hijrilabel = Gtk.Label('Hijri:', halign=Gtk.Align.START)
+		hijrilabel = Gtk.Label(_('Hijri:'), halign=Gtk.Align.START)
 		self.hijri = Gtk.Switch(halign=Gtk.Align.END)
 		self.hijri.set_active(False)
 		self.hijri.connect('button-press-event', self.on_entered_hijri)
@@ -87,6 +90,7 @@ class Cal(Gtk.Box):
 		Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
 		self.dateswitcher = Gtk.Grid(row_homogeneous=True)
 		self.dateswitcher.set_halign(Gtk.Align.CENTER)
+		self.dateswitcher.set_direction(Gtk.TextDirection.LTR)
 
 		self.parent = parent
 
@@ -101,35 +105,35 @@ class Cal(Gtk.Box):
 		self.gmonthstack.set_transition_duration(300)
 		self.gmonthstack.set_homogeneous(True)
 
-		self.gmonthstack.add_named(Gtk.Label(label="January",   name="Label"), "January")
-		self.gmonthstack.add_named(Gtk.Label(label="February",  name="Label"), "February")
-		self.gmonthstack.add_named(Gtk.Label(label="March",     name="Label"), "March")
-		self.gmonthstack.add_named(Gtk.Label(label="April",     name="Label"), "April")
-		self.gmonthstack.add_named(Gtk.Label(label="May",       name="Label"), "May")
-		self.gmonthstack.add_named(Gtk.Label(label="June",      name="Label"), "June")
-		self.gmonthstack.add_named(Gtk.Label(label="July",      name="Label"), "July")
-		self.gmonthstack.add_named(Gtk.Label(label="August",    name="Label"), "August")
-		self.gmonthstack.add_named(Gtk.Label(label="September", name="Label"), "September")
-		self.gmonthstack.add_named(Gtk.Label(label="October",   name="Label"), "October")
-		self.gmonthstack.add_named(Gtk.Label(label="November",  name="Label"), "November")
-		self.gmonthstack.add_named(Gtk.Label(label="December",  name="Label"), "December")
+		self.gmonthstack.add_named(Gtk.Label(label=_("January"),   name="Label"), "January")
+		self.gmonthstack.add_named(Gtk.Label(label=_("February"),  name="Label"), "February")
+		self.gmonthstack.add_named(Gtk.Label(label=_("March"),     name="Label"), "March")
+		self.gmonthstack.add_named(Gtk.Label(label=_("April"),     name="Label"), "April")
+		self.gmonthstack.add_named(Gtk.Label(label=_("May"),       name="Label"), "May")
+		self.gmonthstack.add_named(Gtk.Label(label=_("June"),      name="Label"), "June")
+		self.gmonthstack.add_named(Gtk.Label(label=_("July"),      name="Label"), "July")
+		self.gmonthstack.add_named(Gtk.Label(label=_("August"),    name="Label"), "August")
+		self.gmonthstack.add_named(Gtk.Label(label=_("September"), name="Label"), "September")
+		self.gmonthstack.add_named(Gtk.Label(label=_("October"),   name="Label"), "October")
+		self.gmonthstack.add_named(Gtk.Label(label=_("November"),  name="Label"), "November")
+		self.gmonthstack.add_named(Gtk.Label(label=_("December"),  name="Label"), "December")
 
 		self.hmonthstack = Gtk.Stack()
 		self.hmonthstack.set_transition_duration(300)
 		self.hmonthstack.set_homogeneous(True)
 
-		self.hmonthstack.add_named(Gtk.Label(label="Muharram",         name="Label"), "Muharram")
-		self.hmonthstack.add_named(Gtk.Label(label="Safar",            name="Label"), "Safar")
-		self.hmonthstack.add_named(Gtk.Label(label="Rabi al Awwal",    name="Label"), "Rabi al Awwal")
-		self.hmonthstack.add_named(Gtk.Label(label="Rabi al Akhira",   name="Label"), "Rabi al Akhira")
-		self.hmonthstack.add_named(Gtk.Label(label="Jumada al Ula",    name="Label"), "Jumada al Ula")
-		self.hmonthstack.add_named(Gtk.Label(label="Jumada al Akhira", name="Label"), "Jumada al Akhira")
-		self.hmonthstack.add_named(Gtk.Label(label="Rajab",            name="Label"), "Rajab")
-		self.hmonthstack.add_named(Gtk.Label(label="Sha'ban",          name="Label"), "Sha'ban")
-		self.hmonthstack.add_named(Gtk.Label(label="Ramadhan",         name="Label"), "Ramadhan")
-		self.hmonthstack.add_named(Gtk.Label(label="Shawwal",          name="Label"), "Shawwal")
-		self.hmonthstack.add_named(Gtk.Label(label="Dhu al Qa'da",     name="Label"), "Dhu al Qa'da")
-		self.hmonthstack.add_named(Gtk.Label(label="Dhu al Hijja",     name="Label"), "Dhu al Hijja")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Muharram"),         name="Label"), "Muharram")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Safar"),            name="Label"), "Safar")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Rabi al Awwal"),    name="Label"), "Rabi al Awwal")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Rabi al Akhira"),   name="Label"), "Rabi al Akhira")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Jumada al Ula"),    name="Label"), "Jumada al Ula")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Jumada al Akhira"), name="Label"), "Jumada al Akhira")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Rajab"),            name="Label"), "Rajab")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Sha'ban"),          name="Label"), "Sha'ban")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Ramadhan"),         name="Label"), "Ramadhan")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Shawwal"),          name="Label"), "Shawwal")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Dhu al Qa'da"),     name="Label"), "Dhu al Qa'da")
+		self.hmonthstack.add_named(Gtk.Label(label=_("Dhu al Hijja"),     name="Label"), "Dhu al Hijja")
 
 		self.combinedstack = Gtk.Stack()
 		self.combinedstack.set_transition_type(Gtk.StackTransitionType.SLIDE_UP_DOWN)
@@ -212,31 +216,31 @@ class Cal(Gtk.Box):
 		wkgrid = Gtk.Grid(row_homogeneous=True, column_homogeneous=True, row_spacing=2, column_spacing=2)
 		wkgrid.set_border_width(2)
 
-		wklabel = Gtk.Label(label="S")
+		wklabel = Gtk.Label(label=_("SundayShort"))
 		wklabel.set_size_request(34,26)
 		wkgrid.attach(wklabel, 0, 0, 1, 1)
 
-		wklabel = Gtk.Label(label="M")
+		wklabel = Gtk.Label(label=_("MondayShort"))
 		wklabel.set_size_request(34,26)
 		wkgrid.attach(wklabel, 1, 0, 1, 1)
 
-		wklabel = Gtk.Label(label="T")
+		wklabel = Gtk.Label(label=_("TuesdayShort"))
 		wklabel.set_size_request(34,26)
 		wkgrid.attach(wklabel, 2, 0, 1, 1)
 
-		wklabel = Gtk.Label(label="W")
+		wklabel = Gtk.Label(label=_("WednesdayShort"))
 		wklabel.set_size_request(34,26)
 		wkgrid.attach(wklabel, 3, 0, 1, 1)
 
-		wklabel = Gtk.Label(label="T")
+		wklabel = Gtk.Label(label=_("ThursdayShort"))
 		wklabel.set_size_request(34,26)
 		wkgrid.attach(wklabel, 4, 0, 1, 1)
 
-		wklabel = Gtk.Label(label="F")
+		wklabel = Gtk.Label(label=_("FridayShort"))
 		wklabel.set_size_request(34,26)
 		wkgrid.attach(wklabel, 5, 0, 1, 1)
 
-		wklabel = Gtk.Label(label="S")
+		wklabel = Gtk.Label(label=_("SaturdayShort"))
 		wklabel.set_size_request(34,26)
 		wkgrid.attach(wklabel, 6, 0, 1, 1)
 
@@ -392,8 +396,8 @@ class Cal(Gtk.Box):
 		self.hytoday, self.hmtoday, self.hdtoday = self.hijrical.goto_gregorian_day(self.gytoday, (self.gmtoday+1), self.gdtoday)
 		# update hijri title label
 		now_wd = datetime.datetime.now().strftime("%A")
-		h_date = '%i %s %i' % ( self.hdtoday,  self.hmonths[int(self.hmtoday-1)],  self.hytoday)
-		self.parent.titlestack.get_child_by_name("Hijri").set_label(now_wd+", "+h_date)
+		h_date = '%i %s %i' % (self.hdtoday, _(self.hmonths[int(self.hmtoday-1)]), self.hytoday)
+		self.parent.titlestack.get_child_by_name("Hijri").set_label(_('%s, %s') % (_(now_wd), h_date))
 		# update calendar
 		gday   = (self.refdate).strftime("%d")
 		gmonth = (self.refdate).strftime("%B")

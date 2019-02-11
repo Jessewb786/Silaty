@@ -8,13 +8,13 @@ from gi.repository import Gtk
 
 class SettingsPane(Gtk.Box):
 	def __init__(self):
-		Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, margin_top=12, margin_bottom=6, margin_left=12, margin_right=6)		
+		Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, margin_top=12, margin_bottom=6, margin_left=12, margin_right=12)		
 		self.nrows = 0
 		self.ngrids = -1
 		self.grids = []
 
 	def add_grid(self):
-		grid = Gtk.Grid(column_spacing=3, row_spacing=6, margin_left=12, margin_top=6, margin_bottom=6)
+		grid = Gtk.Grid(column_spacing=3, row_spacing=6, margin_right=12, margin_left=12, margin_top=6, margin_bottom=6)
 		#grid.set_row_homogeneous(True)
 		grid.set_column_homogeneous(True)
 		grid.set_halign(Gtk.Align.FILL)

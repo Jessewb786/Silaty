@@ -6,6 +6,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import GObject, Gtk, Gdk
 from hijrical import *
+from translate import translate_text as _
 import datetime
 
 class Home(Gtk.Box):
@@ -14,7 +15,7 @@ class Home(Gtk.Box):
 		self.parent = parent
 		self.set_orientation(Gtk.Orientation.VERTICAL)
 		self.set_margin_bottom(6)
-		self.titlelabel = Gtk.Label(halign=Gtk.Align.FILL, margin_bottom=12, margin_top=12)
+		self.titlelabel = Gtk.Label(halign=Gtk.Align.FILL, margin_bottom=12, margin_top=12, margin_left=6, margin_right=6)
 		self.set_title()
 		self.pack_start(self.titlelabel, False, True, 0)
 		self.prayers = []
@@ -23,19 +24,23 @@ class Home(Gtk.Box):
 
 	def set_title(self):
 		# Set the Date in the Title
-		now_wd = datetime.datetime.now().strftime("%H:%M - %A")
-		g_date = datetime.datetime.now().strftime("%d %B %Y")
+		now_time = datetime.datetime.now().strftime("%H:%M")
+		now_wd = datetime.datetime.now().strftime("%A")
+		g_day = datetime.datetime.now().strftime("%d")
+		g_month = datetime.datetime.now().strftime("%B")
+		g_year = datetime.datetime.now().strftime("%Y")
+		g_date = '%s %s %s' % (g_day, _(g_month), g_year)
 		calc = HijriCal(self.parent.prayertimes.options.hijrical_adjustment)
 		h_months = ['Muharram', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab',  "Sha'ban",  'Ramadan',  'Shawwal',  "Dhu al Qa'da", 'Dhu al Hijja']
-		h_year,  h_month,  h_day,  h_week_day = calc.today
-		h_date = '%i %s %i' % ( h_day,  h_months[int(h_month-1)],  h_year)
+		h_year, h_month, h_day, h_week_day = calc.today
+		h_date = '%i %s %i' % (h_day, _(h_months[int(h_month-1)]), h_year)
 
-		self.titlelabel.set_label(now_wd+", "+h_date+" / "+g_date)
+		self.titlelabel.set_label('%s - %s, %s / %s' % (now_time, _(now_wd), h_date, g_date))
 
 	def add_prayer(self, prayer, prayertime, colored):
 		# Prayer Listbox
 		prayercontainer = Gtk.Box(orientation = Gtk.Orientation.VERTICAL)
-		prayercontainer.set_size_request(380,0)
+		prayercontainer.set_size_request(380, 0)
 		prayerbox = Prayer(prayer, prayertime, colored)
 		prayerbox.set_halign(Gtk.Align.FILL)
 		prayerbox.set_valign(Gtk.Align.CENTER)
@@ -73,7 +78,7 @@ class Prayer(Gtk.Box):
 		self._name = prayer
 		self._time = prayertime
 
-		self.prayerlabel = Gtk.Label(halign=Gtk.Align.START, margin_bottom=6, margin_top=6, margin_left=12)
+		self.prayerlabel = Gtk.Label(halign=Gtk.Align.START, margin_bottom=6, margin_top=6, margin_left=12, margin_right=12)
 		self.prayerlabel.set_use_markup(True)
 
 		if state == True:
@@ -83,7 +88,7 @@ class Prayer(Gtk.Box):
 
 		self.pack_start(self.prayerlabel, True, True, 0)
 
-		self.timelabel = Gtk.Label(label=prayertime, halign=Gtk.Align.END, margin_bottom=6, margin_top=6, margin_right=12)
+		self.timelabel = Gtk.Label(label=prayertime, halign=Gtk.Align.END, margin_bottom=6, margin_top=6, margin_right=12, margin_left=12)
 		self.timelabel.set_use_markup(True)
 
 		if state == True:

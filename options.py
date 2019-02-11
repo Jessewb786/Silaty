@@ -40,6 +40,7 @@ class Options:
 			self._audionotifications = cparse.get('DEFAULT', 'audio-notifications')
 			self._daylightsavingtime = cparse.get('DEFAULT', 'daylight-saving-time')
 			self._hijricaladjustment = cparse.get('DEFAULT', 'hijrical-adjustment')
+			self._language           = cparse.get('DEFAULT', 'language')
 
 		except configparser.NoOptionError:
 			print ("DEBUG: No configration file using default settings")
@@ -59,6 +60,7 @@ class Options:
 			self._audionotifications = '1'
 			self._daylightsavingtime = '1'
 			self._hijricaladjustment = '0'
+			self._language           = 'English'
 			self.save_options()
 
 		except ValueError:
@@ -80,6 +82,7 @@ class Options:
 			self._audionotifications = '1'
 			self._daylightsavingtime = '1'
 			self._hijricaladjustment = '0'
+			self._language           = 'English'
 			self.save_options()
 
 	## Functions with lists for the Buttons
@@ -87,10 +90,13 @@ class Options:
 		return ['Makkah', 'Egypt', 'Karachi', 'ISNA', 'MWL']
 
 	def get_madhahed(self):
-		return ['Hanafi','Default']
+		return ['Hanafi', 'Default']
 
 	def get_clock_formats(self):
 		return ['12h', '24h']
+
+	def get_languages(self):
+		return ['English', 'Arabic']#, 'French']
 
 	def get_fajr_adhans(self):
 		dirfiles = os.listdir( os.path.dirname(os.path.realpath(__file__))+"/audio/Fajr/")
@@ -263,6 +269,14 @@ class Options:
 		self._hijricaladjustment = str(data)
 
 	@property
+	def language(self):
+		return self._language
+
+	@language.setter
+	def language(self, value):
+		self._language = value
+
+	@property
 	def iconlabel_num(self):
 		return self._iconlabel
 
@@ -357,6 +371,7 @@ country = %s
 latitude = %s
 longitude = %s
 timezone = %s
+language = %s
 
 # Possible Values for Calculation Methods
 # Makkah
@@ -398,7 +413,7 @@ hijrical-adjustment = %s
 fajr-adhan = %s
 normal-adhan = %s
 
-''' %  (self.city, self.country, self.latitude, self.longitude, self.timezone, \
+''' %  (self.city, self.country, self.latitude, self.longitude, self.timezone, self.language, \
         self.calculation_method_name, self.madhab_name, self.clock_format, \
         self.notification_time, self.iconlabel_num, self.audio_notifications_num, self.start_minimized_num, \
         self.daylight_saving_time_num, self.hijrical_adjustment, self.fajr_adhan, self.normal_adhan)

@@ -5,6 +5,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from translate import translate_text as _
 import os
 try:
 	import xml.etree.cElementTree as ET # C implementation is much faster
@@ -52,7 +53,7 @@ class Location():
 class LocationDialog(Gtk.Dialog):
 
 	def __init__(self, parent, title='Silaty'):
-		Gtk.Dialog.__init__(self, modal=True, transient_for=parent, title=title, flags=Gtk.DialogFlags.DESTROY_WITH_PARENT)
+		Gtk.Dialog.__init__(self, modal=True, transient_for=parent, title=_(title), flags=Gtk.DialogFlags.DESTROY_WITH_PARENT)
 		self.parent = parent
 		self.set_border_width(10)
 		self.set_resizable(False)
@@ -74,7 +75,7 @@ class LocationDialog(Gtk.Dialog):
 		self.treeview.set_model(treemodelsort)
 		scrolledwindow.add(self.treeview)
 		cellrenderertext = Gtk.CellRendererText()
-		treeviewcolumn = Gtk.TreeViewColumn('Location', cellrenderertext, text=0)
+		treeviewcolumn = Gtk.TreeViewColumn(_('Location'), cellrenderertext, text=0)
 		self.treeview.append_column(treeviewcolumn)
 		#self.treeview.set_headers_visible(False)
 		treeselection = self.treeview.get_selection()
@@ -82,7 +83,7 @@ class LocationDialog(Gtk.Dialog):
 		treeselection.connect('changed', self.on_selection_changed)
 		# Search
 		searchbox   = Gtk.Box(halign=Gtk.Align.FILL, spacing=10)
-		searchlabel = Gtk.Label('Search:', halign=Gtk.Align.START)
+		searchlabel = Gtk.Label(_('Search:'), halign=Gtk.Align.START)
 		searchbox.pack_start(searchlabel, False, False, 0)
 		searchentry = Gtk.Entry(halign=Gtk.Align.FILL)
 		searchentry.connect('changed', self.on_search_entry_changed)
@@ -95,7 +96,7 @@ class LocationDialog(Gtk.Dialog):
 		helpbox   = Gtk.Box(halign=Gtk.Align.FILL, spacing=3, margin=10)
 		helpimage = Gtk.Image(icon_name='system-help')
 		helpbox.pack_start(helpimage, False, False, 0)
-		helplabel = Gtk.Label('Check your location on <a href="https://www.islamicfinder.org/">www.islamicfinder.org</a>', use_markup=True)
+		helplabel = Gtk.Label(_('Check your location on %s') % '<a href="https://www.islamicfinder.org/">www.islamicfinder.org</a>', use_markup=True)
 		helpbox.pack_start(helplabel, True, True, 0)
 		content_area.add(helpbox)
 		# Buttons

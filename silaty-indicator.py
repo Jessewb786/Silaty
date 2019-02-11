@@ -17,6 +17,7 @@ from gi.repository import AppIndicator3 as AI
 from datetime import date
 from hijrical import *
 from silaty import *
+from translate import translate_text as _
 import locale
 import sys
 
@@ -25,8 +26,7 @@ locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 class SilatyIndicator():
 	def __init__(self):
 		# Setup Indicator Applet
-		self.Indicator = AI.Indicator.new("silaty-indicator","silaty-indicator",
-			AI.IndicatorCategory.APPLICATION_STATUS)
+		self.Indicator = AI.Indicator.new("silaty-indicator", "silaty-indicator", AI.IndicatorCategory.APPLICATION_STATUS)
 		self.Indicator.set_status(AI.IndicatorStatus.ACTIVE)
 		self.Indicator.set_icon(self.icon())
 
@@ -52,24 +52,24 @@ class SilatyIndicator():
 
 		# Add City
 		print ("DEBUG: Adding city to menu @", (str(datetime.datetime.now())))
-		self.CityItem = Gtk.MenuItem("Location: %s" % self.silaty.prayertimes.options.city, sensitive=False)
+		self.CityItem = Gtk.MenuItem(_("Location: %s") % self.silaty.prayertimes.options.city, sensitive=False)
 		self.Menu.append(self.CityItem)
 
 		# Add Qibla Direction
 		print ("DEBUG: Adding qibla direction to menu @", (str(datetime.datetime.now())))
-		self.QiblaItem = Gtk.MenuItem("Qibla is %.2f° from True North" % self.silaty.prayertimes.get_qibla())
+		self.QiblaItem = Gtk.MenuItem(_("Qibla is %.2f° from True North") % self.silaty.prayertimes.get_qibla())
 		self.QiblaItem.connect("activate", self.show_qibla)
 		self.Menu.append(self.QiblaItem)
 		self.Menu.append(Gtk.SeparatorMenuItem())
 
 		# Add Prayer Times
 		print ("DEBUG: Adding the prayer times to menu @", (str(datetime.datetime.now())))
-		self.FajrItem     = Gtk.MenuItem("Fajr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.fajr_time()), sensitive=False)
-		#self.ShurukItem   = Gtk.MenuItem("Shuruk\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.shrouk_time()), sensitive=False)
-		self.DhuhrItem    = Gtk.MenuItem("Dhuhr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.zuhr_time()), sensitive=False)
-		self.AsrItem      = Gtk.MenuItem("Asr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.asr_time()), sensitive=False)
-		self.MaghribItem  = Gtk.MenuItem("Maghrib\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.maghrib_time()), sensitive=False)
-		self.IshaItem     = Gtk.MenuItem("Isha\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.isha_time()), sensitive=False)
+		self.FajrItem     = Gtk.MenuItem(_("Fajr\t\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.fajr_time()), sensitive=False)
+		#self.ShurukItem   = Gtk.MenuItem(_("Shuruk\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.shrouk_time()), sensitive=False)
+		self.DhuhrItem    = Gtk.MenuItem(_("Dhuhr\t\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.zuhr_time()), sensitive=False)
+		self.AsrItem      = Gtk.MenuItem(_("Asr\t\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.asr_time()), sensitive=False)
+		self.MaghribItem  = Gtk.MenuItem(_("Maghrib\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.maghrib_time()), sensitive=False)
+		self.IshaItem     = Gtk.MenuItem(_("Isha\t\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.isha_time()), sensitive=False)
 		self.Menu.append(self.FajrItem)
 		#self.Menu.append(self.ShurukItem)
 		self.Menu.append(self.DhuhrItem)
@@ -79,21 +79,21 @@ class SilatyIndicator():
 		self.Menu.append(Gtk.SeparatorMenuItem())
 
 		print ("DEBUG: Adding Next prayer to menu @", (str(datetime.datetime.now())))
-		self.NextPrayerItem = Gtk.MenuItem('Next Prayer', sensitive=False)# Next PrayerTime's Item, it shows you information about the next prayer
+		self.NextPrayerItem = Gtk.MenuItem(_('Next Prayer'), sensitive=False)# Next PrayerTime's Item, it shows you information about the next prayer
 		self.Menu.append(self.NextPrayerItem)
 		self.Menu.append(Gtk.SeparatorMenuItem())
 
 		print ("DEBUG: Adding About, Settings and Quit to menu @", (str(datetime.datetime.now())))
 		# The Last 3 menu items never change and don't need to be updated
-		AboutItem = Gtk.MenuItem('About')
+		AboutItem = Gtk.MenuItem(_('About'))
 		self.Menu.append(AboutItem)
 		AboutItem.connect('activate',self.about_dialog, None)
 
-		SettingsItem = Gtk.MenuItem('Settings')
+		SettingsItem = Gtk.MenuItem(_('Settings'))
 		self.Menu.append(SettingsItem)
 		SettingsItem.connect('activate', self.show_settings, None)
 
-		ExitItem = Gtk.MenuItem('Quit')
+		ExitItem = Gtk.MenuItem(_('Quit'))
 		self.Menu.append(ExitItem)
 		ExitItem.connect('activate', self.quit)
 
@@ -109,21 +109,21 @@ class SilatyIndicator():
 		self.silaty.prayertimes.calculate()# Calculate PrayerTimes
 
 		# Update City menu item
-		self.CityItem.set_label("Location: %s" % self.silaty.prayertimes.options.city)
+		self.CityItem.set_label(_("Location: %s") % self.silaty.prayertimes.options.city)
 
 		# Update Hijri Date Menu item
 		self.HijriDateItem.set_label(self.get_hijri_date())
 
 		# Update Qibla Menu item
-		self.QiblaItem.set_label("Qibla is %.2f° from True North" % self.silaty.prayertimes.get_qibla())
+		self.QiblaItem.set_label(_("Qibla is %.2f° from True North") % self.silaty.prayertimes.get_qibla())
 
 		# Update Prayer Times items
-		self.FajrItem.set_label("Fajr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.fajr_time()))
-		#self.ShurukItem.set_label("Shuruk\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.shrouk_time()))
-		self.DhuhrItem.set_label("Dhuhr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.zuhr_time()))
-		self.AsrItem.set_label("Asr\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.asr_time()))
-		self.MaghribItem.set_label("Maghrib\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.maghrib_time()))
-		self.IshaItem.set_label("Isha\t\t\t\t\t%s" % self.silaty.get_times(self.silaty.prayertimes.isha_time()))
+		self.FajrItem.set_label(_("Fajr\t\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.fajr_time()))
+		#self.ShurukItem.set_label(_("Shuruk\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.shrouk_time()))
+		self.DhuhrItem.set_label(_("Dhuhr\t\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.zuhr_time()))
+		self.AsrItem.set_label(_("Asr\t\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.asr_time()))
+		self.MaghribItem.set_label(_("Maghrib\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.maghrib_time()))
+		self.IshaItem.set_label(_("Isha\t\t\t\t\t%s") % self.silaty.get_times(self.silaty.prayertimes.isha_time()))
 
 		nextprayer = self.silaty.prayertimes.next_prayer()
 		tonextprayer = self.silaty.prayertimes.time_to_next_prayer()
@@ -133,12 +133,12 @@ class SilatyIndicator():
 			self.silaty.homebox.emit("prayers-updated", nextprayer)
 			self.currentprayer = nextprayer
 
-		self.NextPrayerItem.set_label("%s until %s" % (self.secs_to_hrtime(tonextprayer.seconds), nextprayer))
-		self.silaty.headerbar.set_title("%s until %s" % (self.secs_to_hrtime(tonextprayer.seconds), nextprayer))
-		self.Indicator.set_title("%s in %s" % (nextprayer, (self.secs_to_nrtime(tonextprayer.seconds))))
+		self.NextPrayerItem.set_label(_("%s until %s") % (self.secs_to_hrtime(tonextprayer.seconds), _(nextprayer)))
+		self.silaty.headerbar.set_title(_("%s until %s") % (self.secs_to_hrtime(tonextprayer.seconds), _(nextprayer)))
+		self.Indicator.set_title(_("%s in %s") % (_(nextprayer), (self.secs_to_nrtime(tonextprayer.seconds))))
 
 		if self.silaty.prayertimes.options.iconlabel == True:
-			self.Indicator.set_label("%s in %s" % (nextprayer, (self.secs_to_nrtime(tonextprayer.seconds))),"")
+			self.Indicator.set_label(_("%s in %s") % (_(nextprayer), (self.secs_to_nrtime(tonextprayer.seconds))),"")
 		else:
 			self.Indicator.set_label("","")
 		return True
@@ -150,11 +150,11 @@ class SilatyIndicator():
 		minutes += 1 # correct minutes (to avoid values like "0min")
 		if minutes == 60:
 			hours += 1
-			return str(hours)+" Hours"
+			return _("%s Hours") % str(hours)
 		elif hours == 0:
-			return str(minutes)+" Minutes"
+			return _("%s Minutes") % str(minutes)
 		else:
-			return str(hours)+" Hours and "+str(minutes)+" Minutes"
+			return _("%s Hours and %s Minutes") % (str(hours), str(minutes))
 
 	def secs_to_nrtime(self, secs):
 		# Transform Seconds into Hours and Minutes
@@ -164,11 +164,11 @@ class SilatyIndicator():
 		minutes += 1 # correct minutes (to avoid values like "0min")
 		if minutes == 60:
 			hours += 1
-			return str(hours)+"hr"
+			return _("%shr") % str(hours)
 		elif hours == 0:
-			return str(minutes)+"min"
+			return _("%smin") % str(minutes)
 		else:
-			return str(hours)+"hr "+str(minutes)+"min"
+			return _("%shr %smin") % (str(hours), str(minutes))
 
 	def icon(self):
 		# Get Icon
@@ -190,8 +190,8 @@ class SilatyIndicator():
 		calc = HijriCal(self.silaty.prayertimes.options.hijrical_adjustment)
 		h_months = ['Muharram ', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab', "Sha'ban", 'Ramadan', 'Shawwal', "Dhu al Qa'da", 'Dhu al Hijja']
 		h_year,  h_month,  h_day,  h_week_day = calc.today
-		h_date = '%i %s %i' % ( h_day,  h_months[int(h_month-1)],  h_year)
-		return (str(wd)+", "+str(h_date))
+		h_date = '%i %s %i' % ( h_day,  _(h_months[int(h_month-1)]),  h_year)
+		return ('%s, %s' % (_(wd), h_date))
 
 	def show_home(self, widget):
 		self.show_window("home")
@@ -228,9 +228,9 @@ class SilatyIndicator():
 			about_dialog.set_position(Gtk.WindowPosition.CENTER)
 		logo = GdkPixbuf.Pixbuf.new_from_file(os.path.dirname(os.path.realpath(__file__)) + "/icons/hicolor/48x48/apps/silaty.svg")
 		about_dialog.set_logo(logo)
-		about_dialog.set_program_name("Silaty")
+		about_dialog.set_program_name(_("Silaty"))
 		about_dialog.set_website("https://github.com/AXeL-dev/Silaty")
-		about_dialog.set_website_label("GitHub Project Page")
+		about_dialog.set_website_label(_("GitHub Project Page"))
 		about_dialog.set_authors(["AXeL-dev <anass_denna@hotmail.fr> (Maintainer)", "Jesse Wayde Brandão <www.jwb@gmail.com> (Lead Developer)",\
 		 "Mohamed Alaa <m.alaa8@gmail.com> (Developer)","Eslam Mostafa <CsEslam@gmail.com> (Developer)",\
 		 "Ahmed Youssef <xmonader(at)gmail.com> (Developer)"])
@@ -250,9 +250,9 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.''')
-		about_dialog.set_version("1.2")
-		about_dialog.set_comments("A neat Prayer Time Reminder App.\n Simple and complete so no prayer is missed")
-		about_dialog.set_copyright("Copyright © 2018 Silaty Team")
+		about_dialog.set_version("1.3")
+		about_dialog.set_comments(_("A neat Prayer Time Reminder App.\n Simple and complete so no prayer is missed"))
+		about_dialog.set_copyright(_("Copyright © 2018 Silaty Team"))
 		about_dialog.run()
 		about_dialog.destroy()
 
