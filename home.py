@@ -35,7 +35,7 @@ class Home(Gtk.Box):
 		h_year, h_month, h_day, h_week_day = calc.today
 		h_date = '%i %s %i' % (h_day, _(h_months[int(h_month-1)]), h_year)
 
-		self.titlelabel.set_label('%s - %s, %s / %s' % (now_time, _(now_wd), h_date, g_date))
+		self.titlelabel.set_label(_('%s - %s, %s / %s') % (now_time, _(now_wd), h_date, g_date))
 
 	def add_prayer(self, prayer, prayertime, colored):
 		# Prayer Listbox

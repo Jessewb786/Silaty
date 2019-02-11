@@ -191,7 +191,7 @@ class SilatyIndicator():
 		h_months = ['Muharram ', 'Safar', 'Rabi al Awwal', 'Rabi al Akhira', 'Jumada al Ula', 'Jumada al Akhira', 'Rajab', "Sha'ban", 'Ramadan', 'Shawwal', "Dhu al Qa'da", 'Dhu al Hijja']
 		h_year,  h_month,  h_day,  h_week_day = calc.today
 		h_date = '%i %s %i' % ( h_day,  _(h_months[int(h_month-1)]),  h_year)
-		return ('%s, %s' % (_(wd), h_date))
+		return (_('%s, %s') % (_(wd), h_date))
 
 	def show_home(self, widget):
 		self.show_window("home")
