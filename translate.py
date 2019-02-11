@@ -72,7 +72,7 @@ def translate_text(text):
 		'%shr %smin': '%s ساعة %s دقيقة',
 		'GitHub Project Page': 'صفحة المشروع على GitHub',
 		'A neat Prayer Time Reminder App.\n Simple and complete so no prayer is missed': 'تطبيق أوقات الصلاة.\n بسيط و شامل حتى لا تفوتك أي صلاة',
-		'Copyright © 2018 Silaty Team': 'حقوق النشر محفوظة © 2018 فريق صلاتي',
+		'Copyright © %s Silaty Team': 'حقوق النشر محفوظة © %s فريق صلاتي',
 		'Silaty needs to be restarted, restart now?': 'يحتاج التطبيق إلى إعادة تشغيل، إعادة التشغيل الآن؟',
 		'Hijri:': 'هجري:',
 		'Sunday': 'الأحد',

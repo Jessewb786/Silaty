@@ -231,7 +231,7 @@ class SilatyIndicator():
 		about_dialog.set_program_name(_("Silaty"))
 		about_dialog.set_website("https://github.com/AXeL-dev/Silaty")
 		about_dialog.set_website_label(_("GitHub Project Page"))
-		about_dialog.set_authors(["AXeL-dev <anass_denna@hotmail.fr> (Maintainer)", "Jesse Wayde Brandão <www.jwb@gmail.com> (Lead Developer)",\
+		about_dialog.set_authors(["AXeL-dev <contact.axel.dev@gmail.com> (Maintainer)", "Jesse Wayde Brandão <www.jwb@gmail.com> (Lead Developer)",\
 		 "Mohamed Alaa <m.alaa8@gmail.com> (Developer)","Eslam Mostafa <CsEslam@gmail.com> (Developer)",\
 		 "Ahmed Youssef <xmonader(at)gmail.com> (Developer)"])
 		about_dialog.set_artists(["Mustapha Asbbar <abobakrsalafi@gmail.com> (Designer)"])
@@ -252,7 +252,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.''')
 		about_dialog.set_version("1.3")
 		about_dialog.set_comments(_("A neat Prayer Time Reminder App.\n Simple and complete so no prayer is missed"))
-		about_dialog.set_copyright(_("Copyright © 2018 Silaty Team"))
+		about_dialog.set_copyright(_("Copyright © %s Silaty Team") % '2019')
 		about_dialog.run()
 		about_dialog.destroy()
 
