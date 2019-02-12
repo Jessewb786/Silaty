@@ -236,7 +236,7 @@ class SilatyIndicator():
 		 "Ahmed Youssef <xmonader(at)gmail.com> (Developer)"])
 		about_dialog.set_artists(["Mustapha Asbbar <abobakrsalafi@gmail.com> (Designer)"])
 		about_dialog.set_license('''Silaty, A Prayer Times Reminder Application.
-Copyright © 2018 Silaty Team
+Copyright © 2019 Silaty Team
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

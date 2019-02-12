@@ -5,7 +5,7 @@
 #       
 #       Copyright 2010 ahmed youssef <xmonader@gmail.com>
 #       Copyright 2014 Jesse Brandao <www.jwb@gmail.com>
-#       Copyright 2018 AXeL-dev      <anass_denna@hotmail.fr>
+#       Copyright 2019 AXeL-dev      <contact.axel.dev@gmail.com>
 #       
 #       This program is free software you can redistribute it and/or modify
 #       it under the terms of the GNU General Public License as published by
