@@ -124,6 +124,8 @@ def translate_text(text):
 		'It\'s time for the %s prayer.': 'حان الوقت لصلاة %s.',
 		'%s, %s': '%s، %s',
 		'%s - %s, %s / %s': '%s - %s، %s / %s',
+		'AM': 'ص',
+		'PM': 'م',
 	}
 	frenchTranslations = {
 		'Silaty': 'Silaty',

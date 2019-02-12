@@ -605,7 +605,7 @@ class Silaty(Gtk.Window):
     def get_times(self, prayer):# If User Sets Clock Format 12hr or 24hr Return It As He Likes!
         if self.prayertimes.options.clock_format == '12h':
             #print ("DEBUG: using 12h format @", (str(datetime.datetime.now())))
-            return self.timeto12(prayer)
+            return self.timeto12(prayer).replace('AM', _('AM')).replace('PM', _('PM'))
         if self.prayertimes.options.clock_format == '24h':
             #print ("DEBUG: using 24h format @", (str(datetime.datetime.now())))
             return self.timeto24(prayer)
