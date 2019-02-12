@@ -130,7 +130,7 @@ class SilatyIndicator():
 
 		# Update displayed prayer
 		if (nextprayer != self.currentprayer) and self.silaty.is_visible():
-			self.silaty.homebox.emit("prayers-updated", nextprayer)
+			self.silaty.homebox.emit("prayers-updated", _(nextprayer))
 			self.currentprayer = nextprayer
 
 		self.NextPrayerItem.set_label(_("%s until %s") % (self.secs_to_hrtime(tonextprayer.seconds), _(nextprayer)))

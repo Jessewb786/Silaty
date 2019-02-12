@@ -596,7 +596,7 @@ class Silaty(Gtk.Window):
                 self.homebox.prayers[i].time = self.get_times(self.prayertimes.isha_time())
             i += 1
         nextprayer = self.prayertimes.next_prayer()
-        self.homebox.emit("prayers-updated", nextprayer)
+        self.homebox.emit("prayers-updated", _(nextprayer))
 
     def hide_window(self, widget, data):
         self.prayertimes.options.save_options()
