@@ -101,10 +101,10 @@ class LocationDialog(Gtk.Dialog):
 		content_area.add(helpbox)
 		# Buttons
 		self.action_area.set_layout(Gtk.ButtonBoxStyle.END)
-		self.apply_button = Gtk.Button('Apply')
+		self.apply_button = Gtk.Button(_('Apply'))
 		self.apply_button.set_sensitive(False)
 		self.apply_button.connect('clicked', self.on_apply_button_clicked)
-		cancel_button = Gtk.Button('Cancel')
+		cancel_button = Gtk.Button(_('Cancel'))
 		cancel_button.connect('clicked', self.on_cancel_button_clicked)
 		self.add_action_widget(self.apply_button, Gtk.ResponseType.OK)
 		self.add_action_widget(cancel_button, Gtk.ResponseType.CANCEL)
